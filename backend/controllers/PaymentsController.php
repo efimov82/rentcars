@@ -6,6 +6,8 @@ use yii\filters\AccessControl;
 use backend\models\Payment;
 use backend\models\PaymentCategory;
 use backend\models\PaymentType;
+use backend\models\User;
+use backend\models\Car;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -38,8 +40,18 @@ class PaymentsController extends RentCarsController
     {
       $page = Yii::$app->getRequest()->getQueryParam('page') ? Yii::$app->getRequest()->getQueryParam('page') : 1;
       
-      $payments = Payment::find()->limit(20, ($page-1));
-      return $this->render('index.tpl', ['payments'=>$payments, 'page'=>$page]);
+      $payments = Payment::find()->limit(20, ($page-1))
+                                ->orderBy(['date_create'=>SORT_DESC]);
+      
+      $users = User::find()->indexBy('id')->all();
+      $categories = PaymentCategory::find()->indexBy('id')->all();
+      $cars = Car::find()->indexBy('id')->all();
+
+      return $this->render('index.tpl', ['payments'=>$payments, 
+                                          'users'=>$users, 
+                                          'categories'=>$categories, 
+                                          'cars'=>$cars, 
+                                          'page'=>$page]);
     }
     
     public function actionAdd()
@@ -60,9 +72,10 @@ class PaymentsController extends RentCarsController
       if (!$payment)
         return $this->redirect('/');
       
-      $categories = ArrayHelper::map(PaymentCategory::find(), 'id', 'name');
+      $categories = ArrayHelper::map(PaymentCategory::find()->all(), 'id', 'name');
+      $types = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
       
-      return $this->render('edit.tpl', ['payment'=>$payment, 'categories'=>$categories]);
+      return $this->render('edit.tpl', ['payment'=>$payment, 'categories'=>$categories, 'types'=>$types]);
     }
     
     protected function _passParamsToView(Payment $payment)
