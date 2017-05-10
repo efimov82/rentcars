@@ -28,21 +28,29 @@
       <th>Type</th>
       <th>Contract #</th>
       <th>Car #</th>
-      <th>USD,EUR,THB,RUB</th>
-      <th>Edit</th>
+      <th>USD</th>
+      <th>EUR</th>
+      <th>THB</th>
+      <th>RUB</th>
+      <th>Status</th>
+      <th>&nbsp;</th>
       </tr>
     </thead>
     <tbody>
     {foreach $payments->each() as $payment}
       <tr {if ($payment->status == 1)}class="warning"{else}class="success"{/if}>
       <td>{$payment->id}</td>
-      <td>{$payment->date}</td>
+      <td>{$payment->date|date_format:'%d/%m/%y'}</td>
       <td>{$users[$payment->user_id]->name}</td>
       <td>{$categories[$payment->category_id]->name}</td>
       <td>{$payment->type_id}</td>
       <td>{$payment->contract_id}</td>
       <td>{$cars[$payment->car_id]->number}</td>
-      <td>{$payment->usd}/{$payment->euro}/{$payment->thb}/{$payment->ruble}</td>
+      <td>{$payment->usd}</td>
+      <td>{$payment->euro}</td>
+      <td>{$payment->thb}</td>
+      <td>{$payment->ruble}</td>
+      <td>{$payment->getStatusName()}</td>
       <td>{if Yii::$app->user->can('admin')}<a href="{url route="payments/edit" id=$payment->id}"><button class="btn btn-fill btn-xs"><i class="fa fa-pencil-square-o"></i>Edit</button></a>{/if}</td>
       </tr>
     {/foreach}

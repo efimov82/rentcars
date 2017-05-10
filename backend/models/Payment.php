@@ -8,6 +8,7 @@ class Payment extends ActiveRecord
 {
   const STATUS_NEW        = 1;
   const STATUS_CONFIRMED  = 2;
+  const STATUS_DELETED    = 3;
   /**
      * @inheritdoc
      */

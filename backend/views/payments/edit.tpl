@@ -84,6 +84,7 @@
                 </div> 
             </div>
           </div>
+          {if !$payment->isNewRecord}
           <div class="row">
             <div class="col-md-12">
               <label>Status</label>
@@ -94,6 +95,7 @@
               {/if}
             </div>
           </div>
+          {/if}
         {include file='layouts/panel.tpl' id=$payment->id}
     </div>
 </form>
