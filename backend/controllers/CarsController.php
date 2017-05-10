@@ -41,7 +41,7 @@ class CarsController extends RentCarsController
   }
   
   /**
-     * Displays homepage.
+     * Displays cars
      *
      * @return string
      */

@@ -4,6 +4,7 @@ namespace backend\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use backend\models\Contract;
+use backend\models\Car;
 use backend\models\PaymentCategory;
 use backend\models\PaymentType;
 use yii\helpers\ArrayHelper;
@@ -45,9 +46,9 @@ class ContractsController extends RentCarsController
     public function actionAdd()
     {
       $contract = new Contract();
+      $cars = Car::find()->all();
       
-      
-      return $this->render('edit.tpl', ['contract'=>$contract]);
+      return $this->render('edit.tpl', ['contract'=>$contract, 'cars'=>$cars]);
     }
     
     public function actionEdit()
@@ -64,6 +65,7 @@ class ContractsController extends RentCarsController
     
     public function actionSave()
     {
+      $post = Yii::$app->getRequest()->post();
       
     }
 }

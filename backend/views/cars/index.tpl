@@ -27,7 +27,8 @@
                     <th>Mileage</th>
                     <th>Start of Lease</th>
                     <th>Paid up to</th>
-                    <th>Price</th>
+                    {*<th>Price</th>*}
+                    <th>Status</th>
                     <th>Edit</th>
                     </tr>
                 </thead>
@@ -41,7 +42,7 @@
                     <td>{$car->mileage}</td>
                     <td>{$car->start_lease}</td>
                     <td>{$car->paid_up_to}</td>
-                    <td>PRICES</td>
+                    <td>{$car->getStatusName()}</td>
                     <td>{if Yii::$app->user->can('admin')}<a href="{url route="cars/edit" id=$car->id}"><button class="btn btn-fill btn-xs"><i class="fa fa-pencil-square-o"></i>Edit</button></a>{/if}</td>
                     </tr>
                 {/foreach}
