@@ -1,6 +1,6 @@
 {include file="layouts/header.tpl"}
 <!-- page content -->
-<form action="/contracts/save" method="POST">
+<form action="/contracts/save" enctype="multipart/form-data" method="POST">
     <div class="col-md-6">
     <h3>Add/Edit contract</h3>
         <div class="row">
@@ -15,7 +15,7 @@
             <div class="col-xs-6 col-md-6">
                 <label>Mileage</label>
                 <div class="input-group">
-                    <input type="text" class="form-control">
+                    <input type="text" id="mileage" value="" class="form-control">
                     <span class="input-group-addon"><i class="fa fa-bug"></i></span>
                 </div> 
             </div>
@@ -41,35 +41,22 @@
                 </div>  
             </div>
             <div class="col-xs-6 col-md-6">
-                <label>Last Name</label>
+                <label>Client Name</label>
                 <div class="input-group">
                     <input type="text" class="form-control">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
                 </div>  
             </div>
             <div class="col-xs-6 col-md-6">
-                <label>Passport#</label>
+                <label>Client Passport #</label>
                 <div class="input-group">
                     <input type="text" class="form-control">
                     <span class="input-group-addon"><i class="fa fa-info-circle"></i></span>
                 </div>  
             </div> 
-            <div class="col-xs-6 col-md-6">
-                <label>Place of Birth</label>
-                <div class="input-group">
-                    <input type="text" class="form-control">
-                    <span class="input-group-addon"><i class="fa fa-university"></i></span>
-                </div>  
-            </div>
+            
             <div class="col-xs-6 col-md-6">
                 <label>Nationality</label>
-                <div class="input-group">
-                    <input type="text" value="RUS" class="form-control">
-                    <span class="input-group-addon"><i class="fa fa-flag"></i></span>
-                </div>  
-            </div>
-            <div class="col-xs-6 col-md-6">
-                <label>Сам придумай</label>
                 <div class="input-group">
                     <input type="text" value="RUS" class="form-control">
                     <span class="input-group-addon"><i class="fa fa-flag"></i></span>
@@ -108,7 +95,11 @@
         <label>Add Files</label>
         <div class="input-group">
             <label class="input-group-btn"><span class="btn btn-fill">Browse<input type="file" style="display: none;" multiple></span></label>
-            <input type="text" class="form-control" readonly>
+            <input type="text" name="image1" class="form-control" readonly>
+        </div>
+        <div class="input-group">
+            <label class="input-group-btn"><span class="btn btn-fill">Browse<input type="file" style="display: none;" multiple></span></label>
+            <input type="text" name="image2" class="form-control" readonly>
         </div>
         {include file='layouts/panel.tpl' id=$contract->id}
     </div>
@@ -118,17 +109,18 @@
   <script>
     var countries = [
       {foreach $cars as $num=>$car}
-        {literal}{{/literal} value: '{$car->number} ({$car->mark} {$car->model}, {$car->color})', data: '{$car->id}' {literal}}{/literal},
+        {literal}{{/literal} value: '{$car->number} ({$car->mark} {$car->model}, {$car->color})', data: '{$car->id}', mileage: '{$car->mileage}' {literal}}{/literal},
       {/foreach}
-      {*  { value: '3405 (Toyota Vios Black)', data: '3' },
-        { value: '4560 (BMW 5 white)', data: '5' },
-        { value: '5138 (Volvo red)', data: '7' }*}
      ];
 
 {literal}
      $('#car_number').autocomplete({
          source: countries,
-         select: function (event, ui) {$('#car_id').val(ui.item.data)}
+         select: function (event, ui) {
+                    $('#car_id').val(ui.item.data)
+                    $('#mileage').val(ui.item.mileage)
+
+                  }
      });
   </script>
 {/literal}
