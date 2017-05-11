@@ -2,16 +2,16 @@
 namespace backend\controllers;
 
 use Yii;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use yii\helpers\Html;
+use backend\controllers\RentCarsController;
 
 /**
  * Site controller
  */
-class SiteController extends Controller
+class SiteController extends RentCarsController
 {
 
   /**
@@ -62,7 +62,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->render('index.tpl');
     }
 
     /**
