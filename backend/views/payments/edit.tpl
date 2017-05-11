@@ -46,29 +46,29 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-6 col-md-6">
-                <label>Amount in Thai Baht</label>
+            <div class="col-xs-6 col-md-3">
+                <label>Amount THB</label>
                 <div class="input-group">
                     <input type="text" name="thb" value="{$payment->thb}" class="form-control">
                     <span class="input-group-addon">THB</span>
                 </div> 
             </div>
-            <div class="col-xs-6 col-md-6">
-                <label>Amount in US Dollar</label>
+            <div class="col-xs-6 col-md-3">
+                <label>Amount USD</label>
                 <div class="input-group">
                     <input type="text" name="usd" value="{$payment->usd}" class="form-control">
                     <span class="input-group-addon">USD</span>
                 </div> 
             </div>
-            <div class="col-xs-6 col-md-6">
-                <label>Amount in Euro</label>
+            <div class="col-xs-6 col-md-3">
+                <label>Amount EURO</label>
                 <div class="input-group">
                     <input type="text" name="euro" value="{$payment->euro}" class="form-control">
                     <span class="input-group-addon">EURO</span>
                 </div> 
             </div>
-            <div class="col-xs-6 col-md-6">
-                <label>Amount in Rubles</label>
+            <div class="col-xs-6 col-md-3">
+                <label>Amount RUB</label>
                 <div class="input-group">
                     <input type="text" name="ruble" value="{$payment->ruble}" class="form-control">
                     <span class="input-group-addon">RUB</span>
