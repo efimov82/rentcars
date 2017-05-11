@@ -2,20 +2,20 @@
 {include file="layouts/header.tpl"}
 
 <!-- page content -->
-<div class="col-md-8">
-  <h3>Payments</h3>
-</div>          
+  <div class="col-md-8">
+    <h3>Payments</h3>
+  </div>          
 
-<div class="col-md-4">
-  <div id="custom-search-input">
-    <form action="/payments">
-      <div class="input-group col-md-12">
-        <input type="text" name="car_number" value="" class="search-query form-control" placeholder="Search by car number" />
-        <span class="input-group-btn"><button class="btn btn-fill" type="submit"><span class="fa fa-search"></span></button></span>
-      </div>
-    </form> 
+  <div class="col-md-4">
+    <div id="custom-search-input">
+      <form action="/payments">
+        <div class="input-group col-md-12">
+          <input type="text" name="car_number" value="" class="search-query form-control" placeholder="Search by car number" />
+          <span class="input-group-btn"><button class="btn btn-fill" type="submit"><span class="fa fa-search"></span></button></span>
+        </div>
+      </form> 
+    </div>
   </div>
-</div>
 </div>
 
 <div class="content table-responsive table-full-width">
@@ -34,7 +34,6 @@
       <th>RUB</th>
       <th>Status</th>
       <th>&nbsp;</th>
-      </tr>
     </thead>
     <tbody>
     {foreach $payments->each() as $payment}
