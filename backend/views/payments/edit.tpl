@@ -1,22 +1,24 @@
 {include file="layouts/header.tpl"}
-<!-- page content --!>
+<!-- page content -->
 <form action="/payments/save" method="POST">
+  <input type="hidden" name="id" value="{$payment->id}">
     <div class="col-md-6">
         <h3>Add/Edit payment</h3>
         <div class="row">
             <div class="col-xs-6 col-md-6">
-                <label>Car Number</label>
-                <div class="input-group">
-                    <input type="text" name="car_number" value="{$payment->getCar()->number}" class="form-control">
-                    <span class="input-group-addon"><i class="fa fa-car"></i></span>
-                </div> 
+              <label>Car Number</label>
+              <div class="input-group">
+                <input type="text" id="car_number" name="car_number" value="{$payment->getCar()->number}" class="form-control">
+                <input type="hidden" id="car_id" name="car_id" value="{$payment->getCar()->id}">
+                <span class="input-group-addon"><i class="fa fa-car"></i></span>
+              </div> 
             </div>
             <div class="col-xs-6 col-md-6">
-                <label>Contract Number</label>
-                <div class="input-group">
-                    <input type="text" name="contract_id" value="" class="form-control">
-                    <span class="input-group-addon"><i class="fa fa-car"></i></span>
-                </div> 
+              <label>Contract Number</label>
+              <div class="input-group">
+                <input type="text" name="contract_id" value="{$payment->contract_id}" class="form-control">
+                <span class="input-group-addon"><i class="fa fa-car"></i></span>
+              </div> 
             </div>
         </div>	
         <div class="row">
@@ -79,12 +81,12 @@
             <div class="col-md-12">
                 <label>Description</label>
                 <div class="input-group">
-                    <input type="text" name="description" value="" class="form-control">
+                    <input type="text" name="description" value="{$payment->description}" class="form-control">
                     <span class="input-group-addon"><i class="fa fa-info"></i></span>
                 </div> 
             </div>
           </div>
-          {if !$payment->isNewRecord}
+          
           <div class="row">
             <div class="col-md-12">
               <label>Status</label>
@@ -95,7 +97,24 @@
               {/if}
             </div>
           </div>
-          {/if}
+          
         {include file='layouts/panel.tpl' id=$payment->id}
     </div>
 </form>
+
+<script>
+  var cars = [
+    {foreach $cars as $num=>$car}
+      {literal}{{/literal} value: '{$car->number} ({$car->mark} {$car->model}, {$car->color})', data: '{$car->id}', mileage: '{$car->mileage}' {literal}}{/literal},
+    {/foreach}
+   ];
+
+  {literal}
+    $('#car_number').autocomplete({
+        source: cars,
+        select: function (event, ui) {
+                   $('#car_id').val(ui.item.data)
+                 }
+      });
+  {/literal}
+</script>
