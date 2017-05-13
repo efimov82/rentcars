@@ -8,6 +8,7 @@ use backend\models\PaymentCategory;
 use backend\models\PaymentType;
 use backend\models\User;
 use backend\models\Car;
+use backend\models\Contract;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -35,113 +36,122 @@ class PaymentsController extends RentCarsController
     *
     * @return string
     */
-   public function actionIndex()
-   {
-     $page = Yii::$app->getRequest()->getQueryParam('page') ? Yii::$app->getRequest()->getQueryParam('page') : 1;
+  public function actionIndex()
+  {
+    $page = Yii::$app->getRequest()->getQueryParam('page') ? Yii::$app->getRequest()->getQueryParam('page') : 1;
 
-     $payments = Payment::find()->limit(30, ($page-1))
-                               ->where(['status'=>[1,2]])
-                               ->orderBy(['date_create'=>SORT_DESC]);
+    $payments = Payment::find()->limit(30, ($page-1))
+                              ->where(['status'=>[1,2]])
+                              ->orderBy(['date_create'=>SORT_DESC]);
 
-     $users = User::find()->indexBy('id')->all();
-     $categories = PaymentCategory::find()->indexBy('id')->all();
-     $cars = Car::find()->indexBy('id')->all();
+    $users = User::find()->indexBy('id')->all();
+    $categories = PaymentCategory::find()->indexBy('id')->all();
+    $cars = Car::find()->indexBy('id')->all();
 
-     return $this->render('index.tpl', ['payments'=>$payments, 
-                                         'users'=>$users, 
-                                         'categories'=>$categories, 
-                                         'cars'=>$cars, 
-                                         'page'=>$page]);
-   }
+    return $this->render('index.tpl', ['payments'=>$payments, 
+                                        'users'=>$users, 
+                                        'categories'=>$categories, 
+                                        'cars'=>$cars, 
+                                        'page'=>$page]);
+  }
 
-   public function actionAdd()
-   {
-     $payment = new Payment();
+  public function actionAdd()
+  {
+    $payment = new Payment();
 
-     $categories = ArrayHelper::map(PaymentCategory::find()->all(), 'id', 'name');
-     $types = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
-     
-     return $this->render('edit.tpl', ['payment'=>$payment, 'categories'=>$categories, 'types'=>$types]);
-   }
+    return $this->showAddEditPage($payment);
+//     $categories = ArrayHelper::map(PaymentCategory::find()->all(), 'id', 'name');
+//     $types = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
+//     $cars = Car::find()->all();
+//     $contracts = Contract::find()->all();
+//     
+//     return $this->render('edit.tpl', ['payment'=>$payment, 
+//                                       'categories'=>$categories, 
+//                                       'types'=>$types,
+//                                       'cars'=>$cars,
+//                                       'contracts'=>$contracts,
+//       ]);
+  }
 
-   public function actionEdit()
-   {
-     $id = Yii::$app->getRequest()->getQueryParam('id');
-     $payment = Payment::findOne(['id'=>$id]);
-     if (!$payment || ($payment->status == Payment::STATUS_DELETED))
-       return $this->redirect('/payments');
+  public function actionEdit()
+  {
+    $id = Yii::$app->getRequest()->getQueryParam('id');
+    $payment = Payment::findOne(['id'=>$id]);
+    if (!$payment || ($payment->status == Payment::STATUS_DELETED)){
+      return $this->redirect('/payments');
+    }
 
-     $categories = ArrayHelper::map(PaymentCategory::find()->all(), 'id', 'name');
-     $types = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
+    return $this->showAddEditPage($payment);
+  }
+   
+   
+  protected function showAddEditPage(Payment $payment){
+    $categories = ArrayHelper::map(PaymentCategory::find()->all(), 'id', 'name');
+    $types = ArrayHelper::map(PaymentType::find()->all(), 'id', 'name');
+    $cars = Car::find()->all();
+    $contracts = Contract::find()->all();
 
-     return $this->render('edit.tpl', ['payment'=>$payment, 'categories'=>$categories, 'types'=>$types]);
-   }
+    return $this->render('edit.tpl', ['payment'=>$payment, 
+                                      'categories'=>$categories, 
+                                      'types'=>$types,
+                                      'cars'=>$cars,
+                                      'contracts'=>$contracts]);
+  }
 
-   public function actionSave()
-   {
-     $action = Yii::$app->getRequest()->post('action');
-     $id = Yii::$app->getRequest()->post('id');
+   public function actionSave(){
      $post = Yii::$app->getRequest()->post();
+     $action = $post['action'];
+     $id = (int)$post['id'];
 
      $payment = Payment::findOne(['id'=>$id]);
      // check for Delete status
      if ($payment && ($payment->status == Payment::STATUS_DELETED))
        return $this->redirect ('/payments');
      
-     switch ($action)
-     {
+     switch ($action){
        case 'save':
-         if (!$payment)
-         {
-           $payment = new Payment();
-           if (Yii::$app->user->can('admin'))
-           {
-             $payment->user_id = 1; //(int)$post['user_id'];
-             $payment->status = Payment::STATE_CONFIRM;
-           }
-           else
-           {
-             $payment->user_id = Yii::$app->user->id;
-             $payment->status = Payment::STATE_NEW;
-           }
+        if (!$payment){
+          $payment = new Payment(['status' => Payment::STATUS_NEW,
+                                  'creator_id' => Yii::$app->user->id,
+                                  'date_create' => date('Y-m-d H:i:s')]);
+        }
+        
+        //echo("status_old=".$payment->status);
+        if (Yii::$app->user->can('admin')){
+          $payment->status = (int)$post['status'];
+          //echo("status=".$payment->status);
+        }
+        // Поле creator_id = реальный создатель, user_id - кому приписан контракт, к случае если админ захочет добавить кому то контракт
+        // ВОЗМОЖНО стоит это упразднить
+        $payment->user_id = Yii::$app->user->id;
+        $payment->date = date('Y-m-d', strtotime($post['date']));
+        $payment->category_id = (int)$post['category_id'];
+        $payment->type_id = (int)$post['type_id'];
+        $payment->contract_id = (int)$post['contract_id'];
+        $payment->transaction_number = $post['transaction_number'];
+        $payment->car_id = (int)$post['car_id']; // TODO chect for CAR ID
+        $payment->usd = floatval($post['usd']);
+        $payment->euro = floatval($post['euro']);
+        $payment->thb = floatval($post['thb']);
+        $payment->ruble = floatval($post['ruble']);
+        $payment->description = $post['description'];
 
-
-           $payment->creator_id = Yii::$app->user->id;
-           $payment->date = date('Y-m-d', strtotime($post['date']));
-           $payment->date_create = date('Y-m-d H:i:s');
-           $payment->category_id = (int)$post['category_id'];
-           $payment->type_id = (int)$post['type_id'];
-           $payment->contract_id = $post['contract_id'];
-           $payment->transaction_number = $post['transaction_number'];
-           $payment->car_id = 3;//$post['car_id  ']; // TODO crech and find Car by number
-           $payment->usd = floatval($post['usd']);
-           $payment->uero = floatval($post['uero']);
-           $payment->thb = floatval($post['thb']);
-           $payment->ruble = floatval($post['ruble']);
-           $payment->description = $post['description'];
-         }
-         $payment->save();
-         break;
-       case 'delete':
-         if ($payment)
-         {
-           if (Yii::$app->user->can('admin'))
-           {
-             $payment->status = Payment::STATUS_DELETED;
-             $payment->date_update = date('Y-m-d H:i:s');
-             $payment->save();
-           }
-           else
-           {
-             if (($payment->creator_id == Yii::$app->user->identity->id) && 
-                  ($payment->status == Payment::STATUS_NEW))
-             {
-               $payment->delete();
-             }
-           }
-         }
-       default:
-         return $this->redirect('/payments');
-     } 
-   }
+        $res = $payment->save();
+        break;
+      case 'delete':
+        if ($payment){
+          if (Yii::$app->user->can('admin')){
+            $payment->status = Payment::STATUS_DELETED;
+            $payment->date_update = date('Y-m-d H:i:s');
+            $payment->save();
+          }else{
+            if (($payment->creator_id == Yii::$app->user->identity->id) && 
+                ($payment->status == Payment::STATUS_NEW)){
+              $payment->delete();
+            }
+          }
+        }
+      }
+      return $this->redirect('/payments');
+    }
 }

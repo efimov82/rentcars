@@ -63,9 +63,9 @@ class CarsController extends RentCarsController
       $id = Yii::$app->getRequest()->getQueryParam('id');
       $car = Car::findOne(['id'=>$id]);
       
-      $payments = Payment::find()->where(['car_id'=>$id]);
+      //$payments = Payment::find()->where(['car_id'=>$id]);
       
-      return $this->render('edit.tpl', ['car'=>$car, 'payments'=>$payments]);
+      return $this->render('edit.tpl', ['car'=>$car]);
     }
     
     /**
