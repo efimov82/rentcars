@@ -18,7 +18,7 @@
 
 </div>
 {if $message}
-  <div class="alert-success">{$message}</div>
+  <div class="alert alert-success">{$message}</div>
 {/if}
 
 

@@ -4,7 +4,7 @@
     <div class="col-md-6">
     <h3>Add or Edit Contract</h3>
         {if $error}
-        <div class="alert-danger"><strong>ERROR!</strong> {$error}</div>
+        <div class="alert alert-danger"><strong>ERROR!</strong> {$error}</div>
         {/if}
         <div class="row">
             <div class="col-xs-6 col-md-6">
@@ -18,7 +18,7 @@
             <div class="col-xs-6 col-md-6">
                 <label>Mileage</label>
                 <div class="input-group">
-                    <input type="text" id="mileage" name="mileage" value="{$data.car_mileage}" class="form-control">
+                    <input type="text" id="mileage" name="car_mileage" value="{$data.car_mileage}" class="form-control">
                     <span class="input-group-addon"><i class="fa fa-bug"></i></span>
                 </div> 
             </div>

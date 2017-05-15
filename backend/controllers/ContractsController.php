@@ -79,7 +79,7 @@ class ContractsController extends RentCarsController
       $client = new Client();
       $data = array_flip($contract->getTableSchema()->getColumnNames());
       $data['car_number'] = '';
-      $data['car_mileage'] = '';
+      $data['car_mileage'] = 0;
       $error = '';
       
       if (!Yii::$app->getRequest()->isPost){
@@ -205,7 +205,7 @@ class ContractsController extends RentCarsController
         Yii::$app->session->setFlash('error', 'Wrong car number');
         return false;
       }else{ // change mileage, status car
-        $car->mileage = $post['mileage'];
+        $car->mileage = $post['car_mileage'];
         $car->status = $car_status;
         $car->save();
       }
