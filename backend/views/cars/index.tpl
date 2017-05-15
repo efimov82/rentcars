@@ -2,24 +2,29 @@
 {include file="layouts/header.tpl"}
 
 <!-- page content --!>
-<div class="col-md-8">
-    <h3>List of cars</h3>
-</div>   
-       
-<div class="col-md-4">
-    <div id="custom-search-input">
-        <form action="/cars">
-            <div class="input-group col-md-12">
-                <input type="text" name="number" value={$number} class="search-query form-control" placeholder="Search by number" />
-                <span class="input-group-btn"><button class="btn btn-fill" type="submit"><span class="fa fa-search"></span></button></span>
-            </div>
-        </form> 
-    </div>
+  <div class="col-md-8">
+      <h3>List of cars</h3>
+  </div>   
+
+  <div class="col-md-4">
+      <div id="custom-search-input">
+          <form action="/cars">
+              <div class="input-group col-md-12">
+                  <input type="text" name="number" value={$number} class="search-query form-control" placeholder="Search by number" />
+                  <span class="input-group-btn"><button class="btn btn-fill" type="submit"><span class="fa fa-search"></span></button></span>
+              </div>
+          </form> 
+      </div>
+  </div>
 </div>
-</div>
+{if $message}
+  <div class="alert-success">{$message}</div>
+{/if}
+
         <div class="content table-responsive table-full-width">
             <table class="table table-hover">
                 <thead>
+                    <th>ID</th>
                     <th>Car Number</th>
                     <th>Brand</th>
                     <th>Model</th>
@@ -35,6 +40,7 @@
                 <tbody>
                 {foreach $cars->each() as $car}
                     <tr>
+                    <td>{$car->id}</td>
                     <td>{$car->number}</td>
                     <td>{$car->mark}</td>
                     <td>{$car->model}</td>

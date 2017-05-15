@@ -18,35 +18,35 @@
             <div class="col-xs-6 col-md-6">
                 <label>Mileage</label>
                 <div class="input-group">
-                    <input type="text" id="mileage" value="" class="form-control">
+                    <input type="text" id="mileage" name="mileage" value="{$data.car_mileage}" class="form-control">
                     <span class="input-group-addon"><i class="fa fa-bug"></i></span>
                 </div> 
             </div>
             <div class="col-xs-6 col-md-6">
                 <label>Data of Start</label>
                 <div class="input-group">
-                    <input name="date_start" class="datepicker form-control" type="text"/>
+                    <input name="date_start" class="datepicker form-control" value="{$contract->date_start}" type="text"/>
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
             </div> 
             <div class="col-xs-6 col-md-6">
                 <label>Data of Finish</label>
                 <div class="input-group">
-                    <input name="date_stop" class="datepicker form-control" type="text"/>
+                    <input name="date_stop" class="datepicker form-control" value="{$contract->date_stop}" type="text"/>
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
             </div>
             <div class="col-xs-6 col-md-6">
                 <label>Time</label>
                 <div class="input-group">
-                    <input type="text" name="time" class="form-control">
+                    <input type="text" name="time" value="{$contract->time}" class="form-control">
                     <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                 </div>  
             </div>
             <div class="col-xs-6 col-md-6">
                 <label>Client Passport #</label>
                 <div class="input-group">
-                    <input type="text" id="passport" name="passport" class="form-control">
+                    <input type="text" id="passport" name="passport" value="{$client->passport}" class="form-control">
                     <input type="hidden" name="client_id">
                     <span class="input-group-addon"><i class="fa fa-info-circle"></i></span>
                 </div>  
@@ -54,7 +54,7 @@
             <div class="col-xs-6 col-md-6">
                 <label>Client Name</label>
                 <div class="input-group">
-                    <input type="text" id="s_name" name="s_name" class="form-control">
+                    <input type="text" id="s_name" name="s_name" value="{$client->s_name}" class="form-control">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
                 </div>  
             </div>
@@ -63,28 +63,28 @@
             <div class="col-xs-6 col-md-6">
                 <label>Nationality</label>
                 <div class="input-group">
-                    <input type="text" name="nationality" value="RUS" class="form-control">
+                    <input type="text" name="nationality" value="{$client->nationality}" class="form-control">
                     <span class="input-group-addon"><i class="fa fa-flag"></i></span>
                 </div>  
             </div>
             <div class="col-xs-6 col-md-6">
                 <label>Phone Russia</label>
                 <div class="input-group">
-                    <input type="text" id="phone_h" name="phone_h" value="+7" class="form-control">
+                    <input type="text" id="phone_h" name="phone_h" value="{$client->phone_h|default:"+7"}" class="form-control">
                     <span class="input-group-addon"><i class="fa fa-phone-square"></i></span>
                 </div>
             </div>
             <div class="col-xs-6 col-md-6">
                 <label>Phone Thailand</label>
                 <div class="input-group">
-                    <input type="text" id="phone_m" name="phone_m" value="+66" class="form-control">
+                    <input type="text" id="phone_m" name="phone_m" value={$client->phone_m|default:"+66"} class="form-control">
                     <span class="input-group-addon"><i class="fa fa-phone-square"></i></span>
                 </div> 
             </div>
             <div class="col-xs-6 col-md-6">
                 <label>E-mail</label>
                 <div class="input-group">
-                    <input type="text" id="email" name="email" class="form-control">
+                    <input type="text" id="email" name="email" value="{$client->email|default:"@gmail.com"}" class="form-control">
                     <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
                 </div>
             </div>

@@ -10,6 +10,7 @@ namespace backend\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\helpers\Url;
+use backend\models\Car;
 
 /**
  * Common controller
@@ -67,9 +68,10 @@ class RentCarsController extends Controller
   
   public function render($view, $params = [])
   {
-    $params = array_merge($this->common_vars, $params);
+    $data = array_merge($this->common_vars, $params);
+    $data['statuses'] = Car::$statuses;
     
-    return parent::render($view, $params);
+    return parent::render($view, $data);
   }
   
 }

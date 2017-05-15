@@ -38,11 +38,27 @@ class PaymentsController extends RentCarsController
     */
   public function actionIndex()
   {
-    $page = Yii::$app->getRequest()->getQueryParam('page') ? Yii::$app->getRequest()->getQueryParam('page') : 1;
-
-    $payments = Payment::find()->limit(30, ($page-1))
-                              ->where(['status'=>[1,2]])
-                              ->orderBy(['date_create'=>SORT_DESC]);
+    $page = Yii::$app->getRequest()->getQueryParam('page', 1);// ? Yii::$app->getRequest()->getQueryParam('page') : 1;
+    $car_number = (int)Yii::$app->getRequest()->getQueryParam('car_number', '0');
+    $contract_id = (int)Yii::$app->getRequest()->getQueryParam('contract_id', '0');
+    
+    $count = 20;
+    $where = ['status'=>[1,2]];
+    if ($car_number){
+      $car = Car::findOne(['number'=>$car_number]);
+      if ($car)
+        $where['car_id'] = $car->id;
+      else
+        $where['car_id'] = 0;
+    }
+    
+    if ($contract_id)
+      $where['contract_id'] = $contract_id;
+    
+    $payments = Payment::find()->offset(($page-1)*$count)
+                               ->limit($count)
+                               ->where($where)
+                               ->orderBy(['date_create'=>SORT_DESC]);
 
     $users = User::find()->indexBy('id')->all();
     $categories = PaymentCategory::find()->indexBy('id')->all();
@@ -51,7 +67,8 @@ class PaymentsController extends RentCarsController
     return $this->render('index.tpl', ['payments'=>$payments, 
                                         'users'=>$users, 
                                         'categories'=>$categories, 
-                                        'cars'=>$cars, 
+                                        'cars'=>$cars,
+                                        'car_number'=>$car_number,
                                         'page'=>$page]);
   }
 

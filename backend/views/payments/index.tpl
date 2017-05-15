@@ -10,7 +10,7 @@
     <div id="custom-search-input">
       <form action="/payments">
         <div class="input-group col-md-12">
-          <input type="text" name="car_number" value="" class="search-query form-control" placeholder="Search by car number" />
+          <input type="text" name="car_number" value="{if $car_number}{$car_number}{/if}" class="search-query form-control" placeholder="Search by car number" />
           <span class="input-group-btn"><button class="btn btn-fill" type="submit"><span class="fa fa-search"></span></button></span>
         </div>
       </form> 

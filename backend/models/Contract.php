@@ -12,8 +12,25 @@ class Contract extends ActiveRecord
   /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName(){
         return 'contracts';
+    }
+    
+    public function getStatusName(){
+      if (isset($this->statuses[$this->status])){
+        return $this->statuses[$this->status];
+      }else{
+        return 'unknown';
+      }
+    }
+    
+    public function isFinishSoon()
+    {
+      //echo("id={$this->id} stop=".strtotime($this->date_stop).", now=".strtotime(time()));
+      //die();
+      if ($this->status == 1)
+        return ( (strtotime($this->date_stop) - time()) < 3600*24 );
+      else
+        return false;
     }
 }
