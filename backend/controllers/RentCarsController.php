@@ -57,12 +57,14 @@ class RentCarsController extends Controller
       $menu['reports'] = ['name'=>'Reports', 'class'=>'fa fa-table', 'href'=>'reports', 'items'=>[]];
       
     } 
-    $menu['logout'] = array('name'=>'Logout ('.Yii::$app->user->identity->username.')', 'class'=>'fa-sign-out', 'href'=>'/site/logout', 'items'=>[]);
+    
+    if (!Yii::$app->user->isGuest)
+      $menu['logout'] = array('name'=>'Logout ('.Yii::$app->user->identity->username.')', 'class'=>'fa-sign-out', 'href'=>'/site/logout', 'items'=>[]);
     
     $this->common_vars['main_menu'] = $menu;
     //$this->view->params['title'] = $this->title;
     //$this->main_menu = $menu;
-    
+    parent::beforeAction($action);
     return true;
   }
   
