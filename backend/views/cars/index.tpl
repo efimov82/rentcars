@@ -4,6 +4,7 @@
 <!-- page content --!>
   <div class="col-md-8">
       <h3>List of cars</h3>
+      <div><a href="/cars/add">Add car</a></div>
   </div>   
 
   <div class="col-md-4">

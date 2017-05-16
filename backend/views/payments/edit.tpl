@@ -35,7 +35,7 @@
             <div class="col-xs-6 col-md-6">
                 <label>Date of Payment</label>
                 <div class="input-group">
-                    <input name="date" value="{$payment->date}" class="datepicker form-control" type="text" autocomplete="off"/>
+                    <input name="date" value="{$payment->date|date_format:"%Y-%m-%d"}" class="datepicker form-control" type="text" autocomplete="off"/>
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
             </div>
