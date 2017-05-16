@@ -1,11 +1,9 @@
 {include file="layouts/header.tpl"}
 <!-- page content -->
-<form action="" enctype="multipart/form-data" method="POST">
+<form action="" method="POST">
     <div class="col-md-6">
-    <h3>Closed Contract #13</h3>
-        {if $error}
-        <div class="alert alert-danger"><strong>ERROR!</strong> {$error}</div>
-        {/if}
+    <h3>Close Contract #{$contract->id}</h3>
+        
         <div class="row">
             <div class="col-xs-6 col-md-6">
                 <label>Nationality</label>
@@ -115,40 +113,3 @@
         {include file='layouts/panel.tpl' id=$contract->id}
     </div>
 </form>
-
-<script>
-var cars = [
-  {foreach $cars as $num=>$car}
-    {literal}{{/literal} value: '{$car->number} ({$car->mark} {$car->model}, {$car->color})', data: '{$car->id}', mileage: '{$car->mileage}' {literal}}{/literal},
-  {/foreach}
- ];
-
-var clients_ids = [
-  {foreach $clients as $num=>$client}
-    {literal}{{/literal} value: '{$client->passport}', s_name: "{$client->s_name}", nationality: '{$client->nationality}', phone_m: '{$client->phone_m}', phone_h: '{$client->phone_h}', email: '{$client->email}'{literal}}{/literal},
-  {/foreach}
-];
-
-{literal}
-     $('#car_number').autocomplete({
-         source: cars,
-         select: function (event, ui) {
-                    $('#car_id').val(ui.item.data)
-                    $('#mileage').val(ui.item.mileage)
-
-                  }
-     });
-     
-     $('#passport').autocomplete({
-         source: clients_ids,
-         select: function (event, ui) {
-                    $('#client_id').val(ui.item.client_id)
-                    $('#s_name').val(ui.item.s_name)
-                    $('#email').val(ui.item.email)
-                    $('#phone_m').val(ui.item.phone_m)
-                    $('#phone_h').val(ui.item.phone_h)
-
-                  }
-     });
-  </script>
-  {/literal}

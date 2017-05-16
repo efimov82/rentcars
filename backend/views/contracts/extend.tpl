@@ -3,10 +3,9 @@
 <form action="" method="POST">
   <input type="hidden" name="id" value="{$contract->id}">
     <div class="col-md-6">
-    <h3>Extend contract</h3>
+    <h3>Extend contract #{$contract->id}</h3>
         
         <div class="row">
-            
             <div class="col-xs-6 col-md-6">
                 <label>Current Date of Finish</label>
                 <div class="input-group">

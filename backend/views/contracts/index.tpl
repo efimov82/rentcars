@@ -2,7 +2,7 @@
 
 <!-- page content -->
   <div class="col-md-8">
-    <h3>Contracts</h3> <a href="/contracts/add">Add contract</a>
+    <h3>Contracts</h3>
   </div> 
   
   <div class="col-md-4">
@@ -27,11 +27,13 @@
     <thead>
       <th>#</th>
       <th>Dates</th>
+      <th>Time</th>
       <th>Client</th>
+      <th>Phone Rus</th>
+      <th>Phone Thai</th>
+      <th>Location</th>
       <th>Car</th>
       <th>Status</th>
-      <th>&nbsp;</th>
-      <th>&nbsp;</th>
       <th>&nbsp;</th>
     </thead>
     <tbody>
@@ -41,13 +43,17 @@
             {if ($contract->status == 1)}class="success"{else}class="warning"{/if} {/if}>
         <td>{$contract->id}</td>
         <td>{$contract->date_start|date_format:"d/m/y"} - {$contract->date_stop|date_format:"d/m/y"}</td>
-        <td><a href="/clients/$contract->client_id">{$customers[$contract->client_id]}</a></td>
+        <td>{$contract->time}</td>
+        {$customer = $customers[$contract->client_id]}
+        <td><a href="/clients/$contract->client_id">{$customer->s_name}</a></td>
+        <td>{$customer->phone_h}</td>
+        <td>{$customer->phone_m}</td>
+        <td>{$contract->location}</td>
         <td><a href="/cars/view/{$contract->car_id}">#{$cars[$contract->car_id]}</a></td>
+        
         <td>{$contract->getStatusName()}</td>
         {*<td><a href="{url route="contracts/edit" id=$contract->id}"><button class="btn btn-fill btn-xs"><i class="fa fa-pencil-square-o"></i>Edit</button></a></td>*}
-        <td><a href="{url route="/payments" contract_id=$contract->id}">PAYMENTS</a></td>
-        <td><a href="{url route="/contracts/extend" id=$contract->id}">Extend</a></td>
-        <td><a href="{url route="/contracts/close" id=$contract->id}">Close</a></td>
+        <td><a href="{url route="/payments" contract_id=$contract->id}">Payments</a> | <a href="{url route="/contracts/extend" id=$contract->id}">Extend</a> | <a href="{url route="/contracts/close" id=$contract->id}">Close</a></td>
       </tr>
     </tbody>
     {/foreach}

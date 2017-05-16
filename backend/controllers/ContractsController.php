@@ -57,7 +57,7 @@ class ContractsController extends RentCarsController{
     }
 
     $cars = ArrayHelper::map(Car::find()->all(), 'id', 'number');
-    $customers = ArrayHelper::map(Client::find()->all(), 'id', 's_name');
+    $customers = Client::find()->indexBy('id')->all();
 
     $message = Yii::$app->session->getFlash('message');
 
@@ -119,6 +119,7 @@ class ContractsController extends RentCarsController{
       return $this->renderPage($data, $contract, $client, 'view.tpl');
     }
 
+    
     public function actionExtend(){
       $id = Yii::$app->getRequest()->getQueryParam('id');
       $contract = Contract::findOne(['id'=>$id]);
@@ -152,6 +153,16 @@ class ContractsController extends RentCarsController{
       // TODO - уточнить что именно сохранить и как
     }
     
+    public function actionClose(){
+      $id = Yii::$app->getRequest()->getQueryParam('id');
+      $contract = Contract::findOne(['id'=>$id]);
+      if (!$contract)
+        return $this->redirect('/');
+      
+      $this->render('close.tpl', ['contract'=>$contract]);
+    }
+
+
     protected function renderPage($data, $contract, $client, $template)
     {
       $cars = Car::find()->where(['status'=>Car::STATUS_AVAILABLE])->all();

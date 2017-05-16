@@ -4,7 +4,6 @@
 <!-- page content -->
   <div class="col-md-8">
     <h3>Payments</h3>
-    <div><a href="/payments/add">Add payment</a></div>
   </div>          
 
   <div class="col-md-4">
