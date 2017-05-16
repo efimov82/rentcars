@@ -14,10 +14,8 @@ use yii\helpers\ArrayHelper;
 /**
  * Client controller
  */
-class ContractsController extends RentCarsController
-{
-  public function behaviors()
-  {
+class ContractsController extends RentCarsController{
+  public function behaviors(){
     return [
           'access' => [
               'class' => AccessControl::className(),
@@ -33,48 +31,45 @@ class ContractsController extends RentCarsController
   }
   
   /**
-     * Displays homepage.
-     *
-     * @return string
-     */
-    public function actionIndex()
-    {
-      $car_number = (int)Yii::$app->getRequest()->getQueryParam('car_number');
-      $page = Yii::$app->getRequest()->getQueryParam('page') ? Yii::$app->getRequest()->getQueryParam('page') : 1;
-      
-      $count = 20;
-      if ($car_number){
-        $car_id = 0;
-        $car = Car::findOne(['number'=>$car_number]);
-        if ($car){
-          $car_id = $car->id;
-        }
-        $contracts = Contract::find()->where(['car_id'=>$car_id])
-                                      ->offset(($page-1)*$count)
-                                      ->limit($count)
-                                      ->orderBy(['date_create'=>SORT_DESC]);
+   * Displays list contracts.
+   *
+   * @return string
+   */
+  public function actionIndex(){
+    $car_number = (int)Yii::$app->getRequest()->getQueryParam('car_number');
+    $page = Yii::$app->getRequest()->getQueryParam('page') ? Yii::$app->getRequest()->getQueryParam('page') : 1;
+
+    $count = 20;
+    if ($car_number){
+      $car_id = 0;
+      $car = Car::findOne(['number'=>$car_number]);
+      if ($car){
+        $car_id = $car->id;
       }
-      else{
-        $contracts = Contract::find()->offset(($page-1)*$count)
-                                      ->limit($count)
-                                      ->orderBy(['date_create'=>SORT_DESC]);
-      }
-      
-      $cars = ArrayHelper::map(Car::find()->all(), 'id', 'number');
-      $customers = ArrayHelper::map(Client::find()->all(), 'id', 's_name');
-      
-      $message = Yii::$app->session->getFlash('message');
-      
-      return $this->render('index.tpl', ['contracts'=>$contracts, 
-                                         'page'=>$page, 
-                                         'car_number'=>$car_number, 
-                                         'message'=>$message,
-                                         'customers'=>$customers,
-                                         'cars'=>$cars]);
+      $contracts = Contract::find()->where(['car_id'=>$car_id])
+                                    ->offset(($page-1)*$count)
+                                    ->limit($count)
+                                    ->orderBy(['date_create'=>SORT_DESC]);
+    }else{
+      $contracts = Contract::find()->offset(($page-1)*$count)
+                                    ->limit($count)
+                                    ->orderBy(['date_create'=>SORT_DESC]);
     }
+
+    $cars = ArrayHelper::map(Car::find()->all(), 'id', 'number');
+    $customers = ArrayHelper::map(Client::find()->all(), 'id', 's_name');
+
+    $message = Yii::$app->session->getFlash('message');
+
+    return $this->render('index.tpl', ['contracts'=>$contracts, 
+                                       'page'=>$page, 
+                                       'car_number'=>$car_number, 
+                                       'message'=>$message,
+                                       'customers'=>$customers,
+                                       'cars'=>$cars]);
+  }
     
-    public function actionAdd()
-    {
+    public function actionAdd(){
       $contract = new Contract();
       $client = new Client();
       $data = array_flip($contract->getTableSchema()->getColumnNames());
@@ -83,7 +78,7 @@ class ContractsController extends RentCarsController
       $error = '';
       
       if (!Yii::$app->getRequest()->isPost){
-        return $this->renderPage($data, $contract, $client);
+        return $this->renderPage($data, $contract, $client, 'edit.tpl');
       }
       
       $post = Yii::$app->getRequest()->post();
@@ -111,9 +106,35 @@ class ContractsController extends RentCarsController
       return $this->redirect('/contracts');
     }
     
+    public function actionView(){
+      $id = Yii::$app->getRequest()->getQueryParam('id');
+      $contract = Contract::findOne(['id'=>$id]);
+      if (!$contract)
+        return $this->redirect('/');
+      
+      $car = Car::findOne(['id'=>$contract->car_id]);
+      $client = Client::findOne(['id'=>$contract->client_id]);
+      $data = ['car_number'=>$car->number, 'car_mileage'=>$car->mileage];
+      
+      return $this->renderPage($data, $contract, $client, 'view.tpl');
+    }
 
-    public function actionEdit()
-    {
+    public function actionExtend(){
+      $id = Yii::$app->getRequest()->getQueryParam('id');
+      $contract = Contract::findOne(['id'=>$id]);
+      if (!$contract)
+        return $this->redirect('/');
+      
+      $payments_statuses = Payment::getListStatuses();
+      if (!Yii::$app->getRequest()->isPost){
+        return $this->render('extend.tpl', ['contract'=>$contract, 'payments_statuses'=>$payments_statuses]);
+      }
+      
+      $post = Yii::$app->getRequest()->post();
+      // TODO save + add payment
+    }
+    
+    public function actionEdit(){
       $id = Yii::$app->getRequest()->getQueryParam('id');
       $contract = Contract::findOne(['id'=>$id]);
       if (!$contract)
@@ -124,20 +145,20 @@ class ContractsController extends RentCarsController
       $data = ['car_number'=>$car->number, 'car_mileage'=>$car->mileage];
       
       if (!Yii::$app->getRequest()->isPost){
-        return $this->renderPage($data, $contract, $client);
+        return $this->renderPage($data, $contract, $client, 'edit.tpl');
       }
       
       $post = Yii::$app->getRequest()->post();
       // TODO - уточнить что именно сохранить и как
     }
     
-    protected function renderPage($data, $contract, $client)
+    protected function renderPage($data, $contract, $client, $template)
     {
       $cars = Car::find()->where(['status'=>Car::STATUS_AVAILABLE])->all();
       $clients = Client::find()->all();
       $error = Yii::$app->session->getFlash('error', '');
       
-      return $this->render('edit.tpl', ['data'=>$data, 
+      return $this->render($template, ['data'=>$data, 
                                         'contract'=>$contract, 
                                         'cars'=>$cars, 
                                         'client'=>$client, 
@@ -202,7 +223,7 @@ class ContractsController extends RentCarsController
       
       $car = Car::findOne(['id'=>(int)$post['car_id']]);
       if (!$car){
-        Yii::$app->session->setFlash('error', 'Wrong car number');
+        Yii::$app->session->setFlash('error', 'Car not found or not avaliable for rent.');
         return false;
       }else{ // change mileage, status car
         $car->mileage = $post['car_mileage'];
@@ -218,14 +239,15 @@ class ContractsController extends RentCarsController
     protected function savePayments($contract, $post)
     {
       $user_id = Yii::$app->user->id;
-      $data = ['user_id'=>$user_id, 'creator_id'=>$user_id, 'date'=>$post['date_start'],
+      $data = ['user_id'=>$user_id, 'creator_id'=>$user_id, 'date'=>date('Y-m-d', strtotime($post['date_start'])),
                   'date_create'=>date('Y-m-d H:i:s'), 'type_id'=>PaymentType::INCOMING,
                   'contract_id'=>$contract->id, 'car_id'=>$contract->car_id, 'status'=>Payment::STATUS_NEW];
       
-      // deposit
+      
+      // rent payment
       // category_id = 9 - deposit TODO think about change it
       $data1 = $data;
-      $data1['category_id'] = 9;
+      $data1['category_id'] = 2;
       $data1['thb'] = (int)$post['amount_thb'];
       $data1['euro'] = (int)$post['amount_euro'];
       $data1['usd'] = (int)$post['amount_usd'];
@@ -233,10 +255,10 @@ class ContractsController extends RentCarsController
       
       $payment_deposit = new Payment($data1);
       $payment_deposit->save();
-      // rent payment
+      // deposit
       // category_id = 2 TODO change it
       $data2 = $data;
-      $data2['category_id'] = 2;
+      $data2['category_id'] = 9;
       $data2['thb'] = (int)$post['deposit_thb'];
       $data2['euro'] = (int)$post['deposit_euro'];
       $data2['usd'] = (int)$post['deposit_usd'];

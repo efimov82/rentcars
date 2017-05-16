@@ -2,7 +2,7 @@
 
 <!-- page content -->
   <div class="col-md-8">
-    <h3>Contracts</h3>
+    <h3>Contracts</h3> <a href="/contracts/add">Add contract</a>
   </div> 
   
   <div class="col-md-4">
@@ -26,12 +26,11 @@
   <table class="table table-hover">
     <thead>
       <th>#</th>
-      <th>Date create</th>
-      <th>Date start</th>
-      <th>Date stop</th>
+      <th>Dates</th>
       <th>Client</th>
-      <th>Car#</th>
+      <th>Car</th>
       <th>Status</th>
+      <th>&nbsp;</th>
       <th>&nbsp;</th>
       <th>&nbsp;</th>
     </thead>
@@ -41,14 +40,14 @@
       <tr {if $contract->isFinishSoon()}class="danger"{else} 
             {if ($contract->status == 1)}class="success"{else}class="warning"{/if} {/if}>
         <td>{$contract->id}</td>
-        <td>{$contract->date_create|date_format:"d/m/y H:i"}</td>
-        <td>{$contract->date_start|date_format:"d/m/y"}</td>
-        <td>{$contract->date_stop|date_format:"d/m/y"}</td>
-        <td>{$customers[$contract->client_id]}</td>
-        <td>{$cars[$contract->car_id]}</td>
+        <td>{$contract->date_start|date_format:"d/m/y"} - {$contract->date_stop|date_format:"d/m/y"}</td>
+        <td><a href="/clients/$contract->client_id">{$customers[$contract->client_id]}</a></td>
+        <td><a href="/cars/view/{$contract->car_id}">#{$cars[$contract->car_id]}</a></td>
         <td>{$contract->getStatusName()}</td>
-        <td><a href="{url route="contracts/edit" id=$contract->id}"><button class="btn btn-fill btn-xs"><i class="fa fa-pencil-square-o"></i>Edit</button></a></td>
+        {*<td><a href="{url route="contracts/edit" id=$contract->id}"><button class="btn btn-fill btn-xs"><i class="fa fa-pencil-square-o"></i>Edit</button></a></td>*}
         <td><a href="{url route="/payments" contract_id=$contract->id}">PAYMENTS</a></td>
+        <td><a href="{url route="/contracts/extend" id=$contract->id}">Extend</a></td>
+        <td><a href="{url route="/contracts/close" id=$contract->id}">Close</a></td>
       </tr>
     </tbody>
     {/foreach}

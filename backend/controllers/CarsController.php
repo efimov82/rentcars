@@ -13,10 +13,8 @@ use backend\models\Payment;
 /**
  * Site controller
  */
-class CarsController extends RentCarsController
-{
-  public function behaviors()
-  {
+class CarsController extends RentCarsController{
+  public function behaviors(){
     return [
           'access' => [
               'class' => AccessControl::className(),
@@ -45,8 +43,7 @@ class CarsController extends RentCarsController
      *
      * @return string
      */
-    public function actionIndex()
-    {
+    public function actionIndex(){
       $number = (int)Yii::$app->getRequest()->getQueryParam('number');
       $page = Yii::$app->getRequest()->getQueryParam('page') ? Yii::$app->getRequest()->getQueryParam('page') : 1;
       $count = 20;
@@ -65,19 +62,23 @@ class CarsController extends RentCarsController
                                          'page'=>$page]);
     }
     
-    public function actionAdd()
-    {
+    public function actionAdd(){
       $car = new Car();
-      
       return $this->render('edit.tpl', ['car'=>$car]);
     }
     
-    public function actionEdit()
-    {
+    public function actionEdit(){
       $id = Yii::$app->getRequest()->getQueryParam('id');
       $car = Car::findOne(['id'=>$id]);
       
       return $this->render('edit.tpl', ['car'=>$car]);
+    }
+    
+    public function actionView(){
+      $id = Yii::$app->getRequest()->getQueryParam('id');
+      $car = Car::findOne(['id'=>$id]);
+      
+      return $this->render('view.tpl', ['car'=>$car]);
     }
     
     /**

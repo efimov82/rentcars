@@ -9,6 +9,7 @@ class Payment extends ActiveRecord
   const STATUS_NEW        = 1;
   const STATUS_CONFIRMED  = 2;
   const STATUS_DELETED    = 3;
+  const STATUS_UNPAID     = 4;
   /**
      * @inheritdoc
      */
@@ -29,9 +30,9 @@ class Payment extends ActiveRecord
       return $car;
     }
     
-    public function getListStatuses()
+    public static function getListStatuses()
     {
-      return [self::STATUS_NEW=>'New', self::STATUS_CONFIRMED=>'Confirmed'];
+      return [self::STATUS_NEW=>'New', self::STATUS_CONFIRMED=>'Confirmed', self::STATUS_UNPAID=>'Unpaid'];
     }
     
     public function getStatusName()

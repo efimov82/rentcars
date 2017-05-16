@@ -4,6 +4,7 @@
 <!-- page content -->
   <div class="col-md-8">
     <h3>Payments</h3>
+    <div><a href="/payments/add">Add payment</a></div>
   </div>          
 
   <div class="col-md-4">
@@ -26,7 +27,7 @@
       <th>User</th>
       <th>Category</th>
       <th>Type</th>
-      <th>Contract #</th>
+      <th>Contract</th>
       <th>Car #</th>
       <th>USD</th>
       <th>EUR</th>
@@ -42,8 +43,8 @@
       <td>{$payment->date|date_format:'%d/%m/%y'}</td>
       <td>{$users[$payment->user_id]->name}</td>
       <td>{$categories[$payment->category_id]->name}</td>
-      <td>{$payment->type_id}</td>
-      <td>{$payment->contract_id}</td>
+      <td>{if ($payment->type_id == 1)}+{else}-{/if}</td>
+      <td><a href="{url route="/contracts/view/" id=$payment->contract_id}">#{$payment->contract_id}</a></td>
       <td>{$cars[$payment->car_id]->number}</td>
       <td>{$payment->usd}</td>
       <td>{$payment->euro}</td>
