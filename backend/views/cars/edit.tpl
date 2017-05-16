@@ -2,7 +2,7 @@
             <!-- page content --!>
             <form action="/cars/save" method="POST">
                 <div class="col-md-6">
-                <h3>Edit car</h3>
+                <h3>Edit Сar</h3>
                     <div class="row">
                         <div class="col-xs-6 col-md-6">
                             <label>Car Number</label>
@@ -78,10 +78,13 @@
                       </div>
                       <div class="col-xs-6 col-md-6">
                         <label>Status</label>
-                        <div class="input-group">
-                          {html_options name="status" options=$statuses selected=$car->status class="form-control"}
-                        </div>
+                        {html_options name="status" options=$statuses selected=$car->status class="form-control"}
                       </div>
+                    </div>
+                    <label>Add Files</label>
+                    <div class="input-group">
+                        <label class="input-group-btn"><span class="btn btn-fill">Browse<input type="file" style="display: none;" multiple></span></label>
+                        <input type="text" name="image1" class="form-control" readonly>
                     </div>
                     {include file='layouts/panel.tpl' id=$car->id}
                 </div>

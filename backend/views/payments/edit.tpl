@@ -3,7 +3,7 @@
 <form action="/payments/save" method="POST">
   <input type="hidden" name="id" value="{$payment->id}">
     <div class="col-md-6">
-        <h3>Add/Edit payment</h3>
+        <h3>Add / Edit payment</h3>
         <div class="row">
             <div class="col-xs-6 col-md-6">
               <label>Car Number</label>

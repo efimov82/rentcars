@@ -18,7 +18,7 @@
   </div>
 </div>
 {if $message}
-  <div class="alert-success">{$message}</div>
+  <div class="alert alert-success">{$message}</div>
 {/if}
 
         <div class="content table-responsive table-full-width">
