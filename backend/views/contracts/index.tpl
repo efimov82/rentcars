@@ -42,7 +42,7 @@
       <tr {if $contract->isFinishSoon()}class="danger"{else} 
             {if ($contract->status == 1)}class="success"{else}class="warning"{/if} {/if}>
         <td>{$contract->id}</td>
-        <td>{$contract->date_start|date_format:"d/m/y"} - {$contract->date_stop|date_format:"d/m/y"}</td>
+        <td>{$contract->date_start|date_format:"d.m"} - {$contract->date_stop|date_format:"d/m"}</td>
         <td>{$contract->time}</td>
         {$customer = $customers[$contract->client_id]}
         <td><a href="/clients/$contract->client_id">{$customer->s_name}</a></td>
