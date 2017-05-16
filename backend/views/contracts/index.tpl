@@ -42,18 +42,18 @@
       <tr {if $contract->isFinishSoon()}class="danger"{else} 
             {if ($contract->status == 1)}class="success"{else}class="warning"{/if} {/if}>
         <td>{$contract->id}</td>
-        <td>{$contract->date_start|date_format:"d.m"} - {$contract->date_stop|date_format:"d/m"}</td>
+        <td>{$contract->date_start|date_format:"d/m"} - {$contract->date_stop|date_format:"d/m"}</td>
         <td>{$contract->time}</td>
         {$customer = $customers[$contract->client_id]}
         <td><a href="/clients/$contract->client_id">{$customer->s_name}</a></td>
         <td>{$customer->phone_h}</td>
         <td>{$customer->phone_m}</td>
         <td>{$contract->location}</td>
-        <td><a href="/cars/view/{$contract->car_id}">#{$cars[$contract->car_id]}</a></td>
+        <td><a href="/cars/view/{$contract->car_id}">{$cars[$contract->car_id]}</a></td>
         
         <td>{$contract->getStatusName()}</td>
         {*<td><a href="{url route="contracts/edit" id=$contract->id}"><button class="btn btn-fill btn-xs"><i class="fa fa-pencil-square-o"></i>Edit</button></a></td>*}
-        <td><a href="{url route="/payments" contract_id=$contract->id}">Payments</a> | <a href="{url route="/contracts/extend" id=$contract->id}">Extend</a> | <a href="{url route="/contracts/close" id=$contract->id}">Close</a></td>
+        <td><a href="{url route="/payments" contract_id=$contract->id}">$</a> | <a href="{url route="/contracts/extend" id=$contract->id}"><-></a> | <a href="{url route="/contracts/close" id=$contract->id}"><strong>X</strong></a></td>
       </tr>
     </tbody>
     {/foreach}
