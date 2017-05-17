@@ -140,7 +140,8 @@ class ContractsController extends RentCarsController{
           $contract->save();
           // payment
           $user_id = Yii::$app->user->id;
-          $data = ['user_id'    => $user_id, 
+          $payment = new Payment(
+                  ['user_id'    => $user_id, 
                    'creator_id' => $user_id, 
                    'date'       => date('Y-m-d H:i:s'),
                    'date_create'=> date('Y-m-d H:i:s'), 
@@ -153,10 +154,8 @@ class ContractsController extends RentCarsController{
                    'euro'       => (int)$post['amount_euro'],
                    'usd'        => (int)$post['amount_usd'],
                    'ruble'      => (int)$post['amount_ruble']
-                   ];
-//          print_r($data);
-//          $payment_extend = new Payment($data);
-//          $res=$payment_extend->save();
+                   ]);
+          $payment->save();
 //          echo('res='.$res);
 //          print_r($payment_extend);
 //          die();
