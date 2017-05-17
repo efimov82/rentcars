@@ -165,7 +165,7 @@ class ContractsController extends RentCarsController{
       $this->redirect('/contracts');
     }
     
-    public function actionEdit(){
+    /*public function actionEdit(){
       $id = Yii::$app->getRequest()->getQueryParam('id');
       $contract = Contract::findOne(['id'=>$id]);
       if (!$contract)
@@ -181,7 +181,7 @@ class ContractsController extends RentCarsController{
       
       $post = Yii::$app->getRequest()->post();
       // TODO - уточнить что именно сохранить и как
-    }
+    }*/
     
     public function actionClose(){
       $id = Yii::$app->getRequest()->getQueryParam('id');
@@ -189,7 +189,13 @@ class ContractsController extends RentCarsController{
       if (!$contract)
         return $this->redirect('/');
       
-      $this->render('close.tpl', ['contract'=>$contract]);
+      $payments = Payment::find(['contract_id'=>$id]);
+      $cars = Car::find()->indexBy('id')->all();
+      
+      if (!Yii::$app->getRequest()->isPost){
+        return $this->render('close.tpl', ['contract'=>$contract, 'payments'=>$payments, 'cars'=>$cars]);
+      }
+      
     }
 
 

@@ -5,111 +5,51 @@
     <h3>Close Contract #{$contract->id}</h3>
         
         <div class="row">
+          <div class="col-xs-6 col-md-6">
+              <label>Info</label>
+              <div class="input-group">
+              <div>Date start: {$contract->date_start|date_format:"%d-%m-%Y"}</div>
+              <div>Date finish: {$contract->date_stop|date_format:"%d-%m-%Y"}</div>
+              {$car = $cars[$contract->car_id]}
+              <div>Car: #{$car.number} ({$car->mark} {$car->model})</div>
+              <div>Customer: {$contract->client_id}</div>
+              </div>
+          </div>
+          <div class="col-xs-6 col-md-6">
+              <label>Payments</label> (тут наверное лучше таблицу - ну и чтобы она была как сейчас справа - место экономит)
+              <div class="input-group">
+                <div><strong>ID, Date, Category, Type, USD, EURO, THB. RUB</strong></div>
+                {foreach $payments->each() as $payment}
+                  <div>#{$payment->id} {$payment->date|date_format:"%d-%m-%Y"}, {$payment->category_id}, {$payment->type_id}, {$payment->usd}, {$payment->euro}, {$payment->thb}, {$payment->ruble}</div>
+                {/foreach}
+              </div>  
+          </div>
             <div class="col-xs-6 col-md-6">
-                <label>Nationality</label>
+                <label>Additional payments</label>
+                {$currency_list = ['usd'=>'usd', 'euro'=>'euro', 'thb'=>'thb', 'rub'=>'rub']}
                 <div class="input-group">
-                    <input type="text" name="nationality" value="{$client->nationality}" class="form-control">
-                    <span class="input-group-addon"><i class="fa fa-flag"></i></span>
-                </div>  
-            </div>
-            <div class="col-xs-6 col-md-6">
-                <label>Phone Russia</label>
+                    Clean car: <input type="text" name="clean" value="0" class="form-control">
+                    {html_options name="clean_cur" options=$currency_list class="form-control"}
+                </div>
                 <div class="input-group">
-                    <input type="text" id="phone_h" name="phone_h" value="{$client->phone_h|default:"+7"}" class="form-control">
-                    <span class="input-group-addon"><i class="fa fa-phone-square"></i></span>
+                    Repair car: <input type="text" name="repair" value="0" class="form-control">
+                    {html_options name="repair_cur" options=$currency_list class="form-control"}
+                </div>
+                <div class="input-group">
+                    Gasoline: <input type="text" name="gasoline" value="0" class="form-control">
+                    {html_options name="gasoline_cur" options=$currency_list class="form-control"}
                 </div>
             </div>
-            <div class="col-xs-6 col-md-6">
-                <label>Phone Thailand</label>
-                <div class="input-group">
-                    <input type="text" id="phone_m" name="phone_m" value={$client->phone_m|default:"+66"} class="form-control">
-                    <span class="input-group-addon"><i class="fa fa-phone-square"></i></span>
-                </div> 
-            </div>
-            <div class="col-xs-6 col-md-6">
-                <label>E-mail</label>
-                <div class="input-group">
-                    <input type="text" id="email" name="email" value="{$client->email|default:"@gmail.com"}" class="form-control">
-                    <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                </div>
-            </div>
-            <div class="col-xs-6 col-md-6">
-                <label>Client Type</label>
-                <select class="form-control system-add-price" name="client_type">
-                    <option value="pauper">Pauper</option>
-                    <option value="middle">Middle</option>
-                    <option value="rich">Rich</option>
-                </select>
-            </div>
-            <div class="col-xs-6 col-md-3">
-                <label>Amount THB</label>
-                <div class="input-group">
-                    <input type="text" name="amount_thb" value="" class="form-control">
-                    <span class="input-group-addon">THB</span>
-                </div> 
-            </div>
-            <div class="col-xs-6 col-md-3">
-                <label>Amount USD</label>
-                <div class="input-group">
-                    <input type="text" name="amount_usd" value="" class="form-control">
-                    <span class="input-group-addon">USD</span>
-                </div> 
-            </div>
-            <div class="col-xs-6 col-md-3">
-                <label>Amount EURO</label>
-                <div class="input-group">
-                    <input type="text" name="amount_euro" value="" class="form-control">
-                    <span class="input-group-addon">EURO</span>
-                </div> 
-            </div>
-            <div class="col-xs-6 col-md-3">
-                <label>Amount RUB</label>
-                <div class="input-group">
-                    <input type="text" name="amount_ruble" value="" class="form-control">
-                    <span class="input-group-addon">RUB</span>
-                </div> 
-            </div>
-
-            <div class="col-xs-6 col-md-3">
-                <label>Deposit THB</label>
-                <div class="input-group">
-                    <input type="text" name="deposit_thb" value="" class="form-control">
-                    <span class="input-group-addon">THB</span>
-                </div> 
-            </div>
-            <div class="col-xs-6 col-md-3">
-                <label>Deposit USD</label>
-                <div class="input-group">
-                    <input type="text" name="deposit_usd" value="" class="form-control">
-                    <span class="input-group-addon">USD</span>
-                </div> 
-            </div>
-            <div class="col-xs-6 col-md-3">
-                <label>Deposit EURO</label>
-                <div class="input-group">
-                    <input type="text" name="deposit_euro" value="" class="form-control">
-                    <span class="input-group-addon">EURO</span>
-                </div> 
-            </div>
-            <div class="col-xs-6 col-md-3">
-                <label>Deposit RUB</label>
-                <div class="input-group">
-                    <input type="text" name="deposit_ruble" value="" class="form-control">
-                    <span class="input-group-addon">RUB</span>
-                </div> 
-            </div>
-            <div class="col-xs-6 col-md-6">
-                <label>Add Files</label>
-                <div class="input-group">
-                    <label class="input-group-btn"><span class="btn btn-fill">Browse<input type="file" style="display: none;" multiple></span></label>
-                    <input type="text" name="image1" class="form-control" readonly>
-                </div>
-            </div>
-            <div class="col-xs-6 col-md-6">
-                <label>Status</label>
-                {html_options name="status" options=$contract->statuses selected=$contract->status class="form-control"}
-            </div>
+            
         </div>    
-        {include file='layouts/panel.tpl' id=$contract->id}
+
+
+        <div class="tim-title">
+        <div class="row">
+            <div class="col-md-4">
+                <button name="action" value="save" class="btn btn-block"><i class="fa fa-floppy-o"></i> Close</button>
+            </div>
+        </div>
+    </div>
     </div>
 </form>
