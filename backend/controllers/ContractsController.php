@@ -132,7 +132,38 @@ class ContractsController extends RentCarsController{
       }
       
       $post = Yii::$app->getRequest()->post();
-      // TODO save + add payment
+      $action = $post['action'];
+      switch ($action){
+        case 'save':
+          $contract->date_stop = date('Y-m-d', strtotime($post['new_date_stop']));
+          $contract->time = (int)$post['time'];
+          $contract->save();
+          // payment
+          $user_id = Yii::$app->user->id;
+          $data = ['user_id'    => $user_id, 
+                   'creator_id' => $user_id, 
+                   'date'       => date('Y-m-d H:i:s'),
+                   'date_create'=> date('Y-m-d H:i:s'), 
+                   'type_id'    => PaymentType::INCOMING,
+                   'contract_id'=> $contract->id, 
+                   'car_id'     => $contract->car_id, 
+                   'category_id'=> 10, // category_id = 10 - extend contract
+                   'status'     => $post['status'],
+                   'thb'        => (int)$post['amount_thb'],
+                   'euro'       => (int)$post['amount_euro'],
+                   'usd'        => (int)$post['amount_usd'],
+                   'ruble'      => (int)$post['amount_ruble']
+                   ];
+//          print_r($data);
+//          $payment_extend = new Payment($data);
+//          $res=$payment_extend->save();
+//          echo('res='.$res);
+//          print_r($payment_extend);
+//          die();
+          Yii::$app->session->setFlash('message', 'Contract successfully extended.');
+      }
+      
+      $this->redirect('/contracts');
     }
     
     public function actionEdit(){

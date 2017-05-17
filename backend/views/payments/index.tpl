@@ -37,7 +37,7 @@
     </thead>
     <tbody>
     {foreach $payments->each() as $payment}
-      <tr {if ($payment->status == 1)}class="warning"{else}class="success"{/if}>
+      <tr {if ($payment->status == 1)}class="warning"{elseif $payment->status == 4}class="danger"{else}class="success"{/if}>
       <td>{$payment->id}</td>
       <td>{$payment->date|date_format:'%d/%m/%y'}</td>
       <td>{$users[$payment->user_id]->name}</td>

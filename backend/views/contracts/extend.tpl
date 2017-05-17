@@ -24,7 +24,7 @@
             <div class="col-xs-6 col-md-6">
                 <label>New Date of Finish</label>
                 <div class="input-group">
-                    <input name="date_stop" class="datepicker form-control" value="{$contract->date_stop}" type="text"/>
+                    <input name="new_date_stop" class="datepicker form-control" value="{$contract->date_stop}" type="text"/>
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
             </div>

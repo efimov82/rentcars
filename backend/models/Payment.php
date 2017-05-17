@@ -35,15 +35,16 @@ class Payment extends ActiveRecord
       return [self::STATUS_NEW=>'New', self::STATUS_CONFIRMED=>'Confirmed', self::STATUS_UNPAID=>'Unpaid'];
     }
     
-    public function getStatusName()
-    {
-      if ($this->status == self::STATUS_NEW)
-      {
-        return 'New';
-      }
-      else 
-      {
-        return 'Confirmed';
+    public function getStatusName(){
+      switch ($this->status){
+        case self::STATUS_NEW:
+          return 'New';
+        case self::STATUS_CONFIRMED:
+          return 'Confirmed';
+        case self::STATUS_UNPAID:
+          return 'Unpaid';
+        default:
+          return 'Unknown';
       }
     }
 }

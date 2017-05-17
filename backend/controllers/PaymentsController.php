@@ -40,7 +40,9 @@ class PaymentsController extends RentCarsController{
     $contract_id = (int)Yii::$app->getRequest()->getQueryParam('contract_id', '0');
     
     $count = 20;
-    $where = ['status'=>[1,2]];
+    $where = ['status'=>[Payment::STATUS_NEW, 
+                         Payment::STATUS_CONFIRMED, 
+                         Payment::STATUS_UNPAID]];
     if ($car_number){
       $car = Car::findOne(['number'=>$car_number]);
       if ($car)
@@ -51,10 +53,6 @@ class PaymentsController extends RentCarsController{
     
     if ($contract_id)
       $where['contract_id'] = $contract_id;
-    
-//    print_r($where);
-  //  echo("number=".$car_number);
-    //die();
     
     $payments = Payment::find()->offset(($page-1)*$count)
                                ->limit($count)
