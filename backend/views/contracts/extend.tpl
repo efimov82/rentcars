@@ -1,10 +1,26 @@
 {include file="layouts/header.tpl"}
 <!-- page content -->
 <form action="" method="POST">
-  <input type="hidden" name="id" value="{$contract->id}">
+    <input type="hidden" name="id" value="{$contract->id}">
     <div class="col-md-6">
-    <h3>Extend contract #{$contract->id}</h3>
-        
+        <h3>Extend contract #{$contract->id}</h3>
+        <div class="row">
+            <div class="col-xs-6 col-md-6">
+                <label>Car Number</label>
+                <div class="input-group ui-widget">
+                  <input type="text" id="car_number" name="car_number" value=""  class="form-control" disabled=1>
+                  <input type="hidden" id="car_id" name="car_id" value="">
+                  <span class="input-group-addon"><i class="fa fa-car"></i></span>
+                </div>  
+            </div>
+            <div class="col-xs-6 col-md-6">
+                <label>Client Name</label>
+                <div class="input-group">
+                    <input type="text" id="s_name" name="s_name" value="" class="form-control" disabled=1>
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                </div>  
+            </div>
+        </div>    
         <div class="row">
             <div class="col-xs-6 col-md-6">
                 <label>Current Date of Finish</label>
@@ -20,7 +36,8 @@
                     <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                 </div>  
             </div>
-
+        </div>    
+        <div class="row">
             <div class="col-xs-6 col-md-6">
                 <label>New Date of Finish</label>
                 <div class="input-group">
@@ -35,7 +52,8 @@
                     <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                 </div>  
             </div>
-            
+        </div>    
+        <div class="row">
             <div class="col-xs-6 col-md-3">
                 <label>Surcharge THB</label>
                 <div class="input-group">
@@ -68,7 +86,6 @@
                 <label>Status payment</label>
                 {html_options name="status" options=$payments_statuses class="form-control"}
             </div>
-
         </div>    
         {include file='layouts/panel.tpl' id=0}
     </div>
