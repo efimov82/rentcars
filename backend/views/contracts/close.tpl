@@ -19,7 +19,7 @@
               <label>Payments</label> (тут наверное лучше таблицу - ну и чтобы она была как сейчас справа - место экономит)
               <div class="input-group">
                 <div><strong>ID, Date, Category, Type, USD, EURO, THB. RUB</strong></div>
-                {foreach $payments->each() as $payment}
+                {foreach $payments as $num=>$payment}
                   <div>#{$payment->id} {$payment->date|date_format:"%d-%m-%Y"}, {$payment->category_id}, {$payment->type_id}, {$payment->usd}, {$payment->euro}, {$payment->thb}, {$payment->ruble}</div>
                 {/foreach}
               </div>  
