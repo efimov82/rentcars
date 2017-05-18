@@ -43,7 +43,7 @@
       <td>{$users[$payment->user_id]->name}</td>
       <td>{$categories[$payment->category_id]->name}</td>
       <td>{if ($payment->type_id == 1)}+{else}-{/if}</td>
-      <td><a href="{url route="/contracts/view/" id=$payment->contract_id}">#{$payment->contract_id}</a></td>
+      <td><a href="{url route="/contracts/view/" id=$payment->contract_id}">{$payment->contract_id}</a></td>
       <td>{$cars[$payment->car_id]->number}</td>
       <td>{$payment->usd}</td>
       <td>{$payment->euro}</td>

@@ -1,19 +1,14 @@
 <?php
 namespace backend\controllers;
 
-use Yii;
-
-use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
-
 use backend\controllers\RentCarsController;
+use backend\models\User;
 
 /**
  * Site controller
  */
-class UsersController extends RentCarsController
-{
+class UsersController extends RentCarsController{
   
   public  $title = 'Users';
 
@@ -24,28 +19,12 @@ class UsersController extends RentCarsController
           'access' => [
               'class' => AccessControl::className(),
               'rules' => [
-                  /*[
-                      'actions' => ['index','view'], // these action are accessible 
-                                                     //only the yourRole1 and yourRole2
-                      'allow' => true,
-                      'roles' => ['yourRole1', 'yourRole2'],
-                  ],*/
                   [    // all the action are accessible to superadmin, admin and manager
                       'allow' => true,  
                       'roles' => ['admin'],
                   ],   
-//                   [
-//                       'deny',
-//                       'users'=>array('?'),
-//                  ],
               ],
           ],        
-          /*'verbs' => [
-              'class' => VerbFilter::className(),
-              'actions' => [
-                  'delete' => ['post'],
-              ],
-          ],*/
       ];
   }
   
@@ -59,12 +38,12 @@ class UsersController extends RentCarsController
      */
   public function actionIndex()
   {
-    return $this->render('index.tpl', array( "title"=>"test222"));//'main_menu'=>$this->common_vars['main_menu'],
+    $users = User::find()->all();
+    return $this->render('index.tpl', ['users'=>$users]);
   }
   
   public function actionEdit()
   {
-    //echo('id='.);
     return $this->render('edit.tpl');
   }
 }

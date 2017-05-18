@@ -189,15 +189,26 @@ class ContractsController extends RentCarsController{
       if (!$contract)
         return $this->redirect('/');
       
-      $payments = Payment::find(['contract_id'=>$id]);
+      $payments = Payment::find()->where(['contract_id'=>$id])->all();
       $cars = Car::find()->indexBy('id')->all();
+      $categories_pay = PaymentCategory::find()->indexBy('id')->all();
       
       if (!Yii::$app->getRequest()->isPost){
-        return $this->render('close.tpl', ['contract'=>$contract, 'payments'=>$payments, 'cars'=>$cars]);
+        return $this->render('close.tpl', ['contract'=>$contract, 'payments'=>$payments, 'cars'=>$cars, 'categories_pay'=>$categories_pay]);
       }
       
+      $post = Yii::$app->getRequest()->post();
+      $action = $post['action'];
+      switch ($action){
+        case 'save':
+          echo('save');
+          break;
+        case 'cancel':
+          return $this->redirect('/contracts');
+      }
     }
 
+    
 
     protected function renderPage($data, $contract, $client, $template)
     {

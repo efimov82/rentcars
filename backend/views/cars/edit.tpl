@@ -37,13 +37,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-6 col-md-6">
+                        
+{*<div class="col-xs-6 col-md-6">
                             <label>Start of Lease</label>
                             <div class="input-group">
                                 <input name="start_lease" value="{$car->start_lease}" class="datepicker form-control" type="text"/>
                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                             </div>
-                        </div>                    
+</div>*}                    
                         <div class="col-xs-6 col-md-6">
                             <label>Mileage</label>
                             <div class="input-group">
@@ -51,8 +52,15 @@
                                 <span class="input-group-addon"><i class="fa fa-bug"></i></span>
                             </div>  
                         </div>
+                        <div class="col-xs-6 col-md-6">
+                        <label>Year</label>
+                        <div class="input-group">
+                          <input name="year" value="{$car->year}" class="form-control" type="text"/>
+                          <span class="input-group-addon"><i class="fa fa-bug"></i></span>
+                        </div>
+                      </div>
                     </div>
-                    <div class="row">
+{*<div class="row">
                         <div class="col-xs-6 col-md-6">
                             <label>Paid up to</label>
                             <div class="input-group">
@@ -67,15 +75,9 @@
                                 <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                             </div> 
                         </div>
-                    </div>
+</div>*}
                     <div class="row">
-                      <div class="col-xs-6 col-md-6">
-                        <label>Year</label>
-                        <div class="input-group">
-                          <input name="year" value="{$car->year}" class="form-control" type="text"/>
-                          <span class="input-group-addon"><i class="fa fa-bug"></i></span>
-                        </div>
-                      </div>
+                      
                       <div class="col-xs-6 col-md-6">
                         <label>Status</label>
                         {html_options name="status" options=$statuses selected=$car->status class="form-control"}

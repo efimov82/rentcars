@@ -38,13 +38,14 @@ class RentCarsController extends Controller
                           'items'=>[1=>['name'=>'Contract', 'href'=>'/contracts/add'],
                                     2=>['name'=>'Payment',  'href'=>'/payments/add'],
                                     3=>['name'=>'Car',      'href'=>'/cars/add'],
-                                    4=>['name'=>'Manager',  'href'=>'/managers/add']
+                                    4=>['name'=>'Users',  'href'=>'/users/add']
                                    ]];
                                   //0=>['name'=>'Client', 'href'=>'/clients/add'],
       $menu['view'] = ['name'=>'Show', 'href'=>'', 'class'=>'',
                           'items'=>[0=>['name'=>'Contracts',  'href'=>'/contracts'],
                                     1=>['name'=>'Payments',   'href'=>'/payments'],
                                     2=>['name'=>'Cars',       'href'=>'/cars'],
+                                    3=>['name'=>'Users',       'href'=>'/users'],
                       ]];
                                 
       //$menu['cars'] = array('name'=>'Cars', 'href'=>'/cars', 'class'=>'fa fa-car,', 'items'=>[]);
