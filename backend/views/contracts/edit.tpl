@@ -58,8 +58,6 @@
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
                 </div>  
             </div>
-            
-
             <div class="col-xs-6 col-md-6">
                 <label>Nationality</label>
                 <div class="input-group">
@@ -68,14 +66,14 @@
                 </div>  
             </div>
             <div class="col-xs-6 col-md-6">
-                <label>Phone Russia</label>
+                <label>Phone</label>
                 <div class="input-group">
                     <input type="text" id="phone_h" name="phone_h" value="{$client->phone_h|default:"+7"}" class="form-control">
                     <span class="input-group-addon"><i class="fa fa-phone-square"></i></span>
                 </div>
             </div>
             <div class="col-xs-6 col-md-6">
-                <label>Phone Thailand</label>
+                <label>Phone</label>
                 <div class="input-group">
                     <input type="text" id="phone_m" name="phone_m" value={$client->phone_m|default:"+66"} class="form-control">
                     <span class="input-group-addon"><i class="fa fa-phone-square"></i></span>
@@ -88,14 +86,8 @@
                     <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
                 </div>
             </div>
-            <div class="col-xs-6 col-md-6">
-                <label>Client Type</label>
-                <select class="form-control system-add-price" name="client_type">
-                    <option value="pauper">Pauper</option>
-                    <option value="middle">Middle</option>
-                    <option value="rich">Rich</option>
-                </select>
-            </div>
+        </div>    
+        <div class="row">
             <div class="col-xs-6 col-md-3">
                 <label>Amount THB</label>
                 <div class="input-group">
