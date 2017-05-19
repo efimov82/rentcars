@@ -62,7 +62,7 @@ class SiteController extends RentCarsController
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->render('index.tpl');
     }
 
     /**

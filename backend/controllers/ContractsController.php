@@ -190,27 +190,90 @@ class ContractsController extends RentCarsController{
         return $this->redirect('/');
       
       $payments = Payment::find()->where(['contract_id'=>$id])->all();
-      $cars = Car::find()->indexBy('id')->all();
+      $car = Car::findOne(['id'=>$contract->car_id]);
       $categories_pay = PaymentCategory::find()->indexBy('id')->all();
       
       if (!Yii::$app->getRequest()->isPost){
-        return $this->render('close.tpl', ['contract'=>$contract, 'payments'=>$payments, 'cars'=>$cars, 'categories_pay'=>$categories_pay]);
+        return $this->render('close.tpl', ['contract'=>$contract, 
+                                           'payments'=>$payments, 
+                                           'car'=>$car, 
+                                           'categories_pay'=>$categories_pay]);
       }
       
       $post = Yii::$app->getRequest()->post();
       $action = $post['action'];
       switch ($action){
-        case 'save':
-          echo('save');
+        case 'close':
+          $this->updateUnpaidPayments($payments);
+          $this->createAdditionalPayments($post, $contract);
+          
+          // Set available status car
+          $car->status = Car::STATUS_AVAILABLE;
+          $car->save();
+          // close contract
+          $contract->status = 2;
+          $contract->description = trim(htmlentities($post['description']));
+          $contract->date_update = date('Y-m-d H:i:s', time());
+          $contract->save();
+          
+          Yii::$app->session->setFlash('message', "Contract #{$id} closed.");
           break;
-        case 'cancel':
-          return $this->redirect('/contracts');
+        default:
+          // nothing to do
+          
+      }
+      return $this->redirect('/contracts');
+    }
+
+    
+    protected function createAdditionalPayments(array $post, Contract $contract){
+      if ((int)$post['washing'] > 0){
+        $this->_createPayment(5, (int)$post['washing'], $contract);
+      }
+      
+      if ((int)$post['repair'] > 0){
+        $this->_createPayment(3, (int)$post['repair'], $contract);
+      }
+      
+      if ((int)$post['gasoline'] > 0){
+        $this->_createPayment(4, (int)$post['gasoline'], $contract);
+      }
+      
+      if ((int)$post['overtime'] > 0){
+        $this->_createPayment(11, (int)$post['overtime'], $contract);
       }
     }
 
     
+    protected function _createPayment($category_id, $thb_count, Contract $contract){
+      $payment = new Payment(
+                  ['user_id'    => Yii::$app->user->id, 
+                   'creator_id' => Yii::$app->user->id, 
+                   'date'       => date('Y-m-d H:i:s'),
+                   'date_create'=> date('Y-m-d H:i:s'), 
+                   'type_id'    => PaymentType::INCOMING,
+                   'contract_id'=> $contract->id, 
+                   'car_id'     => $contract->car_id, 
+                   'category_id'=> $category_id,
+                   'status'     => Payment::STATUS_NEW,
+                   'thb'        => $thb_count,
+                   ]);
+      $payment->save();
+    }
+    
+    protected function updateUnpaidPayments(array $payments){
+      $user_id = Yii::$app->user->id;
+      foreach($payments as $num=>$payment){
+        if ($payment->status == Payment::STATUS_UNPAID){
+          $payment->user_id = $user_id;
+          $payment->date_update = date('Y-m-d H:i:s', time());
+          $payment->status = Payment::STATUS_NEW;
+          $payment->save();
+        }
+      }
+    }
 
-    protected function renderPage($data, $contract, $client, $template)
+    protected function renderPage(array $data, Contract $contract, Client $client, $template)
     {
       $cars = Car::find()->where(['status'=>Car::STATUS_AVAILABLE])->all();
       $clients = Client::find()->all();
@@ -294,7 +357,7 @@ class ContractsController extends RentCarsController{
       return $contract->save();
     }
     
-    protected function savePayments($contract, $post)
+    protected function savePayments(Contract $contract, array $post)
     {
       $user_id = Yii::$app->user->id;
       $data = ['user_id'=>$user_id, 'creator_id'=>$user_id, 'date'=>date('Y-m-d', strtotime($post['date_start'])),
@@ -327,7 +390,7 @@ class ContractsController extends RentCarsController{
     }
     
     
-    protected function savePictures($contract, $post)
+    protected function savePictures(Contract $contract, array $post)
     {
       return true;
     }

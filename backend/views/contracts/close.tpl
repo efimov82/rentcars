@@ -1,6 +1,6 @@
 {include file="layouts/header.tpl"} 
 <!-- page content -->
-{$car = $cars[$contract->car_id]}
+
 <form action="" method="POST">
     <div class="col-md-6">
         <h3>Close Contract #{$contract->id}</h3>
@@ -8,7 +8,7 @@
             <div class="col-xs-6 col-md-6">
                 <label>Car Number</label>
                 <div class="input-group">
-                    <input type="text" id="mileage" name="car_mileage" value="{$car.number}" class="form-control" disabled=1>
+                    <input type="text" id="mileage" name="car_mileage" value="{$car->number}" class="form-control" disabled=1>
                     <span class="input-group-addon"><i class="fa fa-car"></i></span>
                 </div> 
             </div>
@@ -48,14 +48,14 @@
             <div class="col-xs-6 col-md-6">
                 <label>Data of Finish</label>
                 <div class="input-group">
-                    <input name="date_start" class="datepicker form-control" value="{$contract->date_stop|date_format:"%d-%m-%Y"}" type="text"/ disabled=1>
+                    <input name="date_stop" class="datepicker form-control" value="{$contract->date_stop|date_format:"%d-%m-%Y"}" type="text"/ disabled=1>
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
             </div>
             <div class="col-xs-6 col-md-6">
                 <label>Washing Car</label>
                 <div class="input-group">
-                    <input type="text" name="clean" value="" class="form-control">
+                    <input type="text" name="washing" value="" class="form-control">
                     <span class="input-group-addon">THB</span>
                 </div> 
             </div>
@@ -76,42 +76,15 @@
             <div class="col-xs-6 col-md-6">
                 <label>Overtime</label>
                 <div class="input-group">
-                    <input type="text" name="amount_ruble" value="" class="form-control">
+                    <input type="text" name="overtime" value="" class="form-control">
                     <span class="input-group-addon">THB</span>
                 </div> 
             </div>
-            <div class="col-xs-6 col-md-3">
-                <label>Deposit THB</label>
-                <div class="input-group">
-                    <input type="text" name="amount_thb" value="" class="form-control">
-                    <span class="input-group-addon">THB</span>
-                </div> 
-            </div>
-            <div class="col-xs-6 col-md-3">
-                <label>Deposit USD</label>
-                <div class="input-group">
-                    <input type="text" name="amount_usd" value="" class="form-control">
-                    <span class="input-group-addon">USD</span>
-                </div> 
-            </div>
-            <div class="col-xs-6 col-md-3">
-                <label>Deposit EURO</label>
-                <div class="input-group">
-                    <input type="text" name="amount_euro" value="" class="form-control">
-                    <span class="input-group-addon">EURO</span>
-                </div> 
-            </div>
-            <div class="col-xs-6 col-md-3">
-                <label>Deposit RUB</label>
-                <div class="input-group">
-                    <input type="text" name="amount_ruble" value="" class="form-control">
-                    <span class="input-group-addon">RUB</span>
-                </div> 
-            </div>
+            
             <div class="col-md-12">
                 <label>Description</label>
                 <div class="input-group">
-                    <input type="text" name="amount_ruble" value="" class="form-control">
+                    <input type="text" name="description" value="" class="form-control">
                     <span class="input-group-addon"><i class="fa fa-info"></i></span>
                 </div> 
             </div>
@@ -152,7 +125,7 @@
         <div class="tim-title">
             <div class="row">
                 <div class="col-md-4">
-                    <button name="action" value="save" class="btn btn-block"><i class="fa fa-floppy-o"></i> Close</button>
+                    <button name="action" value="close" class="btn btn-block"><i class="fa fa-floppy-o"></i> Close</button>
                     <button name="action" value="cancel" class="btn btn-block"><i class="fa fa-floppy-o"></i>Cancel</button>
                 </div>
             </div>
