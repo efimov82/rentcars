@@ -42,8 +42,8 @@ class RentCarsController extends Controller
                                     2=>['name'=>'Cars',       'href'=>'/cars'],
                                     3=>['name'=>'Users',       'href'=>'/users']]
                       ];
-      $menu['statistic'] = ['name'=>'Statistic', 'href'=>'', 'class'=>'',
-                            'items'=>[0=>['name'=>'Money', 'href'=>'/']]
+      $menu['statistic'] = ['name'=>'Statistic', 'href'=>'/', 'class'=>'',
+                            'items'=>[0=>['name'=>'Reports', 'href'=>'/reports']]
                            ];
     }
     elseif (Yii::$app->user->can('manager'))
