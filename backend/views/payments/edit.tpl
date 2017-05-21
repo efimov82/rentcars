@@ -3,7 +3,7 @@
 <form action="/payments/save" method="POST">
   <input type="hidden" name="id" value="{$payment->id}">
     <div class="col-md-6">
-        <h3>Add / Edit payment</h3>
+        <h3>Add / Edit Payment</h3>
         <div class="row">
             <div class="col-xs-6 col-md-6">
               <label>Car Number</label>
@@ -40,11 +40,11 @@
                 </div>
             </div>
             <div class="col-xs-6 col-md-6">
-                <label>Transaction Number</label>
+                <label>Current Date of Finish</label>
                 <div class="input-group">
-                    <input type="text" name="transaction_number" value="" class="form-control">
-                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
-              </div> 
+                    <input name="date_stop" class="datepicker form-control" value="" type="text" disabled=1/>
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -86,9 +86,15 @@
                 </div> 
             </div>
           </div>
-          
-          <div class="row">
-            <div class="col-md-12">
+        <div class="row">
+            <div class="col-xs-6 col-md-6">
+                <label>Transaction Number</label>
+                <div class="input-group">
+                    <input type="text" name="transaction_number" value="" class="form-control">
+                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+              </div> 
+            </div>
+            <div class="col-xs-6 col-md-6">
               <label>Status</label>
               {if Yii::$app->user->can('admin')}
                 {html_options name="status" options=$payment->getListStatuses() selected=$payment->status class="form-control"}
@@ -97,8 +103,8 @@
               {/if}
             </div>
           </div>
-          
         {include file='layouts/panel.tpl' id=$payment->id}
+        </div>
     </div>
 </form>
 

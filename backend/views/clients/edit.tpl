@@ -89,14 +89,6 @@
                     <input type="text" class="form-control" readonly>
                 </div>
             </div>
-            <div class="col-xs-6 col-md-6">
-              <label>Type Client</label>
-              <select class="form-control system-add-price" name="Sex">
-                <option data="male" value="Male">Pauper</option>
-                <option data="male" value="Male">Middle</option>
-                <option data="female" value="Woman">Rich</option>
-              </select>
-            </div>
           </div>
 
           <div class="row">
