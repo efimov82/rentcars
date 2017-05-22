@@ -127,9 +127,6 @@ class PaymentsController extends RentCarsController{
         $payment->user_id = Yii::$app->user->id;
         $payment->date = date('Y-m-d', strtotime($post['date']));
         
-        //echo("post=".$post['date'].", strtotime=".strtotime($post['date'])." res=".$payment->date);
-        //die();
-        
         $payment->category_id = (int)$post['category_id'];
         $payment->type_id = (int)$post['type_id'];
         $payment->contract_id = (int)$post['contract_id'];

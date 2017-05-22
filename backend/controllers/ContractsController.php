@@ -156,9 +156,6 @@ class ContractsController extends RentCarsController{
                    'ruble'      => (int)$post['amount_ruble']
                    ]);
           $payment->save();
-//          echo('res='.$res);
-//          print_r($payment_extend);
-//          die();
           Yii::$app->session->setFlash('message', 'Contract successfully extended.');
       }
       
@@ -363,7 +360,6 @@ class ContractsController extends RentCarsController{
       $data = ['user_id'=>$user_id, 'creator_id'=>$user_id, 'date'=>date('Y-m-d', strtotime($post['date_start'])),
                   'date_create'=>date('Y-m-d H:i:s'), 'type_id'=>PaymentType::INCOMING,
                   'contract_id'=>$contract->id, 'car_id'=>$contract->car_id, 'status'=>Payment::STATUS_NEW];
-      
       
       // rent payment
       // category_id = 9 - deposit TODO think about change it
