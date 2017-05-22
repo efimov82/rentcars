@@ -56,7 +56,7 @@ class ContractsController extends RentCarsController{
                                     ->orderBy(['date_create'=>SORT_DESC]);
     }
 
-    $cars = ArrayHelper::map(Car::find()->where(['status!='.Car::STATUS_DELETED])->all(), 'id', 'number');
+    $cars = ArrayHelper::map(Car::find()->all(), 'id', 'number');
     $customers = Client::find()->indexBy('id')->all();
 
     $message = Yii::$app->session->getFlash('message');
