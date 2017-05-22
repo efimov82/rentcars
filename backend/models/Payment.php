@@ -33,9 +33,9 @@ class Payment extends ActiveRecord
     public static function getListStatuses($with_all = false)
     {
       if ($with_all)
-        return [0=>'ALL', self::STATUS_NEW=>'New', self::STATUS_CONFIRMED=>'Confirmed', self::STATUS_UNPAID=>'Unpaid'];
+        return [0=>'ALL', self::STATUS_NEW=>'New', self::STATUS_CONFIRMED=>'Confirmed', self::STATUS_DELETED=>'Deleted', self::STATUS_UNPAID=>'Unpaid'];
       
-      return [self::STATUS_NEW=>'New', self::STATUS_CONFIRMED=>'Confirmed', self::STATUS_UNPAID=>'Unpaid'];
+      return [self::STATUS_NEW=>'New', self::STATUS_CONFIRMED=>'Confirmed', self::STATUS_DELETED=>'Deleted', self::STATUS_UNPAID=>'Unpaid'];
     }
     
     public function getStatusName(){
