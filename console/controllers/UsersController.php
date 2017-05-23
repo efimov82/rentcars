@@ -2,11 +2,10 @@
 
 namespace console\controllers;
 
-use Yii;
 use yii\console\Controller;
 use \common\models\User;
 /**
- * Create user -  php yii users/create
+ * Create users -  php yii users/create
  */
 class UsersController extends Controller {
   
