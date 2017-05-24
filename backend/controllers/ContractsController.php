@@ -3,6 +3,7 @@ namespace backend\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
+
 use backend\models\Contract;
 use backend\models\Car;
 use backend\models\Client;
@@ -11,10 +12,17 @@ use backend\models\PaymentType;
 use backend\models\Payment;
 use yii\helpers\ArrayHelper;
 
+use yii\web\UploadedFile;
+use backend\models\UploadedPhotos;
+
 /**
  * Client controller
  */
 class ContractsController extends RentCarsController{
+  protected   $photos_dir_web = '/files/contacts/';
+  protected   $photos_dir_fs = '../web/files/contacts/';
+
+
   public function behaviors(){
     return [
           'access' => [
@@ -85,7 +93,7 @@ class ContractsController extends RentCarsController{
       switch ($post['action']){
         case 'save':
       
-          // save clien
+          // save client
           $contract->client_id = $this->saveClient($post);
           if (!$contract->client_id){
             return $this->renderPage($post, $contract);
@@ -93,7 +101,7 @@ class ContractsController extends RentCarsController{
           // save contract
           $res = $this->saveContract($contract, $post);
           if (!$res){
-            return $this->renderPage($post, $contract, $client);
+            return $this->renderPage($post, $contract, $client, 'edit.tpl');
           }
 
           $this->savePayments($contract, $post);
@@ -110,11 +118,11 @@ class ContractsController extends RentCarsController{
       $id = Yii::$app->getRequest()->getQueryParam('id');
       $contract = Contract::findOne(['id'=>$id]);
       if (!$contract)
-        return $this->redirect('/');
+        return $this->redirect('/contracts');
       
       $car = Car::findOne(['id'=>$contract->car_id]);
       $client = Client::findOne(['id'=>$contract->client_id]);
-      $data = ['car_number'=>$car->number, 'car_mileage'=>$car->mileage];
+      $data = ['car_number'=>$car->number, 'car_mileage'=>$car->mileage, 'path'=>'/files/contracts/'.$contract->id.'/'];
       
       return $this->renderPage($data, $contract, $client, 'view.tpl');
     }
@@ -386,8 +394,38 @@ class ContractsController extends RentCarsController{
     }
     
     
-    protected function savePictures(Contract $contract, array $post)
-    {
-      return true;
+  protected function savePictures(Contract $contract, array $post)
+  {
+    $photos = new UploadedPhotos('contracts');
+    $arr_photos = $photos->save($contract->id);
+    
+    $contract->setPhotos($arr_photos);
+    $res = $contract->save();
+    
+    return $res;
+  }
+    
+  public function actionUpload()
+  {
+    if (Yii::$app->getRequest()->isPost){
+      $post = Yii::$app->getRequest()->post();
+      //print_r($_FILES);
+      $photos = new UploadedPhotos('contracts');
+      
+      print_r ($photos->save('4'));
+      //$files = UploadedFile::getInstances($photos, 'files');
+      //$photos->load($files);
+        
+      //if($model->load($post)){
+        
+
+        //if($model->validate()) {
+          //$uploaded = $file->saveAs($dir . '/' .'test'  );
+        //}
+      //}
+    }else{
+      return $this->render('upload.tpl');
     }
+  }
+  
 }

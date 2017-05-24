@@ -52,6 +52,7 @@
         <td><a href="/cars/view/{$contract->car_id}">{$cars[$contract->car_id]}</a></td>
         
         <td>{$contract->getStatusName()}</td>
+        <td><a href="{url route="/contracts/view" id=$contract->id}"><button class="btn btn-fill btn-xs">View</button></a></td>
         <td><a href="{url route="/payments" contract_id=$contract->id}"><button class="btn btn-fill btn-xs">Payments</button></a></td>
         {if $contract->status == 1}
         <td><a href="{url route="extend" id=$contract->id}"><button class="btn btn-fill btn-xs">Extend</button></a></td>

@@ -1,6 +1,5 @@
 {include file="layouts/header.tpl"}
 <!-- page content -->
-<form action="" method="POST">
     <div class="col-md-6">
     <h3>View contract data</h3>
         
@@ -95,12 +94,40 @@
             <div class="col-xs-6 col-md-6">
                 <label>Status</label>
                 <div>{$contract->getStatusName()}</div>
-                
             </div>
+            
         </div>    
+
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+      </ol>
+
+      <!-- Wrapper for slides -->
+      <div class="carousel-inner" role="listbox">
+        {foreach $contract->getPhotos() as $num=>$photo}
+          <div class="item {if $photo@iteration==1}active{/if}">
+            <img src="{$data.path}{$photo}" />
+          </div>
+        {/foreach}
+      </div>
+
+      <!-- Controls -->
+      <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+
         <div><a href="#" onClick="history.go(-1)"><strong>Back</strong></a></div>
     </div>
-</form>
 
 <script>
 var cars = [

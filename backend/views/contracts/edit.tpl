@@ -148,10 +148,11 @@
             <div class="col-xs-6 col-md-6">
                 <label>Add Files</label>
                 <div class="input-group">
-                    <label class="input-group-btn"><span class="btn btn-fill">Browse<input type="file" style="display: none;" multiple></span></label>
+                    <label class="input-group-btn"><span class="btn btn-fill">Browse<input type="file" name="files[]" style="display: none;" multiple></span></label>
                     <input type="text" name="image1" class="form-control" readonly>
                 </div>
             </div>
+            
             <div class="col-xs-6 col-md-6">
                 <label>Status</label>
                 {html_options name="status" options=$contract->statuses selected=$contract->status class="form-control"}
