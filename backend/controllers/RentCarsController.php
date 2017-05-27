@@ -28,8 +28,7 @@ class RentCarsController extends Controller
     $menu = array();
     $this->common_vars['main_menu'] = $menu;
     
-    if (Yii::$app->user->can('admin'))
-    {
+    if (Yii::$app->user->can('admin')){
       $menu['new'] = ['name'=>'<b>NEW</b>','href'=>'', 'class'=>'fa fa-file-text',
                           'items'=>[1=>['name'=>'Contract', 'href'=>'/contracts/add'],
                                     2=>['name'=>'Payment',  'href'=>'/payments/add'],
@@ -43,18 +42,19 @@ class RentCarsController extends Controller
                                     3=>['name'=>'Users',       'href'=>'/users']]
                       ];
       $menu['statistic'] = ['name'=>'Statistic', 'href'=>'/', 'class'=>'',
-                            'items'=>[0=>['name'=>'Reports', 'href'=>'/reports']]
+                            'items'=>[0=>['name'=>'Reports', 'href'=>'/reports'],
+                                      1=>['name'=>'Cars usage', 'href'=>'/cars-usage'],
+                                     ]
                            ];
-    }
-    elseif (Yii::$app->user->can('manager'))
-    {
+    } elseif (Yii::$app->user->can('manager')) {
       $menu['cars'] = ['name'=>'Cars', 'href'=>'/cars', 'class'=>'fa fa-user', 'items'=>[]];
       $menu['reports'] = ['name'=>'Reports', 'class'=>'fa fa-table', 'href'=>'reports', 'items'=>[]];
-      
-    } 
+    } elseif (Yii::$app->user->can('cars_owner')) {
+      $menu['cars'] = ['name'=>'My cars', 'href'=>'/cars', 'class'=>'fa fa-user', 'items'=>[]];
+    }
     
     if (!Yii::$app->user->isGuest){
-      $menu['logout'] = ['name'=>Yii::$app->user->identity->username, 
+      $menu['logout'] = ['name'=>Yii::$app->user->identity->name, 
                          'class'=>'fa fa-sign-out', 
                          'href'=>'/site/logout', 
                          'items'=>[]];

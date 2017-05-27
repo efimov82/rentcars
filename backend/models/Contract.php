@@ -6,7 +6,8 @@ use Yii;
 use yii\db\ActiveRecord;
 
 class Contract extends ActiveRecord{
-  public  $statuses = [1=>'Open', 2=>'Closed'];
+  public  $types = [1=>'Rent', 2=>'Repair'];
+  public  $statuses = [1=>'Open', 2=>'Closed', '3'=>'Need check'];
   public  $car_number = 0;
   
   /**

@@ -8,7 +8,26 @@ use yii\console\Controller;
  */
 class RbacController extends Controller {
 
+  public function actionCreateRoles() {
+    $auth = Yii::$app->authManager;
+        
+    $auth->removeAll(); //На всякий случай удаляем старые данные из БД...
+
+    // Создадим роли админа и редактора новостей
+    $admin = $auth->createRole('admin');
+    $manager = $auth->createRole('manager');
+    $owner = $auth->createRole('car_owner');
+
+    // запишем их в БД
+    $auth->add($admin);
+    $auth->add($manager);
+    $auth->add($owner);
+  }
+    
     public function actionInit() {
+        // first one
+        die();
+        
         $auth = Yii::$app->authManager;
         
         $auth->removeAll(); //На всякий случай удаляем старые данные из БД...
@@ -64,4 +83,6 @@ class RbacController extends Controller {
         // Назначаем роль editor пользователю с ID 2
         $auth->assign($editor, 2);
     }
+    
+    
 }

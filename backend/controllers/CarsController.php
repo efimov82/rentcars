@@ -7,6 +7,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
 use backend\models\Car;
+use backend\models\User;
 use backend\models\Payment;
 use backend\models\PaymentType;
 
@@ -21,7 +22,7 @@ class CarsController extends RentCarsController{
               'rules' => [
                   [    // all the action are accessible to superadmin, admin and manager
                       'allow' => true,  
-                      'roles' => ['admin', 'manager'],
+                      'roles' => ['admin', 'manager', 'cars_owner'],
                   ],   
 //                   [
 //                       'deny',
@@ -47,11 +48,9 @@ class CarsController extends RentCarsController{
       $number = (int)Yii::$app->getRequest()->getQueryParam('number');
       $page = Yii::$app->getRequest()->getQueryParam('page') ? Yii::$app->getRequest()->getQueryParam('page') : 1;
       $count = 20;
-      if ($number){
-        $cars = Car::find()->where(['AND', 'status!=10', ['LIKE', 'number', $number]])->offset(($page-1)*$count)->limit($count);
-      }else{
-        $cars = Car::find()->where('status!=10')->offset(($page-1)*$count)->limit($count);
-      }
+      
+      $where = $this->createWhere($number);
+      $cars = Car::find()->where($where)->offset(($page-1)*$count)->limit($count);
        
       $message = Yii::$app->session->getFlash('message');
       return $this->render('index.tpl', ['cars'=>$cars, 
@@ -151,4 +150,45 @@ class CarsController extends RentCarsController{
       
       return $this->redirect('/cars');
     }
+    
+    /**
+     * 
+     */
+    public function actionPayments() {
+      $id = Yii::$app->getRequest()->getQueryParam('id');
+      
+      $where = ['id'=>$id];
+      if (Yii::$app->user->identity->type_id == User::ROLE_CARS_OWNER) {
+        $where['owner_id'] = Yii::$app->user->id;
+      }
+      
+      $car = Car::findOne($where);
+      $payments = [];
+      if ($car) {
+        $payments = Payment::find(['car_id'=>$car->id, 'category_id'=>  1])->orderBy(['date'=>'DESC']);// 1 =Pay rent car owner
+      }
+        
+      
+      return $this->render('payments.tpl', ['car'     => $car,
+                                            'payments'=> $payments]);
+    }
+    /**
+     * 
+     * @param
+     * @return 
+    */
+    protected function createWhere($number) {
+      $res = ' AND status!=10';
+      
+      //print_r(Yii::$app->user);
+      //die();
+      
+      if ($number)
+        $res .= " AND number LIKE '%".$number."%'";
+      if (Yii::$app->user->identity->type_id == User::ROLE_CARS_OWNER)
+        $res .= ' AND owner_id='.Yii::$app->user->id;
+      
+      return substr($res, 5);
+    } 
+    
 }

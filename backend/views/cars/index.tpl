@@ -55,7 +55,9 @@
                     <td> - </td>
                     {/if}
                     <td>{$car->getStatusName()}</td>
-                    <td>{if Yii::$app->user->can('admin')}
+                    <td>
+                        <a href="{url route="cars/payments" id=$car->id}"><button class="btn btn-fill btn-xs"><i class="fa fa-pencil-square-o"></i>Payments</button></a>
+                        {if Yii::$app->user->can('admin')}
                           <a href="{url route="cars/pay-rent" id=$car->id}"><button class="btn btn-fill btn-xs"><i class="fa fa-pencil-square-o"></i>Pay rent</button></a>
                           <a href="{url route="cars/edit" id=$car->id}"><button class="btn btn-fill btn-xs"><i class="fa fa-pencil-square-o"></i>Edit</button></a>
                         {/if}
