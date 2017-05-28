@@ -25,10 +25,9 @@
             <table class="table table-hover">
                 <thead>
                     <th>ID</th>
-                    <th>Car Number</th>
-                    <th>Brand</th>
-                    <th>Model</th>
-                    <th>Color</th>
+                    <th>Number</th>
+                    <th>Label</th>
+                    <th>Owner</th>
                     <th>Mileage</th>
                     <th>Dates of Lease</th>
                     <th>Price (Thb)</th>
@@ -41,22 +40,20 @@
                     <tr {if ($car->status == 1)}class="success"{else}class="warning"{/if}>
                     <td>{$car->id}</td>
                     <td>{$car->number}</td>
-                    <td>{$car->mark}</td>
-                    <td>{$car->model}</td>
-                    <td>{$car->color}</td>
+                    <td>{$car->mark} {$car->model} ({$car->color|default:"-"})</td>
+                    <td>{if isset($owners[$car->owner_id])}{$owners[$car->owner_id].name}{/if}</td>
                     <td>{$car->mileage}</td>
                     
                     {$payment = $car->getLastRentPayment()}
                     {if $payment}
                     <td>{$payment->date|date_format:"%d/%m"} - {$payment->date_stop|date_format:"%d/%m"}</td>
-                    <td>{$payment->thb}</td>
+                    <td>{$payment->thb|abs}</td>
                     {else}
                     <td> - </td>
                     <td> - </td>
                     {/if}
                     <td>{$car->getStatusName()}</td>
                     <td>
-                        <a href="{url route="cars/payments" id=$car->id}"><button class="btn btn-fill btn-xs"><i class="fa fa-pencil-square-o"></i>Payments</button></a>
                         {if Yii::$app->user->can('admin')}
                           <a href="{url route="cars/pay-rent" id=$car->id}"><button class="btn btn-fill btn-xs"><i class="fa fa-pencil-square-o"></i>Pay rent</button></a>
                           <a href="{url route="cars/edit" id=$car->id}"><button class="btn btn-fill btn-xs"><i class="fa fa-pencil-square-o"></i>Edit</button></a>

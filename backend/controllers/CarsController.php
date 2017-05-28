@@ -2,14 +2,13 @@
 namespace backend\controllers;
 
 use Yii;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
 use backend\models\Car;
 use backend\models\User;
 use backend\models\Payment;
 use backend\models\PaymentType;
+use yii\helpers\ArrayHelper;
 
 /**
  * Site controller
@@ -51,9 +50,11 @@ class CarsController extends RentCarsController{
       
       $where = $this->createWhere($number);
       $cars = Car::find()->where($where)->offset(($page-1)*$count)->limit($count);
-       
+      $owners = User::find(['type_id'=>User::ROLE_CARS_OWNER])->indexBy('id')->all();
+      
       $message = Yii::$app->session->getFlash('message');
       return $this->render('index.tpl', ['cars'=>$cars, 
+                                         'owners'=>$owners, 
                                          'number'=>$number, 
                                          'message'=>$message, 
                                          'page'=>$page]);
@@ -68,8 +69,9 @@ class CarsController extends RentCarsController{
     public function actionEdit(){
       $id = Yii::$app->getRequest()->getQueryParam('id');
       $car = Car::findOne(['id'=>$id]);
+      $owners = ArrayHelper::map(User::find()->where(['type_id'=>User::ROLE_CARS_OWNER])->all(), 'id', 'name');
       
-      return $this->render('edit.tpl', ['car'=>$car]);
+      return $this->render('edit.tpl', ['car'=>$car, 'owners'=>$owners]);
     }
     
     
@@ -99,6 +101,7 @@ class CarsController extends RentCarsController{
           $car->color = trim(ucfirst(strtolower($post['color'])));
           $car->number = trim($post['number']);
           $car->mileage = (int)$post['mileage'];
+          $car->owner_id = (int)$post['owner_id'];
           $car->year = (int)$post['year'];
           $car->status = (int)$post['status'];
           
@@ -154,7 +157,7 @@ class CarsController extends RentCarsController{
     /**
      * 
      */
-    public function actionPayments() {
+    /*public function actionPayments() {
       $id = Yii::$app->getRequest()->getQueryParam('id');
       
       $where = ['id'=>$id];
@@ -165,13 +168,14 @@ class CarsController extends RentCarsController{
       $car = Car::findOne($where);
       $payments = [];
       if ($car) {
-        $payments = Payment::find(['car_id'=>$car->id, 'category_id'=>  1])->orderBy(['date'=>'DESC']);// 1 =Pay rent car owner
+        $payments = Payment::find(['car_id'=>$car->id])->orderBy(['date'=>'DESC']);// 1 =Pay rent car owner
       }
         
       
       return $this->render('payments.tpl', ['car'     => $car,
                                             'payments'=> $payments]);
-    }
+    }*/
+    
     /**
      * 
      * @param
