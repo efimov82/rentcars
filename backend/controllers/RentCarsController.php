@@ -24,6 +24,8 @@ class RentCarsController extends Controller
   public function beforeAction($action)
   {
     $this->enableCsrfValidation = false;
+    if (!parent::beforeAction($action))
+      return false;
      
     $menu = array();
     $this->common_vars['main_menu'] = $menu;
@@ -63,7 +65,7 @@ class RentCarsController extends Controller
     $this->common_vars['main_menu'] = $menu;
     //$this->view->params['title'] = $this->title;
     //$this->main_menu = $menu;
-    parent::beforeAction($action);
+    
     return true;
   }
   

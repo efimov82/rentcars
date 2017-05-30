@@ -21,14 +21,12 @@ class CarsController extends RentCarsController{
           'access' => [
               'class' => AccessControl::className(),
               'rules' => [
+                  
                   [    // all the action are accessible to superadmin, admin and manager
                       'allow' => true,  
-                      'roles' => ['admin', 'manager', 'cars_owner'],
+                      'roles' => ['admin', 'manager'],
                   ],   
-//                   [
-//                       'deny',
-//                       'users'=>array('?'),
-//                  ],
+                   
               ],
           ],        
           /*'verbs' => [
@@ -186,8 +184,10 @@ class CarsController extends RentCarsController{
       if ($params['status'])
         $res .= " AND status = ".$params['status'];
       
-      if (Yii::$app->user->identity->type_id == User::ROLE_CARS_OWNER)
-        $res .= ' AND owner_id='.Yii::$app->user->id;
+      /*if (!Yii::$app->user->isGuest) { // HUCK - TODO find solution
+        if (Yii::$app->user->identity->type_id == User::ROLE_CARS_OWNER)
+          $res .= ' AND owner_id='.Yii::$app->user->id;
+      }*/
       
       return substr($res, 5);
     } 
