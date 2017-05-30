@@ -5,27 +5,53 @@
     <h3>Contracts</h3>
   </div> 
   
-  <div class="col-md-4">
-    <div id="custom-search-input">
-      <form action="/contracts">
-        <div class="input-group col-md-12">
-          <input type="text" name="car_number" value="{$car_number}" class="search-query form-control" placeholder="Search by car number" />
-          <span class="input-group-btn"><button class="btn btn-fill" type="submit"><span class="fa fa-search"></span></button></span>
-        </div>
-      </form> 
+   
     </div>
   </div>
-
 </div>
+
+<form action="/contracts">
+  <div class="row">
+
+    <div class="col-md-4">
+      <div class="input-group col-md-12">
+        Car number <input type="text" name="car_number" value="{if isset($params.car_number)}{$params.car_number}{/if}" class="search-query form-control" placeholder="Search by car number" />
+      </div>
+      <div class="input-group col-md-12">
+        Contract number<input type="text" name="number" value="{if isset($params.number)}{$params.number}{/if}" class="search-query form-control" placeholder="Search by contract number" />
+      </div>
+        <div>
+            <label>Date start {html_options name="d1_equal" options=$list_equals selected=$params.d1_equal}</label>
+            <div class="input-group">
+                <input name="date_start" class="datepicker form-control" data-date-format="yyyy-mm-dd" value="{if isset($params.date_start)}{$params.date_start}{/if}" type="text"/>
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div> 
+        </div>
+        <div>
+            <label>Date finish {html_options name="d2_equal" options=$list_equals selected=$params.d2_equal}</label>
+            <div class="input-group">
+              
+                <input name="date_stop" class="datepicker form-control" data-date-format="yyyy-mm-dd" value="{if isset($params.date_stop)}{$params.date_stop}{/if}" type="text"/>
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div> 
+        </div>
+        <input type="submit" value="Search" />
+    </div> 
+  </div> 
+
+</form> 
 {if $message}
   <div class="alert alert-success">{$message}</div>
 {/if}
 
+<div>Find records: {$all_records}</>
 
 <div class="content table-responsive table-full-width">
   <table class="table table-hover">
     <thead>
       <th>#</th>
+      <th>Number</th>
+      <th>Manager</th>
       <th>Dates</th>
       <th>Time</th>
       <th>Client</th>
@@ -42,6 +68,8 @@
       <tr {if $contract->isFinishSoon()}class="danger"{else} 
             {if ($contract->status == 1)}class="success"{else}class="warning"{/if} {/if}>
         <td>{$contract->id}</td>
+        <td>{$contract->number}</td>
+        <td>{$users[$contract->user_id].name}</td>
         <td>{$contract->date_start|date_format:"d/m/y"} - {$contract->date_stop|date_format:"d/m/y"}</td>
         <td>{$contract->time}</td>
         {$customer = $customers[$contract->client_id]}
@@ -65,4 +93,7 @@
     </tbody>
     {/foreach}
     </tbody>
+
 </table>
+
+{include file="layouts/paginator.tpl" paginator=$paginator}

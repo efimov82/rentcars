@@ -10,6 +10,7 @@ use backend\models\User;
 use backend\models\Car;
 use backend\models\Contract;
 use yii\helpers\ArrayHelper;
+use backend\classes\rcPaginator;
 
 /**
  * Client controller
@@ -58,15 +59,22 @@ class PaymentsController extends RentCarsController{
                                ->limit($count)
                                ->where($where)
                                ->orderBy(['date_create'=>SORT_DESC]);
+    
+    $all_records = Payment::find()->where($where)->count();
+    $pages = ceil($all_records / $count);
 
     $users = User::find()->indexBy('id')->all();
     $categories = PaymentCategory::find()->indexBy('id')->all();
     $cars = Car::find()->indexBy('id')->all();
-
+    $paginator = new rcPaginator(['pages'=>$pages,
+                                  'current'=>$page]);
+    
     return $this->render('index.tpl', ['payments'=>$payments, 
                                         'users'=>$users, 
                                         'categories'=>$categories, 
                                         'cars'=>$cars,
+                                        'paginator'=>$paginator,
+                                        'all_records'=>$all_records,
                                         'car_number'=>$car_number,
                                         'page'=>$page]);
   }

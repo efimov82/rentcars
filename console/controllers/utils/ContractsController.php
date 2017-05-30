@@ -34,6 +34,8 @@ class ContractsController extends Controller {
    * format:  user,contract#,model,car#,time,start,finish,name,hotel,phone, paid ,agent,deposit,who,gas,comments,email
    */
   public function actionImport(){
+    die();
+    
     $file = __DIR__.'/contracts.csv';
     $f = fopen($file, 'r');
     while(!feof($f)){
@@ -48,6 +50,40 @@ class ContractsController extends Controller {
     fclose($f);
   }
   
+  public function actionFindWrongContracts() {
+    $contracts = Contract::find()->all();
+    
+    foreach ($contracts as $num=>$contract) {
+      $date_start = $contract->date_start;
+      //echo("id=$contract->id, date_start=$contract->date_start \n");
+      $contracts2 = Contract::find()
+                              ->where(['AND', "date_start<'".$date_start."'", 
+                                              "date_stop>'".$date_start."'",
+                                              "car_id=".$contract->car_id])
+                              ->all();
+                              //->createCommand()->rawSql;
+      //echo($contracts2);
+      //die;
+      if ($contracts2) {
+        foreach ($contracts2 as $num=>$cnt){
+          echo("Contract #{$contract->id}, car_id={$contract->car_id}, date_start='$date_start' INSIDE contract #$cnt->id, car_id={$cnt->car_id} ($cnt->date_start - $cnt->date_stop) \n");
+        }
+      }
+      // stop  
+      $date_stop = $contract->date_stop;
+      $contracts2 = Contract::find()->where(['AND', "date_start<'".$date_stop."'", 
+                                                    "date_stop>'".$date_stop."'",
+                                                    "car_id=".$contract->car_id
+                                            ])
+                                     ->all();
+      if ($contracts2) {
+        foreach ($contracts2 as $num=>$cnt){
+          echo("Contract #{$contract->id}, car_id={$contract->car_id}, date_stop='$date_stop' INSIDE contract #$cnt->id, car_id={$cnt->car_id} ($cnt->date_start - $cnt->date_stop) \n");
+        }
+      }
+    }
+  }
+    
   /**
    * 
    * @param string "user,contract#,model,car#,time, start,finish,name,hotel,phone, paid ,agent,deposit,who,gas,comments,email"

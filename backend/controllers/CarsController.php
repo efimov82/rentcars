@@ -9,6 +9,8 @@ use backend\models\User;
 use backend\models\Payment;
 use backend\models\PaymentType;
 use yii\helpers\ArrayHelper;
+use backend\classes\rcPaginator;
+use yii\helpers\Url;
 
 /**
  * Site controller
@@ -44,20 +46,35 @@ class CarsController extends RentCarsController{
      * @return string
      */
     public function actionIndex(){
-      $number = (int)Yii::$app->getRequest()->getQueryParam('number');
-      $page = Yii::$app->getRequest()->getQueryParam('page') ? Yii::$app->getRequest()->getQueryParam('page') : 1;
-      $count = 20;
+      $params['number'] = (int)Yii::$app->getRequest()->getQueryParam('number');
+      $params['owner_id'] = (int)Yii::$app->getRequest()->getQueryParam('owner_id');
+      $params['status'] = (int)Yii::$app->getRequest()->getQueryParam('status');
+      $params['page'] = Yii::$app->getRequest()->getQueryParam('page') ? Yii::$app->getRequest()->getQueryParam('page') : 1;
+      $count = 40;
       
-      $where = $this->createWhere($number);
-      $cars = Car::find()->where($where)->offset(($page-1)*$count)->limit($count);
-      $owners = User::find(['type_id'=>User::ROLE_CARS_OWNER])->indexBy('id')->all();
+      $where = $this->createWhere($params);
+      $cars = Car::find()->where($where)
+                          ->offset(($params['page']-1)*$count)
+                          ->limit($count);
       
+      $all_records = Car::find()->where($where)->count();
+      $pages = ceil($all_records / $count);
+      
+      $owners = User::find()->where(['type_id'=>User::ROLE_CARS_OWNER])->indexBy('id')->all();
+      $arr_owners = ArrayHelper::map($owners, 'id', 'name');
+      
+      $paginator = new rcPaginator(['pages'=>$pages, 
+                                    'current'=>$params['page'], 
+                                   ]);
       $message = Yii::$app->session->getFlash('message');
       return $this->render('index.tpl', ['cars'=>$cars, 
                                          'owners'=>$owners, 
-                                         'number'=>$number, 
-                                         'message'=>$message, 
-                                         'page'=>$page]);
+                                         'statuses'=>Car::$statuses, 
+                                         'params'=>$params, 
+                                         'all_records'=>$all_records, 
+                                         'paginator'=>$paginator, 
+                                         'arr_owners'=>$arr_owners, 
+                                         'message'=>$message]);
     }
     
     public function actionAdd(){
@@ -156,39 +173,19 @@ class CarsController extends RentCarsController{
     
     /**
      * 
-     */
-    /*public function actionPayments() {
-      $id = Yii::$app->getRequest()->getQueryParam('id');
-      
-      $where = ['id'=>$id];
-      if (Yii::$app->user->identity->type_id == User::ROLE_CARS_OWNER) {
-        $where['owner_id'] = Yii::$app->user->id;
-      }
-      
-      $car = Car::findOne($where);
-      $payments = [];
-      if ($car) {
-        $payments = Payment::find(['car_id'=>$car->id])->orderBy(['date'=>'DESC']);// 1 =Pay rent car owner
-      }
-        
-      
-      return $this->render('payments.tpl', ['car'     => $car,
-                                            'payments'=> $payments]);
-    }*/
-    
-    /**
-     * 
-     * @param
+     * @param [number, owner_id, status]
      * @return 
     */
-    protected function createWhere($number) {
+    protected function createWhere($params) {
       $res = ' AND status!=10';
       
-      //print_r(Yii::$app->user);
-      //die();
+      if ($params['number'])
+        $res .= " AND number LIKE '%".$params['number']."%'";
+      if ($params['owner_id'])
+        $res .= " AND owner_id = ".$params['owner_id'];
+      if ($params['status'])
+        $res .= " AND status = ".$params['status'];
       
-      if ($number)
-        $res .= " AND number LIKE '%".$number."%'";
       if (Yii::$app->user->identity->type_id == User::ROLE_CARS_OWNER)
         $res .= ' AND owner_id='.Yii::$app->user->id;
       

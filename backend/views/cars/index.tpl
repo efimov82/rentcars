@@ -8,10 +8,22 @@
 
   <div class="col-md-4">
       <div id="custom-search-input">
-          <form action="/cars">
+          <form action="/cars" method="GET">
               <div class="input-group col-md-12">
-                  <input type="text" name="number" value={$number} class="search-query form-control" placeholder="Search by number" />
+                  <input type="text" name="number" value="{if $params.number > 0}{$params.number}{/if}" class="search-query form-control" placeholder="Search by number" />
                   <span class="input-group-btn"><button class="btn btn-fill" type="submit"><span class="fa fa-search"></span></button></span>
+              </div>
+              <div>
+                  <select name="owner_id" class="form-control">
+                    <option value=0>All owners</option>
+                    {html_options options=$arr_owners selected=$params.owner_id}
+                  </select>
+              </div>
+              <div>
+                  <select name="status" class="form-control">
+                    <option value=0>All statuses</option>
+                    {html_options options=$statuses selected=$params.status emptyoption="All"}
+                  </select>
               </div>
           </form> 
       </div>
@@ -20,6 +32,8 @@
 {if $message}
   <div class="alert alert-success">{$message}</div>
 {/if}
+
+<div>Find records: {$all_records}</>
 
         <div class="content table-responsive table-full-width">
             <table class="table table-hover">
@@ -40,13 +54,13 @@
                     <tr {if ($car->status == 1)}class="success"{else}class="warning"{/if}>
                     <td>{$car->id}</td>
                     <td>{$car->number}</td>
-                    <td>{$car->mark} {$car->model} ({$car->color|default:"-"})</td>
+                    <td>{$car->mark} {$car->model} ({$car->color|default:"-"}) {if $car->year}{$car->year}{/if}</td>
                     <td>{if isset($owners[$car->owner_id])}{$owners[$car->owner_id].name}{/if}</td>
                     <td>{$car->mileage}</td>
                     
                     {$payment = $car->getLastRentPayment()}
                     {if $payment}
-                    <td>{$payment->date|date_format:"%d/%m"} - {$payment->date_stop|date_format:"%d/%m"}</td>
+                    <td>{$payment->date|date_format:"%d/%m/%y"} - {$payment->date_stop|date_format:"%d/%m/%y"}</td>
                     <td>{$payment->thb|abs}</td>
                     {else}
                     <td> - </td>
@@ -63,4 +77,6 @@
                 {/foreach}
                 </tbody>
             </table>
+         
+          {include file="layouts/paginator.tpl" paginator=$paginator}
         </div>

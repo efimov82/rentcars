@@ -18,6 +18,7 @@
   </div>
 </div>
 
+<div>Find records: {$all_records}</>
 <div class="content table-responsive table-full-width">
   <table class="table table-hover">
     <thead>
@@ -55,5 +56,7 @@
     {/foreach}
     </tbody>
   </table>
+
+{include file="layouts/paginator.tpl" paginator=$paginator}
 </div>
 

@@ -6,11 +6,13 @@ use yii\filters\AccessControl;
 
 use backend\models\Contract;
 use backend\models\Car;
+use backend\models\User;
 use backend\models\Client;
 use backend\models\PaymentCategory;
 use backend\models\PaymentType;
 use backend\models\Payment;
 use yii\helpers\ArrayHelper;
+use backend\classes\rcPaginator;
 
 use yii\web\UploadedFile;
 use backend\models\UploadedPhotos;
@@ -21,7 +23,7 @@ use backend\models\UploadedPhotos;
 class ContractsController extends RentCarsController{
   protected   $photos_dir_web = '/files/contacts/';
   protected   $photos_dir_fs = '../web/files/contacts/';
-
+  protected   $list_equals = [1=>'=', 2=>'>' , 3=>'<', 4=>'>=', 5=>'=<'];
 
   public function behaviors(){
     return [
@@ -44,35 +46,39 @@ class ContractsController extends RentCarsController{
    * @return string
    */
   public function actionIndex(){
-    $car_number = (int)Yii::$app->getRequest()->getQueryParam('car_number');
-    $page = Yii::$app->getRequest()->getQueryParam('page') ? Yii::$app->getRequest()->getQueryParam('page') : 1;
+    $params['car_number'] = substr(Yii::$app->getRequest()->getQueryParam('car_number'), 0, 5);
+    $params['number'] = substr(Yii::$app->getRequest()->getQueryParam('number'), 0, 10);
+    $params['date_start'] = Yii::$app->getRequest()->getQueryParam('date_start');
+    $params['d1_equal'] = Yii::$app->getRequest()->getQueryParam('d1_equal');
+    $params['d2_equal'] = Yii::$app->getRequest()->getQueryParam('d2_equal');
+    $params['date_stop'] = Yii::$app->getRequest()->getQueryParam('date_stop');
+    $params['page'] = Yii::$app->getRequest()->getQueryParam('page') ? Yii::$app->getRequest()->getQueryParam('page') : 1;
 
-    $count = 20;
-    if ($car_number){
-      $car_id = 0;
-      $car = Car::findOne(['number'=>$car_number]);
-      if ($car){
-        $car_id = $car->id;
-      }
-      $contracts = Contract::find()->where(['car_id'=>$car_id])
-                                    ->offset(($page-1)*$count)
-                                    ->limit($count)
-                                    ->orderBy(['date_create'=>SORT_DESC]);
-    }else{
-      $contracts = Contract::find()->offset(($page-1)*$count)
-                                    ->limit($count)
-                                    ->orderBy(['date_create'=>SORT_DESC]);
-    }
+    $count = 10;
+    $where = $this->createWhere($params);
+    
+    $contracts = Contract::find()->where($where)
+                                  ->offset(($params['page']-1)*$count)
+                                  ->limit($count)
+                                  ->orderBy(['date_start'=>SORT_DESC]);
+    $all_records = Contract::find()->where($where)->count(); 
+    $pages = ceil($all_records / $count);
 
     $cars = ArrayHelper::map(Car::find()->all(), 'id', 'number');
     $customers = Client::find()->indexBy('id')->all();
+    $users = User::find()->indexBy('id')->all();
 
     $message = Yii::$app->session->getFlash('message');
+    $paginator = new rcPaginator(['pages'=>$pages,
+                                  'current'=>$params['page']]);
 
     return $this->render('index.tpl', ['contracts'=>$contracts, 
-                                       'page'=>$page, 
-                                       'car_number'=>$car_number, 
+                                       'params'=>$params, 
                                        'message'=>$message,
+                                       'paginator'=>$paginator,
+                                       'all_records'=>$all_records,
+                                       'users'=>$users,
+                                       'list_equals'=>$this->list_equals,
                                        'customers'=>$customers,
                                        'cars'=>$cars]);
   }
@@ -169,6 +175,38 @@ class ContractsController extends RentCarsController{
       
       $this->redirect('/contracts');
     }
+    
+    /**
+     * 
+     * @param [car_number, date_start, date_stop]
+     * @return 
+    */
+    protected function createWhere($params) {
+      $res = '';
+      if ($params['car_number']) {
+        $car = Car::findOne(['number'=>$params['car_number']]);
+        if ($car)
+          $res .= ' AND car_id='.$car->id;
+      }
+      if ($params['date_start']) {
+        $val = $this->list_equals[$params['d1_equal']];
+        $data_start = date('Y-m-d', strtotime($params['date_start']));
+        $res .= " AND date_start ".$val." '".$data_start."'";
+      }
+      if ($params['date_stop']) {
+        $val = $this->list_equals[$params['d1_equal']];
+        $data_stop = date('Y-m-d', strtotime($params['date_stop']));
+        $res .= " AND date_stop ".$val." '".$data_stop."'";
+      }
+      if ($params['number']) {
+        $res .= " AND number ='".$params['number']."'";
+      }
+      if ($res)
+        return substr($res, 4);
+      else
+        return '1=1';
+    }
+    
     
     /*public function actionEdit(){
       $id = Yii::$app->getRequest()->getQueryParam('id');

@@ -15,8 +15,15 @@
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="/js/jquery-1.12.4.min.js"></script>
-    <script src="/js/jquery-ui-1.12.1.js"></script>
+    {*<script src="/js/jquery-1.12.4.min.js"></script>
+    <script src="/js/jquery-ui-1.12.1.js"></script>*}
+
+    {*<script src="/js/jquery.twbsPagination.min.js" type="text/javascript"></script>*}
+    
+
+
+
+
 </head>
 <body>
 
@@ -45,5 +52,7 @@
 	<script src="/js/ct-paper-radio.js"></script>
 	<script src="/js/bootstrap-select.js"></script>
 	<script src="/js/bootstrap-datepicker.js"></script>
-	<script src="/js/ct-paper.js"></script>    
+	<script src="/js/ct-paper.js"></script>   
+
+  <script src="/js/jquery.simplePagination.js" type="text/javascript"></script> 
 </html>

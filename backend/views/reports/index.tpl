@@ -5,9 +5,6 @@
     <!-- search form -->
       <h3>Reports</h3>
 
-      {*<a href="#seacrh_params" class="btn btn-default" data-toggle="collapse">Search params</a>
-      <div id="seacrh_params" class="collapse {if $params.show_params}in{/if}">*}
-      
       <div>
         <form action="" method="POST">
             <div class="row">
