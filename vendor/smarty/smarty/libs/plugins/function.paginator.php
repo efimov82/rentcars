@@ -7,51 +7,38 @@
  */
 
 /**
- * Smarty {create_url} function plugin
+ * Smarty {paginator} function plugin
  * Type:     function<br>
- * Name:     create_url<br>
- * Date:     May 21, 2002
- * Purpose:  automate mailto address link creation, and optionally encode them.<br>
+ * Name:     paginator<br>
+ * Date:     May 29, 2017
+ * Purpose:  generate pages from 1 to N with set count items to show and set window size.<br>
  * Params:
  * <pre>
- * - address    - (required) - e-mail address
- * - text       - (optional) - text to display, default is address
- * - encode     - (optional) - can be one of:
- *                             * none : no encoding (default)
- *                             * javascript : encode with javascript
- *                             * javascript_charcode : encode with javascript charcode
- *                             * hex : encode with hexidecimal (no javascript)
- * - cc         - (optional) - address(es) to carbon copy
- * - bcc        - (optional) - address(es) to blind carbon copy
- * - subject    - (optional) - e-mail subject
- * - newsgroups - (optional) - newsgroup(s) to post to
- * - followupto - (optional) - address(es) to follow up to
- * - extra      - (optional) - extra tags for the href link
+ * - url          - (required) - url for create links with page numbers for go to next or back page.
+ * - count_all    - (required) - all pages
+ * - current      - (optional) - number current page (Default=1)
+ * - window       - (optional) - count pages to show. If need [1 ... 10 <11> 12 13 14 ... 50] - window = 5
+ *                  Default = 8
  * </pre>
  * Examples:
  * <pre>
- * {mailto address="me@domain.com"}
- * {mailto address="me@domain.com" encode="javascript"}
- * {mailto address="me@domain.com" encode="hex"}
- * {mailto address="me@domain.com" subject="Hello to you!"}
- * {mailto address="me@domain.com" cc="you@domain.com,they@domain.com"}
- * {mailto address="me@domain.com" extra='class="mailto"'}
+ * {paginator url="/list_books?year=2005" current=4 count_all=32 window=8}
  * </pre>
  *
- * @link     http://www.smarty.net/manual/en/language.function.mailto.php {mailto}
- *           (Smarty online manual)
- * @version  1.2
- * @author   Monte Ohrt <monte at ohrt dot com>
- * @author   credits to Jason Sweat (added cc, bcc and subject functionality)
+ * @version  1.0
+ * @author   Danil Efimov <efimov82@gmail.com>
  *
  * @param array $params parameters
- *
  * @return string
  */
 function smarty_function_create_url($params)
 {
+  $res = '';
+  $url = $params['url'];
+  for($i=1; $i > $params['count_all']; $i++) {
     
-
-   return '<a href="/test"> TEST URL </a>';
+  }
+   
+  return '<a href="'.$params['url'].'"> TEST URL </a>';
    
 }

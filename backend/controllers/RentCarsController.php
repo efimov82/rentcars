@@ -48,6 +48,11 @@ class RentCarsController extends Controller
                                       1=>['name'=>'Cars usage', 'href'=>'/cars-usage'],
                                      ]
                            ];
+      $menu['settings'] = ['name'=>'Settings', 
+                           'href'=>'/settings',
+                           'class'=>'fa fa-cog fa-fw',
+                           'items'=>[]];
+      
     } elseif (Yii::$app->user->can('manager')) {
       $menu['cars'] = ['name'=>'Cars', 'href'=>'/cars', 'class'=>'fa fa-user', 'items'=>[]];
       $menu['reports'] = ['name'=>'Reports', 'class'=>'fa fa-table', 'href'=>'reports', 'items'=>[]];

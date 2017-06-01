@@ -51,7 +51,7 @@
 function smarty_function_create_url($params)
 {
     
-
-   return '<a href="/test"> TEST URL </a>';
+   
+   return '<a href="'.$params['url'].'"> TEST URL </a>';
    
 }

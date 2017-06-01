@@ -9,6 +9,7 @@ use backend\models\User;
 use backend\models\Car;
 use backend\models\PaymentCategory;
 use backend\models\Payment;
+use kartik\mpdf\Pdf;
 
 class ReportsController extends RentCarsController{
   
@@ -77,7 +78,7 @@ class ReportsController extends RentCarsController{
     $post['show_params'] = (count($results) == 0);
     $post['hasPost'] = true;
     
-    return $this->render('index.tpl', ['params'             => $post, 
+    $content = $this->render('index.tpl', ['params'             => $post, 
                                        'results'            => $results,
                                        'group_by_list'      => $this->group_by_list,
                                        'users'              => $users,
@@ -85,7 +86,14 @@ class ReportsController extends RentCarsController{
                                        'categories'         => $categories,
                                        'payments_statuses'  => $payments_statuses
                                       ]);
+    //if (Yii::$app->getRequest()->isPost)
+    //  return $this->pdfReport($content);
+    //else
+      return $content;
+    
   }
+  
+  
   
 
   protected function getFields($get){
