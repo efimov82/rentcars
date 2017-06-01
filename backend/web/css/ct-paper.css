@@ -3211,3 +3211,7 @@ label {
 .table-hover > tbody > tr:hover {
     background-color: #fffcf5;
 }
+
+.input-group.col-md-12 {
+    margin-top: 12px;
+}
