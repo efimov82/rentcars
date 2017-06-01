@@ -35,15 +35,15 @@ class RentCarsController extends Controller
                           'items'=>[1=>['name'=>'Contract', 'href'=>'/contracts/add'],
                                     2=>['name'=>'Payment',  'href'=>'/payments/add'],
                                     3=>['name'=>'Car',      'href'=>'/cars/add'],
-                                    3=>['name'=>'Cusromer', 'href'=>'/customers/add'],
-                                    4=>['name'=>'Users',    'href'=>'/users/add']]
+                                    4=>['name'=>'Cusromer', 'href'=>'/customers/add'],
+                                    5=>['name'=>'Users',    'href'=>'/users/add']]
                       ];
       $menu['view'] = ['name'=>'Show', 'href'=>'', 'class'=>'',
                           'items'=>[0=>['name'=>'Contracts',  'href'=>'/contracts'],
                                     1=>['name'=>'Payments',   'href'=>'/payments'],
                                     2=>['name'=>'Cars',       'href'=>'/cars'],
-                                    2=>['name'=>'Customers',  'href'=>'/customers'],
-                                    3=>['name'=>'Users',      'href'=>'/users']]
+                                    3=>['name'=>'Customers',  'href'=>'/customers'],
+                                    4=>['name'=>'Users',      'href'=>'/users']]
                       ];
       $menu['statistic'] = ['name'=>'Statistic', 'href'=>'/', 'class'=>'',
                             'items'=>[0=>['name'=>'Reports',    'href'=>'/reports'],
