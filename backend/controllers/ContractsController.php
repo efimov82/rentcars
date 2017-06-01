@@ -7,7 +7,7 @@ use yii\filters\AccessControl;
 use backend\models\Contract;
 use backend\models\Car;
 use backend\models\User;
-use backend\models\Client;
+use backend\models\Customer;
 use backend\models\PaymentCategory;
 use backend\models\PaymentType;
 use backend\models\Payment;
@@ -16,6 +16,8 @@ use backend\classes\rcPaginator;
 
 use yii\web\UploadedFile;
 use backend\models\UploadedPhotos;
+
+use kartik\mpdf\Pdf;
 
 /**
  * Client controller
@@ -65,7 +67,7 @@ class ContractsController extends RentCarsController{
     $pages = ceil($all_records / $count);
 
     $cars = ArrayHelper::map(Car::find()->all(), 'id', 'number');
-    $customers = Client::find()->indexBy('id')->all();
+    $customers = Customer::find()->indexBy('id')->all();
     $users = User::find()->indexBy('id')->all();
 
     $message = Yii::$app->session->getFlash('message');
@@ -85,7 +87,7 @@ class ContractsController extends RentCarsController{
     
     public function actionAdd(){
       $contract = new Contract();
-      $client = new Client();
+      $client = new Customer();
       $data = array_flip($contract->getTableSchema()->getColumnNames());
       $data['car_number'] = '';
       $data['car_mileage'] = 0;
@@ -127,10 +129,10 @@ class ContractsController extends RentCarsController{
         return $this->redirect('/contracts');
       
       $car = Car::findOne(['id'=>$contract->car_id]);
-      $client = Client::findOne(['id'=>$contract->client_id]);
+      $customer = Customer::findOne(['id'=>$contract->client_id]);
       $data = ['car_number'=>$car->number, 'car_mileage'=>$car->mileage, 'path'=>'/files/contracts/'.$contract->id.'/'];
       
-      return $this->renderPage($data, $contract, $client, 'view.tpl');
+      return $this->renderPage($data, $contract, $customer, 'view.tpl');
     }
 
     
@@ -174,6 +176,46 @@ class ContractsController extends RentCarsController{
       }
       
       $this->redirect('/contracts');
+    }
+    
+    public function actionPdfReport() {
+        // get your HTML raw content without any layouts or scripts
+        $data = ['id'=>365, 'car'=>'Toyota Vios #4605, Color Black',
+                'renter'=>'Ivanov Sergey Vitrorovich',
+                'pasport'=>'#3393923, date 05.12.06, issue 05.12.07',
+                'p'=>'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'];
+        $content = $this->renderPartial('pdf.tpl', ['data'=>$data]);
+        //echo($content);
+        //die();
+        
+        // setup kartik\mpdf\Pdf component
+        $pdf = new Pdf([
+            // set to use core fonts only
+            'mode' => Pdf::MODE_CORE, 
+            // A4 paper format
+            'format' => Pdf::FORMAT_A4, 
+            // portrait orientation
+            'orientation' => Pdf::ORIENT_PORTRAIT, 
+            // stream to browser inline
+            'destination' => Pdf::DEST_BROWSER, 
+            // your html content input
+            'content' => $content,  
+            // format content from your own css file if needed or use the
+            // enhanced bootstrap css built by Krajee for mPDF formatting 
+            'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+            // any css to be embedded if required
+            'cssInline' => '.kv-heading-1{font-size:18px}', 
+             // set mPDF properties on the fly
+            'options' => ['title' => 'Agreement #342'],
+             // call mPDF methods on the fly
+            'methods' => [ 
+                'SetHeader'=>['Phuker Cars Rental Co'], 
+                'SetFooter'=>['{PAGENO}'],
+            ]
+        ]);
+
+        // return the pdf output as per the destination setting
+        return $pdf->render(); 
     }
     
     /**
@@ -316,17 +358,17 @@ class ContractsController extends RentCarsController{
       }
     }
 
-    protected function renderPage(array $data, Contract $contract, Client $client, $template)
+    protected function renderPage(array $data, Contract $contract, Customer $customer, $template)
     {
       $cars = Car::find()->where(['status'=>Car::STATUS_AVAILABLE])->all();
-      $clients = Client::find()->all();
+      $customers = Customer::find()->all();
       $error = Yii::$app->session->getFlash('error', '');
       
       return $this->render($template, ['data'=>$data, 
                                         'contract'=>$contract, 
                                         'cars'=>$cars, 
-                                        'client'=>$client, 
-                                        'clients'=>$clients, 
+                                        'customers'=>$customers, 
+                                        'customer'=>$customer, 
                                         'error'=>$error]);
     }
     
@@ -340,11 +382,11 @@ class ContractsController extends RentCarsController{
     {
       $client = null;
       if (isset($post['client_id']) && (int)$post['client_id']){
-        $client = Client::findOne(['id'=>$post['client_id']]);
+        $client = Customer::findOne(['id'=>$post['client_id']]);
       }
       
       if (!$client){
-        $client = new Client();
+        $client = new Customer();
       }
       
       $client->s_name = $post['s_name'];

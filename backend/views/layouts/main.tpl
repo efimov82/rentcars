@@ -10,7 +10,18 @@
     <link href="/css/ct-paper.css" rel="stylesheet"/>
     <link href="/css/demo.css" rel="stylesheet"/>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'> 
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    
+    {$theme = Yii::$app->user->identity->current_theme}
+    {if $theme}
+      <link href="/css/themes/{$theme}.min.css" rel="stylesheet">
+      <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+    {/if}
+    
+    {*<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">*}
+    
+    {*<script src="/js/jquery-1.12.4.min.js"></script>
+    <script src="/js/jquery-ui-1.12.1.js"></script>*}
+
 </head>
 <body>
 

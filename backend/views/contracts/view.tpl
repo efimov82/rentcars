@@ -1,8 +1,23 @@
 {include file="layouts/header.tpl"}
 <!-- page content -->
     <div class="col-md-6">
-    <h3>View contract data</h3>
+    <h3>Contract #{$contract->id}</h3> <div>( cteated at {$contract->date_create|date_format:"d.m.Y, H:i:s"})</div>
         
+    <div id="renter_info">
+      <div><b>Renter: </b></div>
+      <p>Name: {$customer->f_name} {$customer->s_name} {$customer->l_name}</p>
+      <p>Passport: #{$customer->passport}</p>
+      <p>Phones:  thai: {$customer->phone_m}, rus: {$customer->phone_h}</p>
+      <p>Email:  {$customer->email}</p>
+    </div>
+
+    <div id="owner_info">
+      <div><b>Owner: </b></div>
+      <p>Name: Phuket car rental CO</p>
+      <p>Phones:  thai: +6678940570</p>
+      <p>Email: rentalcars@gmail.com</p>
+    </div>
+
         <div class="row">
             <div class="col-xs-6 col-md-6">
                 <label>Car Number</label>
@@ -42,7 +57,7 @@
             <div class="col-xs-6 col-md-6">
                 <label>Client Passport #</label>
                 <div class="input-group">
-                    <input type="text" id="passport" name="passport" value="{$client->passport}" class="form-control" disabled=1>
+                    <input type="text" id="passport" name="passport" value="" class="form-control" disabled=1>
                     <input type="hidden" name="client_id">
                     <span class="input-group-addon"><i class="fa fa-info-circle"></i></span>
                 </div>  
@@ -50,35 +65,35 @@
             <div class="col-xs-6 col-md-6">
                 <label>Client Name</label>
                 <div class="input-group">
-                    <input type="text" id="s_name" name="s_name" value="{$client->s_name}" class="form-control" disabled=1>
+                    <input type="text" id="s_name" name="s_name" value="" class="form-control" disabled=1>
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
                 </div>  
             </div>
             <div class="col-xs-6 col-md-6">
                 <label>Nationality</label>
                 <div class="input-group">
-                    <input type="text" name="nationality" value="{$client->nationality}" class="form-control" disabled=1>
+                    <input type="text" name="nationality" value="" class="form-control" disabled=1>
                     <span class="input-group-addon"><i class="fa fa-flag"></i></span>
                 </div>  
             </div>
             <div class="col-xs-6 col-md-6">
                 <label>Phone Russia</label>
                 <div class="input-group">
-                    <input type="text" id="phone_h" name="phone_h" value="{$client->phone_h|default:"+7"}" class="form-control" disabled=1>
+                    <input type="text" id="phone_h" name="phone_h" value="" class="form-control" disabled=1>
                     <span class="input-group-addon"><i class="fa fa-phone-square"></i></span>
                 </div>
             </div>
             <div class="col-xs-6 col-md-6">
                 <label>Phone Thailand</label>
                 <div class="input-group">
-                    <input type="text" id="phone_m" name="phone_m" value={$client->phone_m|default:"+66"} class="form-control" disabled=1>
+                    <input type="text" id="phone_m" name="phone_m" value= class="form-control" disabled=1>
                     <span class="input-group-addon"><i class="fa fa-phone-square"></i></span>
                 </div> 
             </div>
             <div class="col-xs-6 col-md-6">
                 <label>E-mail</label>
                 <div class="input-group">
-                    <input type="text" id="email" name="email" value="{$client->email|default:"@gmail.com"}" class="form-control" disabled=1>
+                    <input type="text" id="email" name="email" value="" class="form-control" disabled=1>
                     <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
                 </div>
             </div>
@@ -128,40 +143,3 @@
 
         <div><a href="#" onClick="history.go(-1)"><strong>Back</strong></a></div>
     </div>
-
-<script>
-var cars = [
-  {foreach $cars as $num=>$car}
-    {literal}{{/literal} value: '{$car->number} ({$car->mark} {$car->model}, {$car->color})', data: '{$car->id}', mileage: '{$car->mileage}' {literal}}{/literal},
-  {/foreach}
- ];
-
-var clients_ids = [
-  {foreach $clients as $num=>$client}
-    {literal}{{/literal} value: '{$client->passport}', s_name: "{$client->s_name}", nationality: '{$client->nationality}', phone_m: '{$client->phone_m}', phone_h: '{$client->phone_h}', email: '{$client->email}'{literal}}{/literal},
-  {/foreach}
-];
-
-{literal}
-     $('#car_number').autocomplete({
-         source: cars,
-         select: function (event, ui) {
-                    $('#car_id').val(ui.item.data)
-                    $('#mileage').val(ui.item.mileage)
-
-                  }
-     });
-     
-     $('#passport').autocomplete({
-         source: clients_ids,
-         select: function (event, ui) {
-                    $('#client_id').val(ui.item.client_id)
-                    $('#s_name').val(ui.item.s_name)
-                    $('#email').val(ui.item.email)
-                    $('#phone_m').val(ui.item.phone_m)
-                    $('#phone_h').val(ui.item.phone_h)
-
-                  }
-     });
-  </script>
-  {/literal}

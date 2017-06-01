@@ -7,7 +7,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 
-use backend\models\Client;
+use backend\models\Customer;
 
 /**
  * Client controller
@@ -48,14 +48,14 @@ class ClientsController extends RentCarsController
     {
       $page = Yii::$app->getRequest()->getQueryParam('page') ? Yii::$app->getRequest()->getQueryParam('page') : 1;
       
-      $clients = Client::find()->limit(20, ($page-1));
+      $clients = Customer::find()->limit(20, ($page-1));
       return $this->render('index.tpl', ['clients'=>$clients, 'page'=>$page]);
     }
     
     public function actionEdit()
     {
       $id = Yii::$app->getRequest()->getQueryParam('id');
-      $client = Client::findOne(['id'=>$id]);
+      $client = Customer::findOne(['id'=>$id]);
       return $this->render('edit.tpl', ['client'=>$client]);
     }
 }
