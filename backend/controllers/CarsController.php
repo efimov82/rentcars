@@ -15,8 +15,8 @@ use yii\helpers\Url;
 /**
  * Site controller
  */
-class CarsController extends RentCarsController{
-  public function behaviors(){
+class CarsController extends RentCarsController {
+  public function behaviors() {
     return [
           'access' => [
               'class' => AccessControl::className(),
@@ -43,7 +43,7 @@ class CarsController extends RentCarsController{
      *
      * @return string
      */
-    public function actionIndex(){
+    public function actionIndex() {
       $params['number'] = (int)Yii::$app->getRequest()->getQueryParam('number');
       $params['owner_id'] = (int)Yii::$app->getRequest()->getQueryParam('owner_id');
       $params['status'] = (int)Yii::$app->getRequest()->getQueryParam('status');
