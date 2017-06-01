@@ -11,6 +11,10 @@
     <link href="/css/demo.css" rel="stylesheet"/>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'> 
     
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+    
+
     {$theme = Yii::$app->user->identity->current_theme}
     {if $theme}
       <link href="/css/themes/{$theme}.min.css" rel="stylesheet">
