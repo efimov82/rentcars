@@ -8,7 +8,7 @@ use backend\models\Contract;
 use backend\models\Car;
 use backend\models\Payment;
 use backend\models\PaymentType;
-use backend\models\Client;
+use backend\models\Customer;
 
 /**
  * Import contracts -  php yii utils/contracts/import
