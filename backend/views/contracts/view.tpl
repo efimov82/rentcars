@@ -4,7 +4,7 @@
     <h3>Contract #{$contract->id}</h3> <div>( cteated at {$contract->date_create|date_format:"d.m.Y, H:i:s"})</div>
         
     <div id="renter_info">
-      <div><b>Renter: </b></div>
+      <div><b>Renter data: </b></div>
       <p>Name: {$customer->f_name} {$customer->s_name} {$customer->l_name}</p>
       <p>Passport: #{$customer->passport}</p>
       <p>Phones:  thai: {$customer->phone_m}, rus: {$customer->phone_h}</p>
@@ -12,24 +12,45 @@
     </div>
 
     <div id="owner_info">
-      <div><b>Owner: </b></div>
+      <div><b>Owner data: </b></div>
       <p>Name: Phuket car rental CO</p>
       <p>Phones:  thai: +6678940570</p>
       <p>Email: rentalcars@gmail.com</p>
     </div>
 
+    <div id="car_info">
+      <div><b>Car data:</b></div>
+      <p>VIN: {$data.car.number}</p>
+      <p>Model: {$data.car.mark} {$data.car.model} ({$data.car.year})</p>
+      <p>Color: {$data.car.color|default:"-"}</p>
+      <p>Mileage: {$data.car.mileage}</p>
+    </div>
+
+    <div id="contract_info">
+      <div><b>Contract data:</b></div>
+      <p>Date start rent: {$contract.date_start}</p>
+      <p>Date finish rent: {$contract.date_stop}</p>
+      <p>Time return car: {$contract.time}</p>
+      
+    </div>
+
+    <div><a href="{url route="/contracts/view-pdf" id=$contract->id}" target="_blank"><strong>PDF version</strong></a></div>
+    <div><a href="#" onClick="history.go(-1)"><strong>Back</strong></a></div>
+  </div>
+
+{*  OLD
         <div class="row">
             <div class="col-xs-6 col-md-6">
                 <label>Car Number</label>
                 <div class="input-group ui-widget">
-                  <input type="text" id="car_number" name="car_number" value="{$data.car_number}"  class="form-control" disabled=1>
+                  <input type="text" id="car_number" name="car_number" value=""  class="form-control" disabled=1>
                   <span class="input-group-addon"><i class="fa fa-car"></i></span>
                 </div>  
             </div>
             <div class="col-xs-6 col-md-6">
                 <label>Mileage</label>
                 <div class="input-group">
-                    <input type="text" id="mileage" name="car_mileage" value="{$data.car_mileage}" class="form-control" disabled=1>
+                    <input type="text" id="mileage" name="car_mileage" value="" class="form-control" disabled=1>
                     <span class="input-group-addon"><i class="fa fa-bug"></i></span>
                 </div> 
             </div>
@@ -141,5 +162,6 @@
       </a>
     </div>
 
-        <div><a href="#" onClick="history.go(-1)"><strong>Back</strong></a></div>
-    </div>
+*}
+
+

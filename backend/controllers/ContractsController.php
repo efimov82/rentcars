@@ -130,9 +130,49 @@ class ContractsController extends RentCarsController{
       
       $car = Car::findOne(['id'=>$contract->car_id]);
       $customer = Customer::findOne(['id'=>$contract->client_id]);
-      $data = ['car_number'=>$car->number, 'car_mileage'=>$car->mileage, 'path'=>'/files/contracts/'.$contract->id.'/'];
+      $data = ['car'=>$car, 'path'=>'/files/contracts/'.$contract->id.'/'];
       
       return $this->renderPage($data, $contract, $customer, 'view.tpl');
+    }
+    
+    public function actionViewPdf() {
+      // get your HTML raw content without any layouts or scripts
+        $data = ['id'=>365, 'car'=>'Toyota Vios #4605, Color Black',
+                'renter'=>'Ivanov Sergey Vitrorovich',
+                'pasport'=>'#3393923, date 05.12.06, issue 05.12.07',
+                'p'=>'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'];
+        $content = $this->renderPartial('pdf.tpl', ['data'=>$data]);
+        //echo($content);
+        //die();
+        
+        // setup kartik\mpdf\Pdf component
+        $pdf = new Pdf([
+            // set to use core fonts only
+            'mode' => Pdf::MODE_CORE, 
+            // A4 paper format
+            'format' => Pdf::FORMAT_A4, 
+            // portrait orientation
+            'orientation' => Pdf::ORIENT_PORTRAIT, 
+            // stream to browser inline
+            'destination' => Pdf::DEST_BROWSER, 
+            // your html content input
+            'content' => $content,  
+            // format content from your own css file if needed or use the
+            // enhanced bootstrap css built by Krajee for mPDF formatting 
+            'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+            // any css to be embedded if required
+            'cssInline' => '.kv-heading-1{font-size:18px}', 
+             // set mPDF properties on the fly
+            'options' => ['title' => 'Agreement #342'],
+             // call mPDF methods on the fly
+            'methods' => [ 
+                'SetHeader'=>['Phuker Cars Rental Co'], 
+                'SetFooter'=>['{PAGENO}'],
+            ]
+        ]);
+
+        // return the pdf output as per the destination setting
+        return $pdf->render(); 
     }
 
     
@@ -178,46 +218,6 @@ class ContractsController extends RentCarsController{
       $this->redirect('/contracts');
     }
     
-    public function actionPdfReport() {
-        // get your HTML raw content without any layouts or scripts
-        $data = ['id'=>365, 'car'=>'Toyota Vios #4605, Color Black',
-                'renter'=>'Ivanov Sergey Vitrorovich',
-                'pasport'=>'#3393923, date 05.12.06, issue 05.12.07',
-                'p'=>'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'];
-        $content = $this->renderPartial('pdf.tpl', ['data'=>$data]);
-        //echo($content);
-        //die();
-        
-        // setup kartik\mpdf\Pdf component
-        $pdf = new Pdf([
-            // set to use core fonts only
-            'mode' => Pdf::MODE_CORE, 
-            // A4 paper format
-            'format' => Pdf::FORMAT_A4, 
-            // portrait orientation
-            'orientation' => Pdf::ORIENT_PORTRAIT, 
-            // stream to browser inline
-            'destination' => Pdf::DEST_BROWSER, 
-            // your html content input
-            'content' => $content,  
-            // format content from your own css file if needed or use the
-            // enhanced bootstrap css built by Krajee for mPDF formatting 
-            'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
-            // any css to be embedded if required
-            'cssInline' => '.kv-heading-1{font-size:18px}', 
-             // set mPDF properties on the fly
-            'options' => ['title' => 'Agreement #342'],
-             // call mPDF methods on the fly
-            'methods' => [ 
-                'SetHeader'=>['Phuker Cars Rental Co'], 
-                'SetFooter'=>['{PAGENO}'],
-            ]
-        ]);
-
-        // return the pdf output as per the destination setting
-        return $pdf->render(); 
-    }
-    
     /**
      * 
      * @param [car_number, date_start, date_stop]
@@ -250,23 +250,6 @@ class ContractsController extends RentCarsController{
     }
     
     
-    /*public function actionEdit(){
-      $id = Yii::$app->getRequest()->getQueryParam('id');
-      $contract = Contract::findOne(['id'=>$id]);
-      if (!$contract)
-        return $this->redirect('/');
-      
-      $car = Car::findOne(['id'=>$contract->car_id]);
-      $client = Client::findOne(['id'=>$contract->client_id]);
-      $data = ['car_number'=>$car->number, 'car_mileage'=>$car->mileage];
-      
-      if (!Yii::$app->getRequest()->isPost){
-        return $this->renderPage($data, $contract, $client, 'edit.tpl');
-      }
-      
-      $post = Yii::$app->getRequest()->post();
-      // TODO - уточнить что именно сохранить и как
-    }*/
     
     public function actionClose(){
       $id = Yii::$app->getRequest()->getQueryParam('id');
