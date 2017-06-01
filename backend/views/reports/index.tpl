@@ -61,7 +61,7 @@
                     </div>
                     <div class="col-xs-6 col-md-3">
                         <label>Group by:</label>
-                            <select id="group_by" name="group_by[]" class="form-control">
+                            <select id="group_by" name="group_by[]" {*multiple="multiple" size=2*} class="form-control">
                             {foreach $group_by_list as $val=>$name}
                             <option value="{$val}" {if isset($params['group_by'][$val])}selected="selected"{/if}>{$name}</option>
                             {/foreach}
