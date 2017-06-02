@@ -10,7 +10,6 @@
     <link href="/css/ct-paper.css" rel="stylesheet"/>
     <link href="/css/demo.css" rel="stylesheet" /> 
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>     
 </head>
 <body>
@@ -85,22 +84,7 @@
                   
                     {$content}
                 </div>
-            </div>     
-            <footer class="footer-demo section-dark">
-              <div class="container">
-                  <nav class="pull-left">
-                      <ul>
-                        <li><a href="#">Creative Tim</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Licenses</a></li>
-                      </ul>
-                  </nav>
-                  <div class="copyright pull-right">
-                      &copy; 2017, made with <i class="fa fa-heart heart"></i>
-                  </div>
-              </div>
-            </footer>
-
+            </div>
 </body>
   <script src="/js/jquery-1.10.2.js" type="text/javascript"></script>
 	<script src="/js/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>

@@ -1,0 +1,33 @@
+body {
+  color: #666;
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+a {
+  color: #68B3C8;
+  -webkit-transition: all 150ms linear;
+  -moz-transition: all 150ms linear;
+  -o-transition: all 150ms linear;
+  -ms-transition: all 150ms linear;
+  transition: all 150ms linear;
+}
+a:hover, a:focus {
+  color: #3091B2;
+  text-decoration: none;
+}
+.navbar-inverse {
+    background-color: #004a7c;
+    border-color: #e0edf2;
+}
+.navbar-inverse .navbar-nav>li>a {
+    color: #ddd;
+}
+.content {
+    background-color: #e0edf2;
+    padding-top: 60px;
+    min-height: 800px;
+}
+.input-group, .input-lg {
+    margin-bottom: 20px;
+}
