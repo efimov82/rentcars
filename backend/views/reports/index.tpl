@@ -69,7 +69,7 @@
                 <div class="row">
                     <div class="col-md-offset-10 col-md-2">
                         <div class="tim-title">
-                            <a name="action" value="search" class="btn btn-default btn-lg btn-block"><i class="fa fa-search"></i>Search</a>
+                            <a name="action" value="search" class="btn btn-info btn-lg btn-block"><i class="fa fa-search"></i>Search</a>
                         </div>
                     </div>
                 </div>    

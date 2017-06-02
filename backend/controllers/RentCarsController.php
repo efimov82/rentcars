@@ -32,11 +32,11 @@ class RentCarsController extends Controller
     
     if (Yii::$app->user->can('admin')){
       $menu['new'] = ['name'=>'New','href'=>'', 'class'=>'fa fa-plus-circle',
-                          'items'=>[1=>['name'=>'<i class="fa fa-file-text"></i> Contract', 'href'=>'/contracts/add'],
-                                    2=>['name'=>'<i class="fa fa-usd"></i> Payment',  'href'=>'/payments/add'],
-                                    3=>['name'=>'<i class="fa fa-car"></i> Car',      'href'=>'/cars/add'],
-                                    4=>['name'=>'<i class="fa fa-user"></i> Cusromer', 'href'=>'/customers/add'],
-                                    5=>['name'=>'<i class="fa fa-user"></i> Users',    'href'=>'/users/add']]
+                          'items'=>[1=>['name'=>'Contract', 'href'=>'/contracts/add'],
+                                    2=>['name'=>'Payment',  'href'=>'/payments/add'],
+                                    3=>['name'=>'Car',      'href'=>'/cars/add'],
+                                    4=>['name'=>'Cusromer', 'href'=>'/customers/add'],
+                                    5=>['name'=>'Users',    'href'=>'/users/add']]
                       ];
       $menu['view'] = ['name'=>'Show', 'href'=>'', 'class'=>'fa fa-bar-chart',
                           'items'=>[0=>['name'=>'Contracts',  'href'=>'/contracts'],
