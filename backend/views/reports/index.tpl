@@ -6,62 +6,60 @@
             <h3>Reports</h3>
             <form action="" method="POST">
                 <div class="row">
-                    <div class="col-xs-6 col-md-3">
+                    <div class="col-xs-6 col-md-2">
                         <label>Date from:</label>
-                        <div class="input-group">
+                        <div class="input-group input-group-lg">
                             <input name="date_start" class="datepicker form-control" data-date-format="dd/mm/yyyy" value="{if isset($params.date_start)}{$params.date_start}{/if}" type="text"/>
                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         </div> 
                     </div>
-                    <div class="col-xs-6 col-md-3">
+                    <div class="col-xs-6 col-md-2">
                         <label>Date to:</label>
-                        <div class="input-group">
+                        <div class="input-group input-group-lg">
                             <input name="date_stop" class="datepicker form-control" data-date-format="dd/mm/yyyy" value="{if isset($params.date_stop)}{$params.date_stop}{/if}" type="text"/>
                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         </div> 
                     </div> 
-                    <div class="col-xs-6 col-md-3">
-                        <label>User:</label>
-                        <select name="user_id" class="form-control">
-                            <option value="" class="form-control option">ALL</option>
-                            {foreach $users as $num=>$user}
-                            <option value="{$user.id}"{if $params.user_id == $user.id} selected="selected"{/if} class="form-control option">{$user.username}</option>
-                            {/foreach}
-                        </select>
-                    </div>                
-                    <div class="col-xs-6 col-md-3">
+                    <div class="col-xs-6 col-md-2">
                         <label>Car number:</label>
-                        <div class="input-group">
+                        <div class="input-group input-group-lg">
                             <input type="text" name="car_number" value="{if isset($params.car_number)}{$params.car_number}{/if}" class="form-control" />
                             <span class="input-group-addon"><i class="fa fa-car"></i></span>
                         </div> 
-                    </div>  
-                </div>
-                <div class="row">
-                    <div class="col-xs-6 col-md-3">
-                        <label>Payment type:</label> 
-                        <select name="payment_type" class="form-control">
+                    </div> 
+                    <div class="col-xs-6 col-md-1">
+                        <label>User:</label>
+                        <select name="user_id" class="form-control input-lg">
+                            <option value="" class="form-control option">ALL</option>
+                            {foreach $users as $num=>$user}
+                            <option value="{$user.id}"{if $params.user_id == $user.id} selected="selected"{/if}>{$user.username}</option>
+                            {/foreach}
+                        </select>
+                    </div>              
+                    <div class="col-xs-6 col-md-1">
+                        <label>Type:</label> 
+                        <select name="payment_type" class="form-control input-lg">
                             <option value="0" class="form-control option">ALL</option>
                             <option value="1" class="form-control option" {if $params.payment_type == 1}selected=selected{/if}>INCOME</option>
                             <option value="2" class="form-control option" {if $params.payment_type == 2}selected=selected{/if}>OUTGOING</option>
                         </select>
                     </div>
-                    <div class="col-xs-6 col-md-3">
-                        <label>Payment status:</label>
-                        {html_options name="payment_status" options=$payments_statuses emptyoption="ALL" selected=$params.payment_status class="form-control"}
+                    <div class="col-xs-6 col-md-1">
+                        <label>Status:</label>
+                        {html_options name="payment_status" options=$payments_statuses emptyoption="ALL" selected=$params.payment_status class="form-control input-lg"}
                     </div>
-                    <div class="col-xs-6 col-md-3">
-                        <label>Payment category:</label> 
-                        <select name="payment_category" class="form-control">
+                    <div class="col-xs-6 col-md-1">
+                        <label>Category:</label> 
+                        <select name="payment_category" class="form-control input-lg">
                             <option value="0"  class="form-control option">ALL</option>
                             {foreach $categories as $num=>$arr}
                             <option value="{$arr.id}" class="form-control option"{if $arr.id == $params.payment_category} selected="selected"{/if}>{$arr.name}</option>
                         {/foreach}
                         </select>
                     </div>
-                    <div class="col-xs-6 col-md-3">
+                    <div class="col-xs-6 col-md-2">
                         <label>Group by:</label>
-                            <select id="group_by" name="group_by[]" {*multiple="multiple" size=2*} class="form-control">
+                            <select id="group_by" name="group_by[]" {*multiple="multiple" size=2*} class="form-control input-lg">
                             {foreach $group_by_list as $val=>$name}
                             <option value="{$val}" {if isset($params['group_by'][$val])}selected="selected"{/if}>{$name}</option>
                             {/foreach}
@@ -69,21 +67,19 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-offset-10 col-md-2">
                         <div class="tim-title">
-                            <button name="action" value="search" class="btn btn-block"><i class="fa fa-search"></i>Search</button>
+                            <a name="action" value="search" class="btn btn-default btn-lg btn-block"><i class="fa fa-search"></i>Search</a>
                         </div>
                     </div>
                 </div>    
-            </form> 
-        </div>
+            </form>
                 
         <!-- results -->
         {if $params.hasPost}
-        <div class="col-md-12">
             <h3>Search results</h3>
             {if $results}
-            <div class="content table-responsive table-full-width">
+            <div class="table-responsive table-full-width">
                 <table class="table table-hover">
                     <thead>
                         <th>#</th>

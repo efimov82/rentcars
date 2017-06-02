@@ -31,21 +31,21 @@ class RentCarsController extends Controller
     $this->common_vars['main_menu'] = $menu;
     
     if (Yii::$app->user->can('admin')){
-      $menu['new'] = ['name'=>'<b>NEW</b>','href'=>'', 'class'=>'fa fa-file-text',
-                          'items'=>[1=>['name'=>'Contract', 'href'=>'/contracts/add'],
-                                    2=>['name'=>'Payment',  'href'=>'/payments/add'],
-                                    3=>['name'=>'Car',      'href'=>'/cars/add'],
-                                    4=>['name'=>'Cusromer', 'href'=>'/customers/add'],
-                                    5=>['name'=>'Users',    'href'=>'/users/add']]
+      $menu['new'] = ['name'=>'New','href'=>'', 'class'=>'fa fa-plus-circle',
+                          'items'=>[1=>['name'=>'<i class="fa fa-file-text"></i> Contract', 'href'=>'/contracts/add'],
+                                    2=>['name'=>'<i class="fa fa-usd"></i> Payment',  'href'=>'/payments/add'],
+                                    3=>['name'=>'<i class="fa fa-car"></i> Car',      'href'=>'/cars/add'],
+                                    4=>['name'=>'<i class="fa fa-user"></i> Cusromer', 'href'=>'/customers/add'],
+                                    5=>['name'=>'<i class="fa fa-user"></i> Users',    'href'=>'/users/add']]
                       ];
-      $menu['view'] = ['name'=>'Show', 'href'=>'', 'class'=>'',
+      $menu['view'] = ['name'=>'Show', 'href'=>'', 'class'=>'fa fa-bar-chart',
                           'items'=>[0=>['name'=>'Contracts',  'href'=>'/contracts'],
                                     1=>['name'=>'Payments',   'href'=>'/payments'],
                                     2=>['name'=>'Cars',       'href'=>'/cars'],
                                     3=>['name'=>'Customers',  'href'=>'/customers'],
                                     4=>['name'=>'Users',      'href'=>'/users']]
                       ];
-      $menu['statistic'] = ['name'=>'Statistic', 'href'=>'/', 'class'=>'',
+      $menu['statistic'] = ['name'=>'Statistic', 'href'=>'/', 'class'=>'fa fa-cog fa-pie-chart',
                             'items'=>[0=>['name'=>'Reports',    'href'=>'/reports'],
                                       1=>['name'=>'Cars usage', 'href'=>'/cars-usage'],
                                      ]
