@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ========================================================= */
- var color = '';
+ 
 !function( $ ) {
 	
 	// Picker object
-
+	
 	var Datepicker = function(element, options){
 		this.element = $(element);
 		this.format = DPGlobal.parseFormat(options.format||this.element.data('date-format')||'mm/dd/yyyy');
@@ -75,7 +75,6 @@
 					break;
 			}
 		}
-		this.color = options.color||'azure';
 		this.startViewMode = this.viewMode;
 		this.weekStart = options.weekStart||this.element.data('date-weekstart')||0;
 		this.weekEnd = this.weekStart === 0 ? 6 : this.weekStart - 1;
@@ -84,17 +83,12 @@
 		this.fillMonths();
 		this.update();
 		this.showMode();
-		
 	};
-	
-	
 	
 	Datepicker.prototype = {
 		constructor: Datepicker,
 		
 		show: function(e) {
-		    var datepicker = this.picker;
-
 			this.picker.show();
 			this.height = this.component ? this.component.outerHeight() : this.element.outerHeight();
 			this.place();
@@ -115,20 +109,10 @@
 				type: 'show',
 				date: this.date
 			});
-			
-			setTimeout(function(){
-    			datepicker.addClass('open');
-			}, 170);
 		},
 		
 		hide: function(){
-			var datepicker = this.picker;
-			datepicker.removeClass('open');
-			
-			setTimeout(function(){
-    			datepicker.hide();
-			}, 500);
-			
+			this.picker.hide();
 			$(window).off('resize', this.place);
 			this.viewMode = this.startViewMode;
 			this.showMode();
@@ -140,8 +124,7 @@
 				type: 'hide',
 				date: this.date
 			});
-			
-    	},
+		},
 		
 		set: function() {
 			var formated = DPGlobal.formatDate(this.date, this.format);
@@ -233,9 +216,9 @@
 					clsName += ' new';
 				}
 				if (prevMonth.valueOf() === currentDate) {
-					clsName += ' active ' + this.color;
+					clsName += ' active';
 				}
-				html.push('<td class="day '+clsName+'"><p>'+prevMonth.getDate() + '</p></td>');
+				html.push('<td class="day '+clsName+'">'+prevMonth.getDate() + '</td>');
 				if (prevMonth.getDay() === this.weekEnd) {
 					html.push('</tr>');
 				}
@@ -250,7 +233,7 @@
 							.end()
 						.find('span').removeClass('active');
 			if (currentYear === year) {
-				months.eq(this.date.getMonth()).addClass('active').addClass(this.color);
+				months.eq(this.date.getMonth()).addClass('active');
 			}
 			
 			html = '';
@@ -262,7 +245,7 @@
 								.find('td');
 			year -= 1;
 			for (var i = -1; i < 11; i++) {
-				html += '<span class="year'+(i === -1 || i === 10 ? ' old' : '')+(currentYear === year ? ' active ' : '')+ this.color + '">'+year+'</span>';
+				html += '<span class="year'+(i === -1 || i === 10 ? ' old' : '')+(currentYear === year ? ' active' : '')+'">'+year+'</span>';
 				year += 1;
 			}
 			yearCont.html(html);
@@ -276,7 +259,7 @@
 				switch(target[0].nodeName.toLowerCase()) {
 					case 'th':
 						switch(target[0].className) {
-							case 'switch-datepicker':
+							case 'switch':
 								this.showMode(1);
 								break;
 							case 'prev':
@@ -388,8 +371,8 @@
 		dates:{
 			days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
 			daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-			daysMin: ["S", "M", "T", "W", "T", "F", "S", "S"],
-			months: ["JAN.", "FEB.", "MAR.", "APR.", "MAY", "JUN.", "JUL.", "AUG.", "SEPT.", "OCT.", "NOV.", "DEC."],
+			daysMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 			monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 		},
 		isLeapYear: function (year) {
@@ -460,14 +443,13 @@
 		},
 		headTemplate: '<thead>'+
 							'<tr>'+
-								'<th class="prev"><p>&lsaquo;</p></th>'+
-								'<th colspan="5" class="switch-datepicker"></th>'+
-								'<th class="next"><p>&rsaquo;</p></th>'+
+								'<th class="prev">&lsaquo;</th>'+
+								'<th colspan="5" class="switch"></th>'+
+								'<th class="next">&rsaquo;</th>'+
 							'</tr>'+
 						'</thead>',
 		contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>'
 	};
-	
 	DPGlobal.template = '<div class="datepicker dropdown-menu">'+
 							'<div class="datepicker-days">'+
 								'<table class=" table-condensed">'+
