@@ -6,7 +6,35 @@
             <h3>Reports</h3>
             <form action="" method="POST">
                 <div class="row">
-                    <div class="col-xs-6 col-md-2">
+
+                <label>Dates:</label>
+                <div class="input-group input-group-lg">
+                
+                  <input id="date_start" name="date_start" value="{if isset($params.date_start)}{$params.date_start|date_format:"d.m.Y"}{/if}" type="text" class="datepicker"/>
+                  <input id="date_stop" name="date_stop" value="{if isset($params.date_stop)}{$params.date_stop|date_format:"d.m.Y"}{/if}" type="text" class="datepicker"/>
+                </div>
+                  
+                  
+
+
+                {*
+<input  name="date_start" value="" required="required" type="text" placeholder="Date from">
+                  <input id="date_stop" name="date_stop" value="" required="required" type="text" placeholder="Date to">
+
+                  <div class="input-group date" id="datetimepicker_start">
+                    
+                    <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
+                  </div>
+                  <div class="input-group date" id="datetimepicker_stop">
+                    <input value="" class="form-control" name="date_stop" required="required" type="text" placeholder="Date to">
+                    <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
+                  </div>
+                  *}
+
+
+
+                    {* OLD
+                      <div class="col-xs-6 col-md-2">
                         <label>Date from:</label>
                         <div class="input-group input-group-lg">
                             <input name="date_start" class="datepicker form-control" data-date-format="dd/mm/yyyy" value="{if isset($params.date_start)}{$params.date_start}{/if}" type="text"/>
@@ -19,7 +47,8 @@
                             <input name="date_stop" class="datepicker form-control" data-date-format="dd/mm/yyyy" value="{if isset($params.date_stop)}{$params.date_stop}{/if}" type="text"/>
                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         </div> 
-                    </div> 
+                    </div>
+                    *}
                     <div class="col-xs-6 col-md-2">
                         <label>Car number:</label>
                         <div class="input-group input-group-lg">
@@ -140,3 +169,27 @@
             {/if}
         </div>
         {/if}
+
+{literal}
+<script type="text/javascript">
+	 
+    // Init datePicker
+    $('#date_start').datepicker({
+		  format: 'dd.mm.yyyy',
+      weekStart: 1
+		}).on('changeDate', function(ev){
+          stop = moment(ev.date).add(1, 'days').format('DD.MM.YYYY');
+          $('#date_stop').val(stop);
+          }
+      );
+
+		$('#date_stop').datepicker({
+		  format: 'dd.mm.yyyy',
+      weekStart: 1
+		}).on('changeDate', function(ev){
+          start = moment(ev.date).subtract(1, 'days').format('DD.MM.YYYY');
+          $('#date_start').val(start);
+          }
+      );
+</script>
+{/literal}
