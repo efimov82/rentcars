@@ -13,12 +13,12 @@ use kartik\mpdf\Pdf;
 
 class ReportsController extends RentCarsController{
   
-  public    $group_by_list = ['days'      => 'Days',
-                              'users'     => 'Users',
-                              'cars'      => 'Cars',
-                              'types'     => 'Payment types',
-                              'categories'=> 'Payment categories',
-                              'statuses'  => 'Payment statuses',
+  public    $group_by_list = ['days'      => 'Day',
+                              'users'     => 'User',
+                              'cars'      => 'Car',
+                              'types'     => 'Type',
+                              'categories'=> 'Category',
+                              'statuses'  => 'Status',
                              ];
   
   public function behaviors(){
@@ -132,7 +132,7 @@ class ReportsController extends RentCarsController{
     //echo("start=".$params['date_start']);
     //echo("time=".strtotime($params['date_start']));
     //die();
-    
+    print_r($params);
     if (isset($params['date_start']) && $params['date_start']){
       $where .= " AND date >= '".date('Y-m-d', strtotime(str_replace('/', '-', $params['date_start'])))."'";
     }

@@ -57,47 +57,23 @@
                         {/foreach}
                         </select>
                     </div>
-                    <div class="col-xs-6 col-md-2">
-                        <label>Group by:</label>
-                            <select id="group_by" name="group_by[]" {*multiple="multiple" size=2*} class="form-control">
-                            {foreach $group_by_list as $val=>$name}
-                            <option value="{$val}" {if isset($params['group_by'][$val])}selected="selected"{/if}>{$name}</option>
-                            {/foreach}
-                        </select>
-                    </div>
+                    
                 </div>
+                
                 <div class="row">
+                  {foreach $group_by_list as $val=>$name}
                     <div class="col-xs-6 col-md-1">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"> Check me out
-                            </label>
-                        </div>
-                    </div>   
-                    <div class="col-xs-6 col-md-1">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"> Check me out
-                            </label>
-                        </div>
+                      <div class="checkbox">
+                        <label>
+                          <input name="group_by[]" value="{$val}" type="checkbox" {if isset($params['group_by'][$val])}checked="checked"{/if}> {$name}
+                        </label>
+                      </div>
                     </div> 
-                    <div class="col-xs-6 col-md-1">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"> Check me out
-                            </label>
-                        </div>
-                    </div> 
-                    <div class="col-xs-6 col-md-1">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"> Check me out
-                            </label>
-                        </div>
-                    </div>                     
-                    <div class="col-xs-6 col-md-1">
-                        <button name="action" value="search" class="btn btn-info btn-block"><i class="fa fa-search"></i> Search</button>
-                    </div>
+                  {/foreach}
+                      
+                  <div class="col-xs-6 col-md-1">
+                    <button name="action" value="search" class="btn btn-info btn-block"><i class="fa fa-search"></i> Search</button>
+                  </div>
                 </div>    
             </form>
                 
@@ -176,6 +152,7 @@
       weekStart: 1
 		}).on('changeDate', function(ev){
           stop = moment(ev.date).add(1, 'days').format('DD.MM.YYYY');
+          alert('start val='+ev.date);
           $('#date_stop').val(stop);
           }
       );
