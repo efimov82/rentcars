@@ -129,10 +129,6 @@ class ReportsController extends RentCarsController{
 
   protected function getWhereStatement($params){
     $where = "";
-    //echo("start=".$params['date_start']);
-    //echo("time=".strtotime($params['date_start']));
-    //die();
-    print_r($params);
     if (isset($params['date_start']) && $params['date_start']){
       $where .= " AND date >= '".date('Y-m-d', strtotime(str_replace('/', '-', $params['date_start'])))."'";
     }
