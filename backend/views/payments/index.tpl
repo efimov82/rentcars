@@ -7,8 +7,8 @@
                     <div class="row">
                         <div class="col-xs-6 col-md-2">
                             <label>Date from:</label>
-                            <div class="input-group input-group-lg">
-                                <input name="date_start" class="datepicker form-control" data-date-format="dd/mm/yyyy" value="" type="text"/>
+                            <div class="input-group input-group-lg" id="date_start">
+                                <input class="datepicker form-control" data-date-format="dd/mm/yyyy" value="" type="text"/>
                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                             </div> 
                         </div>
@@ -18,7 +18,7 @@
                                 <input name="date_stop" class="datepicker form-control" data-date-format="dd/mm/yyyy" value="" type="text"/>
                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                             </div> 
-                        </div> 
+                        </div>
                         <div class="col-xs-6 col-md-2">
                             <label>Car number:</label>
                             <div class="input-group input-group-lg">
