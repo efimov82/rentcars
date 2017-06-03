@@ -68,42 +68,34 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-6 col-md-1">
-                        <span class="button-checkbox">
-                            <button type="button" class="btn btn-block" data-color="info"> Dates</button>
-                            <input type="checkbox" class="hidden" />
-                        </span>
-                    </div>  
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"> Check me out
+                            </label>
+                        </div>
+                    </div>   
                     <div class="col-xs-6 col-md-1">
-                        <span class="button-checkbox">
-                            <button type="button" class="btn btn-block" data-color="info"> Users</button>
-                            <input type="checkbox" class="hidden" />
-                        </span>
-                    </div>  
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"> Check me out
+                            </label>
+                        </div>
+                    </div> 
                     <div class="col-xs-6 col-md-1">
-                        <span class="button-checkbox">
-                            <button type="button" class="btn btn-block" data-color="info"> Dates</button>
-                            <input type="checkbox" class="hidden" />
-                        </span>
-                    </div>  
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"> Check me out
+                            </label>
+                        </div>
+                    </div> 
                     <div class="col-xs-6 col-md-1">
-                        <span class="button-checkbox">
-                            <button type="button" class="btn btn-block" data-color="info"> Users</button>
-                            <input type="checkbox" class="hidden" />
-                        </span>
-                    </div>  
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"> Check me out
+                            </label>
+                        </div>
+                    </div>                     
                     <div class="col-xs-6 col-md-1">
-                        <span class="button-checkbox">
-                            <button type="button" class="btn btn-block" data-color="info"> Dates</button>
-                            <input type="checkbox" class="hidden" />
-                        </span>
-                    </div>  
-                    <div class="col-xs-6 col-md-1">
-                        <span class="button-checkbox">
-                            <button type="button" class="btn btn-block" data-color="info"> Users</button>
-                            <input type="checkbox" class="hidden" />
-                        </span>
-                    </div>                    
-                    <div class="col-md-offset-0 col-md-1">
                         <button name="action" value="search" class="btn btn-info btn-block"><i class="fa fa-search"></i> Search</button>
                     </div>
                 </div>    
