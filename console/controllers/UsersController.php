@@ -13,10 +13,10 @@ class UsersController extends Controller {
     //die();
     
     $user = new User();
-    $user->username = 'owner';
-    $user->setPassword('owner');
-    $user->name = 'Mr. Wa (Thai owner)';
-    $user->email = 'mrwa@mail';
+    $user->username = 'dan82';
+    $user->setPassword('qwe123');
+    $user->name = 'Creator';
+    $user->email = 'efimov82@gmail.com';
     
     $user->generateAuthKey();
     if ($user->save()) {

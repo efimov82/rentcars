@@ -14,7 +14,7 @@ use kartik\mpdf\Pdf;
 class ReportsController extends RentCarsController{
   
   public    $group_by_list = ['days'      => 'Day',
-                              'users'     => 'User',
+                              'users'     => 'Manager',
                               'cars'      => 'Car',
                               'types'     => 'Type',
                               'categories'=> 'Category',

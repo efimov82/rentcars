@@ -143,27 +143,3 @@
         </div>
         {/if}
 
-{literal}
-<script type="text/javascript">
-	 
-    // Init datePicker
-    $('#date_start').datepicker({
-		  format: 'dd.mm.yyyy',
-      weekStart: 1
-		}).on('changeDate', function(ev){
-          stop = moment(ev.date).add(1, 'days').format('DD.MM.YYYY');
-          alert('start val='+ev.date);
-          $('#date_stop').val(stop);
-          }
-      );
-
-		$('#date_stop').datepicker({
-		  format: 'dd.mm.yyyy',
-      weekStart: 1
-		}).on('changeDate', function(ev){
-          start = moment(ev.date).subtract(1, 'days').format('DD.MM.YYYY');
-          $('#date_start').val(start);
-          }
-      );
-</script>
-{/literal}

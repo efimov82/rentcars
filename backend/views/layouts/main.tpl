@@ -9,7 +9,7 @@
 
     <link href="/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/css/datepicker.css" rel="stylesheet" />
-    <link href="/css/style.css" rel="stylesheet"/>
+    <link href="/css/style.css?v=2" rel="stylesheet"/>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'> 
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type='text/css'>
 
@@ -33,5 +33,8 @@
     </div>
 </div>
 </body>
+
+<script src="/js/spa/offline.js"></script>
+<script src="/js/inner_functions.js"></script>
 
 </html>

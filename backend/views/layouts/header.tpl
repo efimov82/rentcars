@@ -15,7 +15,7 @@
                     <ul class="nav navbar-nav navbar-right">
                       {foreach $main_menu as $num=>$item}
                         {if count($item.items) > 0}
-                        <li class="dropdown">
+                        <li class="dropdown menu1">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="{$item.class}"> </i> {$item.name|upper}<b class="caret"></b></a>
                           <ul class="dropdown-menu dropdown-menu-right">
                             {foreach $item.items as $num2=>$subitem}
@@ -26,6 +26,7 @@
                         <li><a href="{$item.href}"><i class="{$item.class}"> </i> {$item.name|upper}</a></li>  
                         {/if}
                       {/foreach}
+                      <li class="dropdown"><b>STATE:</b> <span id="status">Online</span></li>
                     </ul>
                 </div>
             </div>
