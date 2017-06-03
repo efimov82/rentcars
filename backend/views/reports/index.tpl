@@ -6,59 +6,30 @@
             <h3>Reports</h3>
             <form action="" method="POST">
                 <div class="row">
-
-                <label>Dates:</label>
-                <div class="input-group input-group-lg">
-                
-                  <input id="date_start" name="date_start" value="{if isset($params.date_start)}{$params.date_start|date_format:"d.m.Y"}{/if}" type="text" class="datepicker"/>
-                  <input id="date_stop" name="date_stop" value="{if isset($params.date_stop)}{$params.date_stop|date_format:"d.m.Y"}{/if}" type="text" class="datepicker"/>
-                </div>
-                  
-                  
-
-
-                {*
-<input  name="date_start" value="" required="required" type="text" placeholder="Date from">
-                  <input id="date_stop" name="date_stop" value="" required="required" type="text" placeholder="Date to">
-
-                  <div class="input-group date" id="datetimepicker_start">
-                    
-                    <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
-                  </div>
-                  <div class="input-group date" id="datetimepicker_stop">
-                    <input value="" class="form-control" name="date_stop" required="required" type="text" placeholder="Date to">
-                    <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
-                  </div>
-                  *}
-
-
-
-                    {* OLD
-                      <div class="col-xs-6 col-md-2">
+                    <div class="col-xs-6 col-md-2">
                         <label>Date from:</label>
-                        <div class="input-group input-group-lg">
-                            <input name="date_start" class="datepicker form-control" data-date-format="dd/mm/yyyy" value="{if isset($params.date_start)}{$params.date_start}{/if}" type="text"/>
+                        <div class="input-group">
+                            <input id="date_start" name="date_start" value="{if isset($params.date_start)}{$params.date_start|date_format:"d.m.Y"}{/if}" type="text" class="form-control datepicker"/>
                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         </div> 
                     </div>
                     <div class="col-xs-6 col-md-2">
                         <label>Date to:</label>
-                        <div class="input-group input-group-lg">
-                            <input name="date_stop" class="datepicker form-control" data-date-format="dd/mm/yyyy" value="{if isset($params.date_stop)}{$params.date_stop}{/if}" type="text"/>
+                        <div class="input-group">
+                            <input id="date_stop" name="date_stop" value="{if isset($params.date_stop)}{$params.date_stop|date_format:"d.m.Y"}{/if}" type="text" class="form-control datepicker"/>
                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         </div> 
                     </div>
-                    *}
                     <div class="col-xs-6 col-md-2">
                         <label>Car number:</label>
-                        <div class="input-group input-group-lg">
+                        <div class="input-group">
                             <input type="text" name="car_number" value="{if isset($params.car_number)}{$params.car_number}{/if}" class="form-control" />
                             <span class="input-group-addon"><i class="fa fa-car"></i></span>
                         </div> 
                     </div> 
                     <div class="col-xs-6 col-md-1">
                         <label>User:</label>
-                        <select name="user_id" class="form-control input-lg">
+                        <select name="user_id" class="form-control">
                             <option value="" class="form-control option">ALL</option>
                             {foreach $users as $num=>$user}
                             <option value="{$user.id}"{if $params.user_id == $user.id} selected="selected"{/if}>{$user.username}</option>
@@ -67,7 +38,7 @@
                     </div>              
                     <div class="col-xs-6 col-md-1">
                         <label>Type:</label> 
-                        <select name="payment_type" class="form-control input-lg">
+                        <select name="payment_type" class="form-control">
                             <option value="0" class="form-control option">ALL</option>
                             <option value="1" class="form-control option" {if $params.payment_type == 1}selected=selected{/if}>INCOME</option>
                             <option value="2" class="form-control option" {if $params.payment_type == 2}selected=selected{/if}>OUTGOING</option>
@@ -75,11 +46,11 @@
                     </div>
                     <div class="col-xs-6 col-md-1">
                         <label>Status:</label>
-                        {html_options name="payment_status" options=$payments_statuses emptyoption="ALL" selected=$params.payment_status class="form-control input-lg"}
+                        {html_options name="payment_status" options=$payments_statuses emptyoption="ALL" selected=$params.payment_status class="form-control"}
                     </div>
                     <div class="col-xs-6 col-md-1">
                         <label>Category:</label> 
-                        <select name="payment_category" class="form-control input-lg">
+                        <select name="payment_category" class="form-control">
                             <option value="0"  class="form-control option">ALL</option>
                             {foreach $categories as $num=>$arr}
                             <option value="{$arr.id}" class="form-control option"{if $arr.id == $params.payment_category} selected="selected"{/if}>{$arr.name}</option>
@@ -88,7 +59,7 @@
                     </div>
                     <div class="col-xs-6 col-md-2">
                         <label>Group by:</label>
-                            <select id="group_by" name="group_by[]" {*multiple="multiple" size=2*} class="form-control input-lg">
+                            <select id="group_by" name="group_by[]" {*multiple="multiple" size=2*} class="form-control">
                             {foreach $group_by_list as $val=>$name}
                             <option value="{$val}" {if isset($params['group_by'][$val])}selected="selected"{/if}>{$name}</option>
                             {/foreach}
@@ -96,10 +67,44 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-offset-10 col-md-2">
-                        <div class="tim-title">
-                            <a name="action" value="search" class="btn btn-info btn-lg btn-block"><i class="fa fa-search"></i>Search</a>
-                        </div>
+                    <div class="col-xs-6 col-md-1">
+                        <span class="button-checkbox">
+                            <button type="button" class="btn btn-block" data-color="info"> Dates</button>
+                            <input type="checkbox" class="hidden" />
+                        </span>
+                    </div>  
+                    <div class="col-xs-6 col-md-1">
+                        <span class="button-checkbox">
+                            <button type="button" class="btn btn-block" data-color="info"> Users</button>
+                            <input type="checkbox" class="hidden" />
+                        </span>
+                    </div>  
+                    <div class="col-xs-6 col-md-1">
+                        <span class="button-checkbox">
+                            <button type="button" class="btn btn-block" data-color="info"> Dates</button>
+                            <input type="checkbox" class="hidden" />
+                        </span>
+                    </div>  
+                    <div class="col-xs-6 col-md-1">
+                        <span class="button-checkbox">
+                            <button type="button" class="btn btn-block" data-color="info"> Users</button>
+                            <input type="checkbox" class="hidden" />
+                        </span>
+                    </div>  
+                    <div class="col-xs-6 col-md-1">
+                        <span class="button-checkbox">
+                            <button type="button" class="btn btn-block" data-color="info"> Dates</button>
+                            <input type="checkbox" class="hidden" />
+                        </span>
+                    </div>  
+                    <div class="col-xs-6 col-md-1">
+                        <span class="button-checkbox">
+                            <button type="button" class="btn btn-block" data-color="info"> Users</button>
+                            <input type="checkbox" class="hidden" />
+                        </span>
+                    </div>                    
+                    <div class="col-md-offset-0 col-md-1">
+                        <button name="action" value="search" class="btn btn-info btn-block"><i class="fa fa-search"></i> Search</button>
                     </div>
                 </div>    
             </form>
