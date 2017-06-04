@@ -45,7 +45,7 @@ class RentCarsController extends Controller
                                     1=>['name'=>'Payments',   'href'=>'/payments'],
                                     2=>['name'=>'Cars',       'href'=>'/cars'],
                                     3=>['name'=>'Customers',  'href'=>'/customers'],
-                                    4=>['name'=>'Users',      'href'=>'/users']]
+                                    4=>['name'=>'Managers',      'href'=>'/users']]
                       ];
       $menu['statistic'] = ['name'=>'Statistic', 'href'=>'/', 'class'=>'fa fa-cog fa-pie-chart',
                             'items'=>[0=>['name'=>'Reports',    'href'=>'/reports'],

@@ -23,8 +23,36 @@ class CustomersController extends RentCarsController {
   
 
   public function actionIndex() {
-    $customers = Customer::find()->all();
-    return $this->render('index.tpl', ['customers'=>$customers]);
+    $params['str_search'] = trim(Yii::$app->getRequest()->getQueryParam('str_search', ''));
+    
+    $params['str_search'] = str_replace(['"', "'", "(", ")", ";", "\\", "*", ",", "#", "$", "%", "^", "&", "/", "?", ".", ","], 
+                                        "", $params['str_search']);
+    
+    $where = $this->createWhere($params['str_search']);
+    
+    $customers = Customer::find()->where($where)->all();//createCommand();
+    
+    //echo("where=".$customers->sql);
+    //die();
+    return $this->render('index.tpl', ['customers'=>$customers, 'params'=>$params]);
+  }
+  
+  /**
+   * 
+   * @param
+   * @return 
+ */
+  protected function createWhere($str) {
+    if (!$str)
+      return [];
+    
+    $str = strtolower($str);
+    return "(phone_m LIKE '%$str%')
+              OR (phone_h LIKE '%$str%')
+              OR (`email` LIKE '%$str%')
+              OR (LOWER(f_name) LIKE '%$str%')
+              OR (LOWER(s_name) LIKE '%$str%')
+              OR (LOWER(l_name) LIKE '%$str%')";
   }
   
   public function actionAdd() {
