@@ -11,6 +11,8 @@ use backend\models\PaymentType;
 use yii\helpers\ArrayHelper;
 use backend\classes\rcPaginator;
 use yii\helpers\Url;
+use backend\classes\Mobile_Detect;
+
 
 /**
  * Site controller
@@ -38,6 +40,14 @@ class CarsController extends RentCarsController {
       ];
   }
   
+  public function actionTest() {
+      
+      $detecter = new Mobile_Detect();
+      
+      return $this->render('test.tpl', ['detecter'=>$detecter]);
+    }
+
+    
   /**
      * Displays cars
      *

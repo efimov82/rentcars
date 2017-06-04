@@ -8,6 +8,8 @@ use common\models\LoginForm;
 use yii\helpers\Html;
 use backend\controllers\RentCarsController;
 
+use backend\classes\Mobile_Detect;
+
 /**
  * Site controller
  */
@@ -64,7 +66,8 @@ class SiteController extends RentCarsController
     {
         return $this->render('index.tpl');
     }
-
+    
+    
     /**
      * Login action.
      *
