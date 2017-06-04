@@ -50,6 +50,7 @@ class ContractsController extends RentCarsController{
   public function actionIndex(){
     $params['car_number'] = substr(Yii::$app->getRequest()->getQueryParam('car_number'), 0, 5);
     $params['number'] = substr(Yii::$app->getRequest()->getQueryParam('number'), 0, 10);
+    $params['customer_id'] = (int)Yii::$app->getRequest()->getQueryParam('customer_id');
     $params['date_start'] = Yii::$app->getRequest()->getQueryParam('date_start');
     $params['d1_equal'] = Yii::$app->getRequest()->getQueryParam('d1_equal');
     $params['d2_equal'] = Yii::$app->getRequest()->getQueryParam('d2_equal');
@@ -231,17 +232,18 @@ class ContractsController extends RentCarsController{
           $res .= ' AND car_id='.$car->id;
       }
       if ($params['date_start']) {
-        $val = $this->list_equals[$params['d1_equal']];
         $data_start = date('Y-m-d', strtotime($params['date_start']));
-        $res .= " AND date_start ".$val." '".$data_start."'";
+        $res .= " AND date_start >='".$data_start."'";
       }
       if ($params['date_stop']) {
-        $val = $this->list_equals[$params['d1_equal']];
         $data_stop = date('Y-m-d', strtotime($params['date_stop']));
-        $res .= " AND date_stop ".$val." '".$data_stop."'";
+        $res .= " AND date_stop <= '".$data_stop."'";
       }
       if ($params['number']) {
         $res .= " AND number ='".$params['number']."'";
+      }
+      if ($params['customer_id']) {
+        $res .= " AND client_id ='".$params['customer_id']."'";
       }
       if ($res)
         return substr($res, 4);

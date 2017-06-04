@@ -48,7 +48,7 @@
                             <th>Manager</th>
                             <th>Dates</th>
                             <th>Time</th>
-                            <th>Client</th>
+                            <th>Customer</th>
                             <th>Phone</th>
                             <th>Phone</th>
                             <th>Location</th>
@@ -67,7 +67,7 @@
                             <td>{$contract->date_start|date_format:"d/m/y"} - {$contract->date_stop|date_format:"d/m/y"}</td>
                             <td>{$contract->time}</td>
                             {$customer = $customers[$contract->client_id]}
-                            <td><a href="/clients/$contract->client_id">{$customer->s_name}</a></td>
+                            <td><a href="/customers/{$contract->client_id}">{$customer->s_name}</a></td>
                             <td>{$customer->phone_h}</td>
                             <td>{$customer->phone_m}</td>
                             <td>{$contract->location}</td>

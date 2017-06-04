@@ -42,6 +42,7 @@
                         <td><a href="skype:{$customer->phone_h}?call">{$customer->phone_h|regex_replace:"/$str/": $res}</a></td>
                         <td><a href="skype:{$customer->phone_m}?call">{$customer->phone_m|regex_replace:"/$str/": $res}</a></td>
                         <td><a href="mailto:{$customer->email}">{$customer->email|regex_replace:"/$str/": $res}</a></td>
+                        <td><a href="{url route="/contracts" customer_id=$customer->id}"><button class="btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Contracts</button></a></td>
                         <td><a href="{url route="customers/edit" id=$customer->id}"><button class="btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Edit</button></a></td>
                     </tr>
                 {/foreach}
