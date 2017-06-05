@@ -15,6 +15,9 @@ a:hover, a:focus {
   color: #3091B2;
   text-decoration: none;
 }
+.navbar-inverse .navbar-brand {
+    color: #5bc0de;
+}
 .navbar-inverse {
     background-color: #004a7c;
     border-color: #e0edf2;
@@ -42,4 +45,14 @@ a:hover, a:focus {
 .pagination>li>a {
     color: #666;
 }
-
+.sub_str_search {
+    color: #004a7c;
+}
+select {
+    margin-bottom: 20px;
+}
+hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-top: 1px solid #999;
+}

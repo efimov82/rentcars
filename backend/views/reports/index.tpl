@@ -10,24 +10,24 @@
                         <label>Date from:</label>
                         <div class="input-group">
                             <input id="date_start" name="date_start" value="{if isset($params.date_start)}{$params.date_start|date_format:"d.m.Y"}{/if}" type="text" class="form-control datepicker"/>
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
                         </div> 
                     </div>
                     <div class="col-xs-6 col-md-2">
                         <label>Date to:</label>
                         <div class="input-group">
                             <input id="date_stop" name="date_stop" value="{if isset($params.date_stop)}{$params.date_stop|date_format:"d.m.Y"}{/if}" type="text" class="form-control datepicker"/>
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
                         </div> 
                     </div>
                     <div class="col-xs-6 col-md-2">
-                        <label>Car number:</label>
+                        <label>Car:</label>
                         <div class="input-group">
                             <input type="text" name="car_number" value="{if isset($params.car_number)}{$params.car_number}{/if}" class="form-control" />
-                            <span class="input-group-addon"><i class="fa fa-car"></i></span>
+                            <span class="input-group-addon">#</span>
                         </div> 
                     </div> 
-                    <div class="col-xs-6 col-md-1">
+                    <div class="col-xs-6 col-md-2">
                         <label>User:</label>
                         <select name="user_id" class="form-control">
                             <option value="" class="form-control option">ALL</option>
@@ -35,7 +35,16 @@
                             <option value="{$user.id}"{if $params.user_id == $user.id} selected="selected"{/if}>{$user.username}</option>
                             {/foreach}
                         </select>
-                    </div>              
+                    </div> 
+                    <div class="col-xs-6 col-md-2">
+                        <label>Category:</label> 
+                        <select name="payment_category" class="form-control">
+                            <option value="0"  class="form-control option">ALL</option>
+                            {foreach $categories as $num=>$arr}
+                            <option value="{$arr.id}" class="form-control option"{if $arr.id == $params.payment_category} selected="selected"{/if}>{$arr.name}</option>
+                        {/foreach}
+                        </select>
+                    </div>
                     <div class="col-xs-6 col-md-1">
                         <label>Type:</label> 
                         <select name="payment_type" class="form-control">
@@ -48,35 +57,23 @@
                         <label>Status:</label>
                         {html_options name="payment_status" options=$payments_statuses emptyoption="ALL" selected=$params.payment_status class="form-control"}
                     </div>
-                    <div class="col-xs-6 col-md-1">
-                        <label>Category:</label> 
-                        <select name="payment_category" class="form-control">
-                            <option value="0"  class="form-control option">ALL</option>
-                            {foreach $categories as $num=>$arr}
-                            <option value="{$arr.id}" class="form-control option"{if $arr.id == $params.payment_category} selected="selected"{/if}>{$arr.name}</option>
-                        {/foreach}
-                        </select>
-                    </div>
-                    
                 </div>
-                
                 <div class="row">
-                  {foreach $group_by_list as $val=>$name}
+                    {foreach $group_by_list as $val=>$name}
                     <div class="col-xs-6 col-md-1">
-                      <div class="checkbox">
+                        <div class="checkbox">
                         <label>
                           <input name="group_by[]" value="{$val}" type="checkbox" {if isset($params['group_by'][$val])}checked="checked"{/if}> {$name}
                         </label>
-                      </div>
+                        </div>
                     </div> 
-                  {/foreach}
-                      
-                  <div class="col-xs-6 col-md-1">
-                    <button name="action" value="search" class="btn btn-info btn-block"><i class="fa fa-search"></i> Search</button>
-                  </div>
+                    {/foreach}
+                    <div class="col-md-offset-5 col-xs-12 col-md-1">
+                        <button name="action" value="search" class="btn btn-info btn-block"><span class="glyphicon-search glyphicon"></span></span> Search</button>
+                    </div>
                 </div>    
             </form>
-                
+            <hr>
         <!-- results -->
         {if $params.hasPost}
             <h3>Search results</h3>
@@ -85,16 +82,16 @@
                 <table class="table table-hover">
                     <thead>
                         <th>#</th>
-                        <th>date</th>
-                        {if isset($params.group_by.users)}<th>user</th>{/if}
-                        {if isset($params.group_by.cars)}<th>car#</th>{/if}
-                        {if isset($params.group_by.types)}<th>type</th>{/if}
-                        {if isset($params.group_by.categories)}<th>category</th>{/if}
-                        {if isset($params.group_by.statuses)}<th>status</th>{/if}
-                        <th>thb</th>
-                        <th>usd</th>
-                        <th>eur</th>
-                        <th>rub</th>
+                        <th>Date</th>
+                        {if isset($params.group_by.users)}<th>User</th>{/if}
+                        {if isset($params.group_by.cars)}<th>Car #</th>{/if}
+                        {if isset($params.group_by.types)}<th>Type</th>{/if}
+                        {if isset($params.group_by.categories)}<th>Category</th>{/if}
+                        {if isset($params.group_by.statuses)}<th>Status</th>{/if}
+                        <th>THB</th>
+                        <th>USD</th>
+                        <th>EURO</th>
+                        <th>RUB</th>
                     </thead>
                     <tbody>
                         {$all_thb=0}
@@ -120,7 +117,6 @@
                             {$all_ruble = $all_ruble + $data.sum_ruble}
                         </tr>
                         {/foreach}
-                        
                         <tr class="alert alert-info">
                             <td><strong>TOTAL ({$results|count})</strong></td>
                             <td>&nbsp;</td>
@@ -142,4 +138,3 @@
             {/if}
         </div>
         {/if}
-
