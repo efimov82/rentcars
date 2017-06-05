@@ -4,42 +4,37 @@
                     <h3>Contracts {$all_records}</h3>
                     <form action="/contracts">
                         <div class="row">
-                            <div class='col-xs-6 col-md-2'>
-                                <label>Date from:</label>
-                                <div class="form-group">
-                                    <div class='input-group input-group-lg date' id='datetimepicker6'>
-                                        <input type='text' class="form-control" />
-                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class='col-xs-6 col-md-2'>
-                                <label>Date to:</label>
-                                <div class="form-group">
-                                    <div class='input-group input-group-lg date' id='datetimepicker7'>
-                                        <input type='text' class="form-control" />
-                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-xs-6 col-md-2">
-                                <label>Car number:</label>
-                                <div class="input-group input-group-lg">
-                                    <input type="text" name="car_number" value="" class="form-control" />
-                                    <span class="input-group-addon"><i class="fa fa-car"></i></span>
+                                <label>Date from:</label>
+                                <div class="input-group">
+                                    <input id="date_start" name="date_start" value="{if isset($params.date_start)}{$params.date_start|date_format:"d.m.Y"}{/if}" type="text" class="form-control datepicker"/>
+                                    <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
                                 </div> 
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-offset-10 col-md-2">
-                                <a name="action" value="search" class="btn btn-info btn-lg btn-block"><i class="fa fa-search"></i> Search</a>
+                            <div class="col-xs-6 col-md-2">
+                                <label>Date to:</label>
+                                <div class="input-group">
+                                    <input id="date_stop" name="date_stop" value="{if isset($params.date_stop)}{$params.date_stop|date_format:"d.m.Y"}{/if}" type="text" class="form-control datepicker"/>
+                                    <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
+                                </div> 
+                            </div>
+                            <div class="col-xs-6 col-md-2">
+                                <label>Car:</label>
+                                <div class="input-group">
+                                    <input type="text" name="car_number" value="" class="form-control" />
+                                    <span class="input-group-addon">#</span>
+                                </div> 
+                            </div>
+                            <div class="col-md-offset-4 col-xs-6 col-md-1">
+                                <label>.</label>
+                                <button name="action" value="search" class="btn btn-info btn-block"><span class="glyphicon-search glyphicon"></span></span> Search</button>
                             </div>
                         </div>    
                     </form>
+                    <hr>
                 {if $message}
                   <div class="alert alert-success">{$message}</div>
                 {/if}
-            <div class="row">
                 <div class="table-responsive table-full-width">
                     <table class="table table-hover">
                         <thead>
@@ -85,7 +80,4 @@
                         {/foreach}
                         </tbody>
                     </table>
-                </div>
-                <div class="container-fluid">
                     {include file="layouts/paginator.tpl" paginator=$paginator}
-                </div>                

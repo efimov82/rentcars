@@ -14,11 +14,9 @@ COORDS
 <p>Click the button to get your coordinates.</p>
 
 <button onclick="checkLocation();">Try It</button>
-
 <div id="map"></div>
 
 {literal}
-
 
 <div>
         <script src="http://maps.google.com/maps?hl=it&amp;file=api&amp;v=2&amp;sensor=true&amp;" type="text/javascript"></script>
@@ -101,6 +99,7 @@ COORDS
     </script>
 
 <script>
+
 var options = {
   enableHighAccuracy: true,
   timeout: 30000,
@@ -124,7 +123,9 @@ function error(err) {
 function checkLocation() {
   navigator.geolocation.getCurrentPosition(success, error, options);
 };
+
 </script> 
+
 {/literal}
 
-</div>
+<div>

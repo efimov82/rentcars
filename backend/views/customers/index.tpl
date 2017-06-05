@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <h3>Customers list</h3>
             </div>    
-            <div class="col-md-offset-4 col-md-2">
+            <div class="col-md-offset-3 col-md-3">
                 <div id="custom-search-input">
                     <form action="" method="GET">
                     <label>Search:</label>
@@ -22,15 +22,15 @@
                     <tr>
                         <th>#</th>
                         <th>Name</th>
-                        <th>Phone Rus</th>
-                        <th>Phone Thai</th>
+                        <th>Phone</th>
+                        <th>Phone</th>
                         <th>E-mail</th>
-                        <th>&nbsp;</th>
+                        <th>Tupe</th>
+                        <th>&nbsp;</th>                        
                     </tr>
                 </thead>
                 <tbody>
                 {$str = $params.str_search}
-                
                 {$res = "<span class=\"sub_str_search\">$str</span>"}
                 {foreach $customers as $num=>$customer}
                     <tr>
@@ -38,10 +38,10 @@
                         <td>{$customer->f_name|regex_replace:"/$str/": $res} 
                             {$customer->s_name|regex_replace:"/$str/": $res} 
                             {$customer->l_name|regex_replace:"/$str/": $res}</td>
-                        
                         <td><a href="skype:{$customer->phone_h}?call">{$customer->phone_h|regex_replace:"/$str/": $res}</a></td>
                         <td><a href="skype:{$customer->phone_m}?call">{$customer->phone_m|regex_replace:"/$str/": $res}</a></td>
                         <td><a href="mailto:{$customer->email}">{$customer->email|regex_replace:"/$str/": $res}</a></td>
+                        <td>&nbsp;</td>
                         <td><a href="{url route="/contracts" customer_id=$customer->id}"><button class="btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Contracts</button></a></td>
                         <td><a href="{url route="customers/edit" id=$customer->id}"><button class="btn btn-info btn-xs"><i class="fa fa-pencil-square-o"></i> Edit</button></a></td>
                     </tr>
@@ -49,11 +49,5 @@
                 </tbody>
             </table>
           </div>
-
 {literal}
-<style>
-.sub_str_search {
-    color: red;
-} 
-</style>
 {/literal}
