@@ -47,6 +47,12 @@ abstract class AbstractPaymentsController extends RentCarsController {
     $this->cars = Car::find()->indexBy('id')->all();
     $this->payments_statuses = Payment::getListStatuses(true);
   }
+  
+  /**
+   * 
+   * @param array $params [date_start, date_stop, car_number, user_id, payment_type, payment_status, payment_category]
+   * @return string WHERE conditions
+   */
   protected function getWhereStatement($params){
     $where = "";
     if (isset($params['date_start']) && $params['date_start']){

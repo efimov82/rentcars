@@ -5,15 +5,15 @@
                 <h3>Payments {if $params.all_records}(find {$params.all_records} records){/if}</h3>
                 <form action="/payments" method="GET">
                     <div class="row">
-                        {include file="shared/filters/dates.tpl" params=$params}
-                        <div class="col-xs-6 col-md-2">
+                      {include file="shared/filters/dates.tpl" params=$params}
+                      <div class="col-xs-6 col-md-2">
                         <label>Car:</label>
                         <div class="input-group">
                             <input type="text" name="car_number" value="{if isset($params.car_number)}{$params.car_number}{/if}" class="form-control" />
                             <span class="input-group-addon">#</span>
                         </div> 
-                    </div> 
-                    {include file="shared/filters/managers.tpl" managers=$managers params=$params}
+                      </div> 
+                      {include file="shared/filters/managers.tpl" managers=$managers params=$params}
                     <div class="col-xs-6 col-md-2">
                         <label>Category:</label> 
                         <select name="payment_category" class="form-control">
@@ -40,7 +40,6 @@
               </div>
             </div>
             <hr>
-            <div class="row">
                 {if $payments}
                 <h3>Search results</h3>
                 <div class="table-responsive table-full-width">
@@ -65,7 +64,7 @@
                             <tr {if ($payment->status == 1)}class="warning"{elseif $payment->status == 4}class="danger"{else}class="success"{/if}>
                             <td>{$payment->id}</td>
                             <td>{$payment->date|date_format:'%d/%m/%y'}</td>
-                            <td>{if isset($managers[$payment->user_id])}{$managers[$payment->user_id].name}{$payment->user_id}{else}{/if}</td>
+                            <td>{if isset($managers[$payment->user_id])}{$managers[$payment->user_id].name}{else}{$payment->user_id}{/if}</td>
                             <td>{$categories[$payment->category_id].name}</td>
                             <td>{if ($payment->type_id == 1)}+{else}-{/if}</td>
                             <td><a href="{url route="/contracts/view/" id=$payment->contract_id}">{$payment->contract_id}</a></td>
@@ -83,5 +82,4 @@
                 </div>
                 {include file="layouts/paginator.tpl" paginator=$paginator}
                 {/if}
-            </div>
 

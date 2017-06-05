@@ -41,7 +41,10 @@ class PaymentsController extends AbstractPaymentsController {
     //$cars = Car::find()->indexBy('id')->all();
     //$payments_statuses = Payment::getListStatuses(true);
     
-    if (!Yii::$app->getRequest()->isGet){
+    $params = Yii::$app->getRequest()->get();
+    $where = $this->getWhereStatement($params);
+    
+    if (!count(Yii::$app->getRequest()->getQueryParams())){
       $this->default_params['all_records'] = 0;
       return $this->render('index.tpl', ['params'             => $this->default_params,
                                          'payments'           => [], 
@@ -51,12 +54,14 @@ class PaymentsController extends AbstractPaymentsController {
                                         ]);
     }
 
-    $params = Yii::$app->getRequest()->get();
-    $where = $this->getWhereStatement($params);
+    
     $count = 20;
     
-    $params['page'] = Yii::$app->getRequest()->getQueryParam('page', 1);
     
+    $params['page'] = Yii::$app->getRequest()->getQueryParam('page', 1);
+    $post = Yii::$app->getRequest()->get();
+    $where = $this->getWhereStatement($post);
+    echo('where='.$where);
     $payments = Payment::find()->offset(($params['page']-1)*$count)
                                ->limit($count)
                                ->where($where)
