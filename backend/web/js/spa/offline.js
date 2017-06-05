@@ -1,13 +1,10 @@
 // page loaded
 $(function() {
   console.log( "ready!" );
-	// form data saving
-  //$("#mainform").submit(lib.Save);
 
   setInterval(function() {
-    // your code goes here...
     lib.Net.ChangeStatus();
-}, 5 * 1000); // 60 * 1000 milsec
+  }, 5 * 1000); // 60 * 1000 milsec
 	// online/offline event handler
 	
   
@@ -18,7 +15,7 @@ $(function() {
 	
 	// load data
 	lib.Load();
-
+  $("#sys_message").hide();
 });
 
 // online/offline library
@@ -42,12 +39,24 @@ lib.Net = function() {
         s.removeClass("offline");
         
       } else { 
-        alert("You are OFFLINE. Data will save local.");
+        //alert("You are OFFLINE. Data will save local.");
+        
+        // Most effect types need no options passed by default
+        var options = {};// direction: 'right' 
+        $("#sys_message").show('slide', options, 1000, hidePopMessage );
+        
         s.addClass("offline");
         $(".menu1").hide();//attr("disabled", true);
       }
 		}
 	}
+  
+  function hidePopMessage() {
+    setTimeout(function() {
+      //$( "#sys_message:visible" ).removeAttr( "style" ).fadeOut();
+      $( "#sys_message").hide('slide', {}, 1000);
+    }, 5000 );
+  }
 	
 	return {
 		Online: Online,
