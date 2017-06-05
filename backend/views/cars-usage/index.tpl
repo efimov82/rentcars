@@ -5,31 +5,18 @@
                 <h3>Cars usage</h3>
                 <form action="" method="POST">
                     <div class="row">
-                        <div class="col-xs-6 col-md-2">
-                            <label>Date from:</label>
-                            <div class="input-group">
-                                <input name="date_start" class="datepicker form-control" value="{if isset($params.date_start)}{$params.date_start|date_format:"%Y-%m-%d"}{/if}" type="text"/>
-                                <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
-                            </div> 
-                        </div>
-                        <div class="col-xs-6 col-md-2">
-                            <label>Date to:</label>
-                            <div class="input-group">
-                                <input name="date_stop" class="datepicker form-control" value="{if isset($params.date_stop)}{$params.date_stop|date_format:"%Y-%m-%d"}{/if}" type="text"/>
-                                <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
-                            </div> 
-                        </div> 
+                        {include file="shared/filters/dates.tpl" params=$params}
                         <div class="col-md-2">
                             <label>.</label>
                             <button name="action" value="search" class="btn btn-info btn-block"><span class="glyphicon-search glyphicon"></span></span> Search</button>
                         </div>
                     </div>
                 </form>
-              </div> 
           </div> 
         </div>
-        <div class="row">
+        <hr>
         {if $data}
+        <h3>Search results</h3>
         <div class="content table-responsive table-full-width">
             <table class="table table-hover">
                 <thead>
@@ -73,4 +60,3 @@
                 </tbody>  
             </table>
         {/if}
-        </div>

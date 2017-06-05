@@ -45,7 +45,7 @@ class CarsUsageController extends RentCarsController{
     $d2 = new \DateTime($date_stop);
     
     $count_days = (int)$d1->diff($d2)->format('%R%a');
-    echo("$date_start - $date_stop, $count_days  \n");
+    //echo("$date_start - $date_stop, $count_days  \n");
     
     $where = "date_start <='".$date_stop."' AND date_stop >'".$date_start."'";
     $raw_data = (new Query())
