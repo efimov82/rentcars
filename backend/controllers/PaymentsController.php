@@ -1,6 +1,8 @@
 <?php
 namespace backend\controllers;
 
+use backend\controllers\common\AbstractPaymentsController;
+
 use Yii;
 use yii\filters\AccessControl;
 use backend\models\Payment;
@@ -15,7 +17,7 @@ use backend\classes\rcPaginator;
 /**
  * Client controller
  */
-class PaymentsController extends RentCarsController{
+class PaymentsController extends AbstractPaymentsController {
   public function behaviors(){
     return [
           'access' => [
@@ -31,57 +33,54 @@ class PaymentsController extends RentCarsController{
   }
   
   /**
-    * Displays homepage.
-    *
     * @return string
     */
   public function actionIndex(){
-    $page = Yii::$app->getRequest()->getQueryParam('page', 1);// ? Yii::$app->getRequest()->getQueryParam('page') : 1;
-    $car_number = (int)Yii::$app->getRequest()->getQueryParam('car_number', '0');
-    $contract_id = (int)Yii::$app->getRequest()->getQueryParam('contract_id', '0');
+    //$users = User::find()->select('id, username')->indexBy('id')->asArray()->all();
+    //$categories = PaymentCategory::find()->select('id, name')->indexBy('id')->asArray()->all();
+    //$cars = Car::find()->indexBy('id')->all();
+    //$payments_statuses = Payment::getListStatuses(true);
     
-    $count = 20;
-    $where = ['status'=>[Payment::STATUS_NEW, 
-                         Payment::STATUS_CONFIRMED, 
-                         Payment::STATUS_UNPAID]];
-    if ($car_number){
-      $car = Car::findOne(['number'=>$car_number]);
-      if ($car)
-        $where['car_id'] = $car->id;
-      else
-        $where['car_id'] = 0;
+    if (!Yii::$app->getRequest()->isGet){
+      $this->default_params['all_records'] = 0;
+      return $this->render('index.tpl', ['params'             => $this->default_params,
+                                         'payments'           => [], 
+                                         'managers'           => $this->list_managers,
+                                         'categories'         => $this->categories,
+                                         'payments_statuses'  => $this->payments_statuses
+                                        ]);
     }
+
+    $params = Yii::$app->getRequest()->get();
+    $where = $this->getWhereStatement($params);
+    $count = 20;
     
-    if ($contract_id)
-      $where['contract_id'] = $contract_id;
+    $params['page'] = Yii::$app->getRequest()->getQueryParam('page', 1);
     
-    $payments = Payment::find()->offset(($page-1)*$count)
+    $payments = Payment::find()->offset(($params['page']-1)*$count)
                                ->limit($count)
                                ->where($where)
-                               ->orderBy(['date_create'=>SORT_DESC]);
+                               ->orderBy(['date_create'=>SORT_DESC])
+                                ->all();
     
-    $all_records = Payment::find()->where($where)->count();
-    $pages = ceil($all_records / $count);
-
-    $users = User::find()->indexBy('id')->all();
-    $categories = PaymentCategory::find()->indexBy('id')->all();
-    $cars = Car::find()->indexBy('id')->all();
-    $paginator = new rcPaginator(['pages'=>$pages,
-                                  'current'=>$page]);
+    $params['all_records'] = Payment::find()->where($where)->count();
+    $paginator = new rcPaginator(['pages'=>ceil($params['all_records'] / $count),
+                                  'current'=>$params['page']]);
     
     return $this->render('index.tpl', ['payments'=>$payments, 
-                                        'users'=>$users, 
-                                        'categories'=>$categories, 
-                                        'cars'=>$cars,
+                                        'params'=>$params,
+                                        'managers'=>$this->list_managers, 
+                                        'categories'=>$this->categories, 
+                                        'cars'=>$this->cars,
+                                        'payments_statuses' => $this->payments_statuses,
                                         'paginator'=>$paginator,
-                                        'all_records'=>$all_records,
-                                        'car_number'=>$car_number,
-                                        'page'=>$page]);
+                                        
+                                      ]);
   }
 
+  
   public function actionAdd(){
     $payment = new Payment();
-
     return $this->showAddEditPage($payment);
   }
 
@@ -95,6 +94,28 @@ class PaymentsController extends RentCarsController{
     return $this->showAddEditPage($payment);
   }
    
+  /**
+   * 
+   * @param array
+   * @return array
+ */
+  protected function createWhere($params) {
+    $where = ['status'=>[Payment::STATUS_NEW, 
+                         Payment::STATUS_CONFIRMED, 
+                         Payment::STATUS_UNPAID]];
+    if ($params['car_number']) {
+      $car = Car::findOne(['number'=>$params['car_number']]);
+      if ($car)
+        $where['car_id'] = $car->id;
+      else
+        $where['car_id'] = 0;
+    }
+    
+    if ($params['contract_id'])
+      $where['contract_id'] = $params['contract_id'];
+    
+    return $where;
+  }
    
   protected function showAddEditPage(Payment $payment){
     $categories = ArrayHelper::map(PaymentCategory::find()->all(), 'id', 'name');

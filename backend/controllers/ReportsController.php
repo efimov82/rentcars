@@ -3,15 +3,13 @@ namespace backend\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
-use backend\controllers\RentCarsController;
-use yii\db\Query;
-use backend\models\User;
-use backend\models\Car;
-use backend\models\PaymentCategory;
-use backend\models\Payment;
-use kartik\mpdf\Pdf;
 
-class ReportsController extends RentCarsController{
+use backend\controllers\common\AbstractPaymentsController;
+use yii\db\Query;
+
+//use kartik\mpdf\Pdf;
+
+class ReportsController extends AbstractPaymentsController{
   
   public    $group_by_list = ['days'      => 'Day',
                               'users'     => 'Manager',
@@ -39,29 +37,13 @@ class ReportsController extends RentCarsController{
    * @return string
    */
   public function actionIndex(){
-    $users = User::find()->select('id, username')->indexBy('id')->asArray()->all();
-    $categories = PaymentCategory::find()->select('id, name')->indexBy('id')->asArray()->all();
-    $cars = Car::find()->indexBy('id')->all();
-    $payments_statuses = Payment::getListStatuses(true);
-    
-    //die();
-    $default_params = ['user_id'    => 0, 
-                       'date_start' => date('d/m/Y', time()),
-                       'date_stop'  => date('d/m/Y', time()+24*3600),
-                       'payment_category' => 0,
-                       'payment_status' => 0,
-                       'payment_type'   => 0,
-                       'show_params'    => true,
-                       'hasPost'        => false
-                      ];
-    
     if (!Yii::$app->getRequest()->isPost){
-      return $this->render('index.tpl', ['params'             => $default_params,
+      return $this->render('index.tpl', ['params'             => $this->default_params,
                                          'results'            => [], 
                                          'group_by_list'      => $this->group_by_list, 
-                                         'users'              => $users,
-                                         'categories'         => $categories,
-                                         'payments_statuses'  => $payments_statuses
+                                         'managers'           => $this->list_managers,
+                                         'categories'         => $this->categories,
+                                         'payments_statuses'  => $this->payments_statuses
                                         ]);
     }
 
@@ -78,14 +60,14 @@ class ReportsController extends RentCarsController{
     $post['show_params'] = (count($results) == 0);
     $post['hasPost'] = true;
     
-    $content = $this->render('index.tpl', ['params'             => $post, 
-                                       'results'            => $results,
-                                       'group_by_list'      => $this->group_by_list,
-                                       'users'              => $users,
-                                       'cars'               => $cars,
-                                       'categories'         => $categories,
-                                       'payments_statuses'  => $payments_statuses
-                                      ]);
+    $content = $this->render('index.tpl', ['params'           => $post, 
+                                          'results'           => $results,
+                                          'group_by_list'     => $this->group_by_list,
+                                          'managers'          => $this->list_managers,
+                                          'cars'              => $this->cars,
+                                          'categories'        => $this->categories,
+                                          'payments_statuses' => $this->payments_statuses
+                                         ]);
     //if (Yii::$app->getRequest()->isPost)
     //  return $this->pdfReport($content);
     //else
@@ -93,14 +75,10 @@ class ReportsController extends RentCarsController{
     
   }
   
-  
-  
-
   protected function getFields($get){
     return 'date, user_id, car_id, type_id, status, category_id, SUM(usd) as sum_usd,
             SUM(euro) as sum_euro, SUM(thb) as sum_thb, SUM(ruble) as sum_ruble';
   }
-
   
   protected function getGroupBy($get){
     $res = [];
@@ -125,53 +103,6 @@ class ReportsController extends RentCarsController{
     }
 
     return $res;
-  }
-
-  protected function getWhereStatement($params){
-    $where = "";
-    if (isset($params['date_start']) && $params['date_start']){
-      $where .= " AND date >= '".date('Y-m-d', strtotime(str_replace('/', '-', $params['date_start'])))."'";
-    }
-    
-    if (isset($params['date_stop']) && $params['date_stop']){
-      $where .= " AND date <= '".date('Y-m-d', strtotime(str_replace('/', '-', $params['date_stop'])))."'";
-    }
-    
-    if (isset($params['car_number']) && $params['car_number']){
-      $car = Car::findOne(['number'=>$params['car_number']]);
-      //$car_id = !is_null($car) ? $car->id : 0;
-      $where .= " AND car_id = ".(!is_null($car) ? $car->id : 0);//$car_id;
-    }
-    
-    if (isset($params['user_id']) && (int)$params['user_id'])
-      $where .= " AND user_id = ".(int)$params['user_id'];
-    
-    if (isset($params['payment_type']) && (int)$params['payment_type'])
-      $where .= " AND type_id = ".(int)$params['payment_type'];
-    
-    if (isset($params['payment_status']) && (int)$params['payment_status'])
-      $where .= " AND status = ".(int)$params['payment_status'];
-    
-    if (isset($params['payment_category']) && (int)$params['payment_category'])
-      $where .= " AND category_id = ".(int)$params['payment_category'];
-
-    if ($where)
-      $where = substr($where, 4);
-
-    return $where;
-
-    //[‘between’, ‘created_date’, ‘2014-11-08’, ‘2014-11-19’]
-    /*$query = (new Query())
-          ->select('*')
-          ->from('users u')
-          ->where(['and',['u.user_id'=>[1,5,8]],['or','u.status=1','u.verified=1']])
-          ->orWhere(['u.social_account'=>1,'u.enable_social'=>1]);*/
-    //$command = $query->createCommand();  
-    //print_r ($command->sql);
-    //die;
-
-    //return ['where'=>['AND', ['']],
-    //        'group_by'=>[]];
   }
 
   protected function search($fields, $where, $group_by){

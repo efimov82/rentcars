@@ -6,20 +6,7 @@
             <h3>Reports</h3>
             <form action="" method="POST">
                 <div class="row">
-                    <div class="col-xs-6 col-md-2">
-                        <label>Date from:</label>
-                        <div class="input-group">
-                            <input id="date_start" name="date_start" value="{if isset($params.date_start)}{$params.date_start|date_format:"d.m.Y"}{/if}" type="text" class="form-control datepicker"/>
-                            <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
-                        </div> 
-                    </div>
-                    <div class="col-xs-6 col-md-2">
-                        <label>Date to:</label>
-                        <div class="input-group">
-                            <input id="date_stop" name="date_stop" value="{if isset($params.date_stop)}{$params.date_stop|date_format:"d.m.Y"}{/if}" type="text" class="form-control datepicker"/>
-                            <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
-                        </div> 
-                    </div>
+                    {include file="shared/filters/dates.tpl" params=$params}
                     <div class="col-xs-6 col-md-2">
                         <label>Car:</label>
                         <div class="input-group">
@@ -27,15 +14,7 @@
                             <span class="input-group-addon">#</span>
                         </div> 
                     </div> 
-                    <div class="col-xs-6 col-md-2">
-                        <label>User:</label>
-                        <select name="user_id" class="form-control">
-                            <option value="" class="form-control option">ALL</option>
-                            {foreach $users as $num=>$user}
-                            <option value="{$user.id}"{if $params.user_id == $user.id} selected="selected"{/if}>{$user.username}</option>
-                            {/foreach}
-                        </select>
-                    </div> 
+                    {include file="shared/filters/managers.tpl" managers=$managers params=$params}
                     <div class="col-xs-6 col-md-2">
                         <label>Category:</label> 
                         <select name="payment_category" class="form-control">
@@ -45,14 +24,7 @@
                         {/foreach}
                         </select>
                     </div>
-                    <div class="col-xs-6 col-md-1">
-                        <label>Type:</label> 
-                        <select name="payment_type" class="form-control">
-                            <option value="0" class="form-control option">ALL</option>
-                            <option value="1" class="form-control option" {if $params.payment_type == 1}selected=selected{/if}>INCOME</option>
-                            <option value="2" class="form-control option" {if $params.payment_type == 2}selected=selected{/if}>OUTGOING</option>
-                        </select>
-                    </div>
+                    {include file="shared/filters/payment_types.tpl" params=$params}
                     <div class="col-xs-6 col-md-1">
                         <label>Status:</label>
                         {html_options name="payment_status" options=$payments_statuses emptyoption="ALL" selected=$params.payment_status class="form-control"}
@@ -73,8 +45,8 @@
                     </div>
                 </div>    
             </form>
-            <hr>
         <!-- results -->
+        <hr>
         {if $params.hasPost}
             <h3>Search results</h3>
             {if $results}
@@ -102,8 +74,8 @@
                         <tr  {if ($data.type_id == 1)}class="success"{else}class="danger"{/if}>
                             <td>{$data@iteration}</td>
                             <td>{if isset($params.group_by.days)}{$data.date|date_format:"d/m"}{else}&nbsp;{/if}</td>
-                            {if isset($params.group_by.users)}<td>{$users[$data.user_id].username}</td>{/if}
-                            {if isset($params.group_by.cars)}<td>{$cars[$data.car_id].number}</td>{/if}
+                            {if isset($params.group_by.users)}<td>{$managers[$data.user_id].name}</td>{/if}
+                            {if isset($params.group_by.cars)}<td>{if isset($cars[$data.car_id])}{$cars[$data.car_id].number}{/if}</td>{/if}
                             {if isset($params.group_by.types)}<td>{if $data.type_id == 1}+{else}-{/if}</td>{/if}
                             {if isset($params.group_by.categories)}<td>{$categories[$data.category_id].name}</td>{/if}
                             {if isset($params.group_by.statuses)}<td>{$payments_statuses[$data.status]}</td>{/if}
