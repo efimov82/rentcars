@@ -21,6 +21,7 @@ COORDS
 <div>
         <script src="http://maps.google.com/maps?hl=it&amp;file=api&amp;v=2&amp;sensor=true&amp;" type="text/javascript"></script>
 <script type="text/javascript">
+  
     var map;
     var geocoder;
 

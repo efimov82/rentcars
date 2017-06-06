@@ -1,10 +1,11 @@
 // page loaded
 $(function() {
+  //javascript:initGeolocation();
   console.log( "ready!" );
 
   setInterval(function() {
     lib.Net.ChangeStatus();
-  }, 5 * 1000); // 60 * 1000 milsec
+  }, 30 * 1000); // 60 * 1000 milsec
 	// online/offline event handler
 	
   

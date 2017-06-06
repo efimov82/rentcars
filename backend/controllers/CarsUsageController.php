@@ -4,7 +4,7 @@ namespace backend\controllers;
 use Yii;
 use yii\filters\AccessControl;
 
-use backend\models\Contract;
+use yii\helpers\Url;
 use yii\db\Query;
 use backend\models\Car;
 
@@ -31,23 +31,39 @@ class CarsUsageController extends RentCarsController{
     $default_params = ['date_start' => date('Y-m-d', time()),
                        'date_stop'  => date('Y-m-d', time()+24*3600),
                       ];
-    if (!Yii::$app->getRequest()->isPost){
+    if (!count(Yii::$app->getRequest()->getQueryParams())){
       return $this->render('index.tpl', ['params'  => $default_params,
                                          'data'    => [],
                                         ]);
     }
 
-    $post = Yii::$app->getRequest()->post();
-    $date_start = date('Y-m-d', strtotime($post['date_start']));
-    $date_stop = date('Y-m-d', strtotime($post['date_stop']));
+    $params = Yii::$app->getRequest()->get();
+    $date_start = date('Y-m-d', strtotime($params['date_start']));
+    $date_stop = date('Y-m-d', strtotime($params['date_stop']));
+    $car_number = substr(trim($params['number']), 0, 6);
+    $car_id = isset($params['car_id']) ? (int)$params['car_id'] : 0;
     
     $d1 = new \DateTime($date_start);
     $d2 = new \DateTime($date_stop);
     
     $count_days = (int)$d1->diff($d2)->format('%R%a');
-    //echo("$date_start - $date_stop, $count_days  \n");
     
-    $where = "date_start <='".$date_stop."' AND date_stop >'".$date_start."'";
+    $where = "date_start <='".$date_stop."' AND date_stop >='".$date_start."'";
+    if ($car_number) {
+      $car = Car::findOne(['number'=>$car_number]);
+      if ($car)
+        $car_id = $car->id;
+    }
+      
+    if ($car_id) {
+      $car = Car::findOne(['id'=>$car_id]);
+      if ($car)
+        $params['number'] = $car->number;
+    }
+    
+    if ($car_id)
+      $where .= ' AND car_id='.$car_id;
+    
     $raw_data = (new Query())
                     ->select('*')
                     ->from('contracts')
@@ -57,12 +73,20 @@ class CarsUsageController extends RentCarsController{
                     //print_r ($results->sql);
                     //die();
                     ->all();
-    $data = $this->createData($raw_data, $d1, $d2);
-    $cars = Car::find()->indexBy('id')->all();
+    if ($car_id) {
+      $data = $this->createCalendarData($raw_data, $date_start, $date_stop);
+    } else {
+      $data = $this->createData($raw_data, $d1, $d2);
+    }
     
-    return $this->render('index.tpl', ['params' => $post,
+    $cars = Car::find()->indexBy('id')->all();
+    $base_url = Url::current();
+    return $this->render('index.tpl', ['params' => $params,
                                        'data'   => $data,
+                                       'base_url'   => $base_url,
                                        'cars'   => $cars,
+                                       'car_number' =>$car_number,
+                                       'car_id' =>$car_id,
                                        'count_days'=> $count_days]);
   }
   
@@ -93,8 +117,6 @@ class CarsUsageController extends RentCarsController{
         } else {
           $days = (int)$last_date->diff($c2)->format('%R%a');
         }
-        //echo("contract={$arr['id']}, car_d={$arr['car_id']}, diff(last=".$last_date->format('d-m-Y')." - c2=".$arr['date_stop']." ,)=$days;\n");
-        //echo("days=$days");
       } else {
         if($diff > 1) { // есть зазор между периодами - заполняем как свободное время
           $res[$arr['car_id']][] = ['contract_id'=>0, 
@@ -134,8 +156,104 @@ class CarsUsageController extends RentCarsController{
                             'all_days'=>$days];
       }
     }
-    
-     
     return $res;
+  }
+  
+  /**
+   * Cteate calendar data array.
+   * 
+   * @param array $raw_data [num]=>[id, car_id, date_start, date_stop, ...]
+   * @return array [num]['month'=>12,           (1-12)
+   *                     'year'=>2016,          (1970-NOW)
+   *                     'name'=>'Dec, 20016',  (string name)
+   *                     'days'=>[day=>state]]  (1-31)
+   *                            where 'state': [
+   *                                            1 - free,
+   *                                            2 - rent, 
+   *                                            3 - repair]
+ */
+  protected function createCalendarData($raw_data, $period_start, $period_stop) {
+    // TODO for February add check 28-29 days
+    // cal_days_in_month(CAL_GREGORIAN, 2, 2003); // 28
+    $months = [1=>'31', 2=>'28', 3=>'31', 4=>'30', 5=>'31', 6=>'30', 7=>'31', 8=>'31', 9=>'30', 10=>'31',11=>'30', 12=>'31'];
+    $res = [];
+    
+    
+    // create rent days matrix
+    $data_rent = [];
+    foreach ($raw_data as $num=>$arr) {
+      $date_start = new \DateTime($arr['date_start']);
+      $date_stop = new \DateTime($arr['date_stop']);
+    
+      //echo('state='.$arr['date_start'].", stop=".$arr['date_stop']."\n");
+      while($date_start <= $date_stop) {
+        $data_rent[$date_start->format('Y')][$date_start->format('m')][$date_start->format('d')] = 2;//rent
+        $date_start->add(new \DateInterval('P1D'));
+      }
+    }
+    
+    // create matrix of months from start date to end date from contracts data
+    $start = reset($raw_data);
+    $date_start = new \DateTime($start['date_start']);
+    $date_start->modify('first day of this month');
+    // end
+    $stop = end($raw_data);
+    $date_end = new \DateTime($stop['date_stop']);
+    $date_end->modify('last day of month');
+    
+    while($date_start <= $date_end) {
+      $date_start->add(new \DateInterval('P1D'));
+    }
+    /*$res[] = ['name'=>'Dec, 2016', 'days'=>[0=>['day'=>'', 'state'=>1], 
+                                            1=>['day'=>'1', 'state'=>2], 
+                                            2=>['day'=>'2', 'state'=>2], 
+                                            3=>['day'=>'3', 'state'=>2], 
+                                            4=>['day'=>'4', 'state'=>1], 
+                                            5=>['day'=>'5', 'state'=>1], 
+                                            6=>['day'=>'6', 'state'=>1], 
+                                            7=>['day'=>'7', 'state'=>2], 
+                                            8=>['day'=>'8', 'state'=>2], 
+                                            9=>['day'=>'9', 'state'=>2], 
+                                            10=>['day'=>'10', 'state'=>2], 
+                                            11=>['day'=>'11', 'state'=>1], 
+                                            12=>['day'=>'12', 'state'=>1], 
+                                            13=>['day'=>'13', 'state'=>1], 
+                                            14=>['day'=>'14', 'state'=>2], 
+                                           ]
+              ];
+    $res[] = ['name'=>'Jan, 2017', 'days'=>[]];
+    $res[] = ['name'=>'Feb, 2017', 'days'=>[0=>['day'=>'', 'state'=>1], 
+                                            1=>['day'=>'', 'state'=>2], 
+                                            2=>['day'=>'', 'state'=>2], 
+                                            3=>['day'=>'', 'state'=>2], 
+                                            4=>['day'=>'1', 'state'=>1], 
+                                            5=>['day'=>'2', 'state'=>1], 
+                                            6=>['day'=>'3', 'state'=>1], 
+                                            7=>['day'=>'4', 'state'=>2], 
+                                            8=>['day'=>'5', 'state'=>2], 
+                                            9=>['day'=>'6', 'state'=>2], 
+                                            10=>['day'=>'7', 'state'=>2], 
+                                            11=>['day'=>'8', 'state'=>1], 
+                                            12=>['day'=>'9', 'state'=>1], 
+                                            13=>['day'=>'10', 'state'=>1], 
+                                            14=>['day'=>'11', 'state'=>2], 
+                                            15=>['day'=>'12', 'state'=>2], 
+                                            16=>['day'=>'13', 'state'=>2], 
+                                           ]
+              ];
+    $res[] = ['name'=>'Mar, 2017', 'days'=>[]];*/
+    
+    return $res;
+  }
+  
+  /**
+   * 
+   * @param
+   * @return [year][month]=>[num=>day] - num starts from Monday. 
+   *              If current month start from Friday 
+   *              array contain [0=>'',1=>'',2=>'',3=>'', 4=>'1', 5=>'2', 6=>'3', ...]
+ */
+  protected function _createEmptyMatrix($raw_data) {
+    
   }
 }
