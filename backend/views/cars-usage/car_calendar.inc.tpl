@@ -1,4 +1,9 @@
 
+<div id="calendar"></div>
+
+<script src="/js/spa/calendar.js"></script>
+
+{*
 {literal}
 <style>
 * {box-sizing:border-box;}
@@ -76,3 +81,5 @@ ul {list-style-type: none;}
     {include file="month.inc.tpl" name=$arr.name days=$arr.days}
   </div>
 {/foreach}
+
+*}
