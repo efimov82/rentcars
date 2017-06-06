@@ -199,12 +199,12 @@ class CarsUsageController extends RentCarsController{
     // end
     $stop = end($raw_data);
     $date_end = new \DateTime($stop['date_stop']);
-    $date_end->modify('last day of month');
+    $date_end->modify('last day of this month');
     
     while($date_start <= $date_end) {
       $date_start->add(new \DateInterval('P1D'));
     }
-    /*$res[] = ['name'=>'Dec, 2016', 'days'=>[0=>['day'=>'', 'state'=>1], 
+    $res[] = ['name'=>'Dec, 2016', 'days'=>[0=>['day'=>'', 'state'=>1], 
                                             1=>['day'=>'1', 'state'=>2], 
                                             2=>['day'=>'2', 'state'=>2], 
                                             3=>['day'=>'3', 'state'=>2], 
@@ -241,7 +241,7 @@ class CarsUsageController extends RentCarsController{
                                             16=>['day'=>'13', 'state'=>2], 
                                            ]
               ];
-    $res[] = ['name'=>'Mar, 2017', 'days'=>[]];*/
+    $res[] = ['name'=>'Mar, 2017', 'days'=>[]];
     
     return $res;
   }
