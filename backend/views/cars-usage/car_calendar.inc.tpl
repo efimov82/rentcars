@@ -18,6 +18,25 @@
 </script>
 
 <span id="calendar"></span>
-<span id="event-modal"></span>
 
+
+<h4><b>List contracts</b></h4>
+      <div class="table-responsive table-full-width">
+        <table class="table table-hover">
+          <thead>
+            <th>ID</th>
+            <th>Dates</th>
+            <th>&nbsp;</th>
+          </thead>
+          <tbody>
+            {foreach $data as $num=>$arr}
+              <tr>
+                <td>{$arr.id}</td>
+                <td>{$arr.date_start|date_format:"d.m.y"} - {$arr.date_stop|date_format:"d.m.y"}</td>
+                <td><a href="{url route="/contracts/edit" id=$arr.id}">Edit</a></td>
+              </tr>
+            {/foreach}
+          <tbody>
+        </table>
+      </div>
 
