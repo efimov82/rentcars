@@ -88,14 +88,14 @@ class ContractsController extends RentCarsController{
     
     public function actionAdd(){
       $contract = new Contract();
-      $client = new Customer();
+      $customer = new Customer();
       $data = array_flip($contract->getTableSchema()->getColumnNames());
       $data['car_number'] = '';
       $data['car_mileage'] = 0;
       $error = '';
       
       if (!Yii::$app->getRequest()->isPost){
-        return $this->renderPage($data, $contract, $client, 'edit.tpl');
+        return $this->renderPage($data, $contract, $customer, 'edit.tpl');
       }
       
       $post = Yii::$app->getRequest()->post();
@@ -110,7 +110,7 @@ class ContractsController extends RentCarsController{
           // save contract
           $res = $this->saveContract($contract, $post);
           if (!$res){
-            return $this->renderPage($post, $contract, $client, 'edit.tpl');
+            return $this->renderPage($post, $contract, $customer, 'edit.tpl');
           }
 
           $this->savePayments($contract, $post);

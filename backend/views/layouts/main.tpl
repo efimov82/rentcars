@@ -11,9 +11,11 @@
     <link href="/css/style.css?v=2" rel="stylesheet"/>
     <link href="/css/bootstrap-year-calendar.min.css" rel="stylesheet"/>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'> 
+    <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
 
      <script src="/js/jquery-1.12.4.min.js"></script>
      <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -62,5 +64,5 @@
     <script src="/js/spa/offline.js" type="text/javascript"></script>
     <script src="/js/inner_functions.js" type="text/javascript"></script>
     {*popup*}
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" type="text/javascript"></script>
+    
 </html>
