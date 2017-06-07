@@ -26,6 +26,10 @@ class ContractsController extends RentCarsController{
   protected   $photos_dir_web = '/files/contacts/';
   protected   $photos_dir_fs = '../web/files/contacts/';
   protected   $list_equals = [1=>'=', 2=>'>' , 3=>'<', 4=>'>=', 5=>'=<'];
+  protected   $list_orders = [1=>['name'=>'Data of start','field'=>'date_start'], 
+                              2=>['name'=>'Data of finish','field'=>'date_stop DESC'], 
+                              3=>['name'=>'Contract number','field'=>'number']
+                            ];
 
   public function behaviors(){
     return [
@@ -52,18 +56,17 @@ class ContractsController extends RentCarsController{
     $params['number'] = substr(Yii::$app->getRequest()->getQueryParam('number'), 0, 10);
     $params['customer_id'] = (int)Yii::$app->getRequest()->getQueryParam('customer_id');
     $params['date_start'] = Yii::$app->getRequest()->getQueryParam('date_start');
-    $params['d1_equal'] = Yii::$app->getRequest()->getQueryParam('d1_equal');
-    $params['d2_equal'] = Yii::$app->getRequest()->getQueryParam('d2_equal');
     $params['date_stop'] = Yii::$app->getRequest()->getQueryParam('date_stop');
+    $params['order_by'] = Yii::$app->getRequest()->getQueryParam('order_by');
     $params['page'] = Yii::$app->getRequest()->getQueryParam('page') ? Yii::$app->getRequest()->getQueryParam('page') : 1;
 
     $count = 50;
     $where = $this->createWhere($params);
-    
+    $order = isset($this->list_orders[$params['order_by']]) ? $this->list_orders[$params['order_by']]['field'] : ' date_start';
     $contracts = Contract::find()->where($where)
                                   ->offset(($params['page']-1)*$count)
                                   ->limit($count)
-                                  ->orderBy(['date_start'=>SORT_DESC]);
+                                  ->orderBy($order);
     $all_records = Contract::find()->where($where)->count(); 
     $pages = ceil($all_records / $count);
 
@@ -81,7 +84,7 @@ class ContractsController extends RentCarsController{
                                        'paginator'=>$paginator,
                                        'all_records'=>$all_records,
                                        'users'=>$users,
-                                       'list_equals'=>$this->list_equals,
+                                       'list_orders'=>$this->list_orders,
                                        'customers'=>$customers,
                                        'cars'=>$cars]);
   }

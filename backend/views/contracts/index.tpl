@@ -27,11 +27,10 @@
                             </div>
                             <div class="col-xs-6 col-md-2">
                                 <label>Order:</label>
-                                <select name="user_id" class="form-control">
-                                    <option value="1">Data of start</option>
-                                    <option value="2">Data of finish</option>
-                                    <option value="4">Car number</option>
-                                    <option value="4">Contract number</option>
+                                <select name="order_by" class="form-control">
+                                  {foreach $list_orders as $val=>$arr}
+                                    <option value="{$val}" {if isset($params.order_by) && $params.order_by==$val}selected="selected"{/if}>{$arr.name}</option>
+                                  {/foreach}
                                 </select>
                             </div>
                             <div class="col-md-offset-3 col-xs-6 col-md-1">
@@ -59,6 +58,9 @@
                             <th>Car</th>
                             <th>Status</th>
                             <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
                         </thead>
                         <tbody>
                         {foreach $contracts->each() as $contract}
@@ -79,10 +81,13 @@
                             <td>{$contract->getStatusName()}</td>
                             <td><a href="{url route="/contracts/view" id=$contract->id}"><button class="btn btn-info btn-fill btn-xs">View</button></a></td>
                             <td><a href="{url route="/payments" contract_id=$contract->id}"><button class="btn btn-info btn-fill btn-xs">Payments</button></a></td>
+
                             {if $contract->status == 1}
-                            <td><a href="{url route="extend" id=$contract->id}"><button class="btn btn-info btn-fill btn-xs">Extend</button></a></td>
-                            <td><a href="{url route="close" id=$contract->id}"><button class="btn btn-info btn-fill btn-xs">Close</button></a></td>
+                              <td><a href="{url route="extend" id=$contract->id}"><button class="btn btn-info btn-fill btn-xs">Extend</button></a></td>
+                              <td><a href="{url route="close" id=$contract->id}"><button class="btn btn-info btn-fill btn-xs">Close</button></a></td>
                             {else}
+                            <td></td>
+                            <td></td>
                             {/if}
                           </tr>
                         </tbody>
