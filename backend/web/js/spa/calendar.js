@@ -1,4 +1,5 @@
 $(function() {
+  
   var currentYear = new Date().getFullYear();
   
   function editContract(event) {
@@ -24,9 +25,7 @@ $(function() {
 //            click: deleteEvent
 //        }
     ] ,
-//    selectRange: function(e) {
-//        editEvent({ startDate: e.startDate, endDate: e.endDate });
-//    },
+
     mouseOnDay: function(e) {
         if(e.events.length > 0) {
             var content = '';
