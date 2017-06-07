@@ -28,7 +28,7 @@ class CarsUsageController extends RentCarsController{
    * @return string
    */
   public function actionIndex(){
-    $default_params = ['date_start' => date('Y-m-d', time()),
+    $default_params = ['date_start' => date('Y-m-d', time()-24*3600*30),
                        'date_stop'  => date('Y-m-d', time()+24*3600),
                       ];
     if (!count(Yii::$app->getRequest()->getQueryParams())){
@@ -74,7 +74,7 @@ class CarsUsageController extends RentCarsController{
                     //die();
                     ->all();
     if ($car_id) {
-      $data = $this->createCalendarData($raw_data, $date_start, $date_stop);
+      $data = $raw_data;
     } else {
       $data = $this->createData($raw_data, $d1, $d2);
     }

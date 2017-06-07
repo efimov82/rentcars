@@ -23,8 +23,8 @@
         </div>
         <hr>
         {if $data}
-        <h3>Search results</h3>
           {if !$car_id} 
+          <h3>Search results</h3>
             {include file="table_all.inc.tpl" data=$data cars=$cars} 
           {else}
             {include file="car_calendar.inc.tpl" data=$data} 
