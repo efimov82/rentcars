@@ -25,7 +25,16 @@
                                     <span class="input-group-addon">#</span>
                                 </div> 
                             </div>
-                            <div class="col-md-offset-4 col-xs-6 col-md-1">
+                            <div class="col-xs-6 col-md-2">
+                                <label>Order:</label>
+                                <select name="user_id" class="form-control">
+                                    <option value="1">Data of start</option>
+                                    <option value="2">Data of finish</option>
+                                    <option value="4">Car number</option>
+                                    <option value="4">Contract number</option>
+                                </select>
+                            </div>
+                            <div class="col-md-offset-3 col-xs-6 col-md-1">
                                 <label>.</label>
                                 <button name="action" value="search" class="btn btn-info btn-block"><span class="glyphicon-search glyphicon"></span></span> Search</button>
                             </div>
