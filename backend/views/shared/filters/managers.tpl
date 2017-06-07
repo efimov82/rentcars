@@ -7,7 +7,7 @@ Usage: {include file="shared/filters/managers.tpl" managers=$managers params=$pa
     <select name="user_id" class="form-control">
         <option value="">-</option>
         {foreach $managers as $num=>$user}
-        <option value="{$user.id}"{if $params.user_id == $user.id} selected="selected"{/if}>{$user.name}</option>
+        <option value="{$user.id}"{if isset($params.user_id) &&  ($params.user_id == $user.id)} selected="selected"{/if}>{$user.name}</option>
         {/foreach}
     </select>
 </div> 

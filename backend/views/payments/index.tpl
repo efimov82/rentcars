@@ -19,14 +19,18 @@
                         <select name="payment_category" class="form-control">
                             <option value="0"  class="form-control option">ALL</option>
                             {foreach $categories as $num=>$arr}
-                            <option value="{$arr.id}" class="form-control option"{if $arr.id == $params.payment_category} selected="selected"{/if}>{$arr.name}</option>
+                            <option value="{$arr.id}" class="form-control option"{if isset($params.payment_category) && ($arr.id == $params.payment_category)} selected="selected"{/if}>{$arr.name}</option>
                         {/foreach}
                         </select>
                     </div>
                     {include file="shared/filters/payment_types.tpl" params=$params}
                     <div class="col-xs-6 col-md-1">
                         <label>Status:</label>
-                        {html_options name="payment_status" options=$payments_statuses emptyoption="ALL" selected=$params.payment_status class="form-control"}
+                        <select name="payment_status" class="form-control">
+                          {foreach $payments_statuses as $val=>$name}
+                          <option value="{$val}" {if isset($params.payment_status) && ($val == $params.payment_status)}selected="selected"{/if} class="form-control"}>{$name}</option>
+                          {/foreach}
+                        </select>
                     </div>
 
                     <div class="row">

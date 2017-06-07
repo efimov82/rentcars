@@ -79,6 +79,9 @@ abstract class AbstractPaymentsController extends RentCarsController {
     
     if (isset($params['payment_category']) && (int)$params['payment_category'])
       $where .= " AND category_id = ".(int)$params['payment_category'];
+    
+    if (isset($params['contract_id']) && (int)$params['contract_id'])
+      $where .= " AND id = ".(int)$params['contract_id'];
 
     if ($where)
       $where = substr($where, 4);

@@ -54,14 +54,9 @@ class PaymentsController extends AbstractPaymentsController {
                                         ]);
     }
 
-    
     $count = 20;
-    
-    
     $params['page'] = Yii::$app->getRequest()->getQueryParam('page', 1);
-    $post = Yii::$app->getRequest()->get();
-    $where = $this->getWhereStatement($post);
-    echo('where='.$where);
+    $where = $this->getWhereStatement(Yii::$app->getRequest()->get());
     $payments = Payment::find()->offset(($params['page']-1)*$count)
                                ->limit($count)
                                ->where($where)
