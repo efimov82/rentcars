@@ -57,7 +57,7 @@ class ContractsController extends RentCarsController{
     $params['date_stop'] = Yii::$app->getRequest()->getQueryParam('date_stop');
     $params['page'] = Yii::$app->getRequest()->getQueryParam('page') ? Yii::$app->getRequest()->getQueryParam('page') : 1;
 
-    $count = 10;
+    $count = 50;
     $where = $this->createWhere($params);
     
     $contracts = Contract::find()->where($where)

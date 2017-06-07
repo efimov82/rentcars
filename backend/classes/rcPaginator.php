@@ -12,13 +12,13 @@ class rcPaginator implements \Iterator {
    * @param array $params:  
    *                  pages   - (required) - count pages 
     *                 current - (required) - number current page
-   *                  visible - (optional) - size of window visible pages if  count pages > visible. Default = 10
+   *                  visible - (optional) - size of window visible pages if  count pages > visible. Default = 2
    */
   public function __construct($params) {
     $this->position = 0;
     
     if (!isset($params['visible']))
-      $params['visible'] = 10;
+      $params['visible'] = 2;
     if ($params['current'] < 1)
       $params['current'] = 1;
     
