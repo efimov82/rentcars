@@ -53,8 +53,20 @@ $(function() {
         }
     },
     dayContextMenu: function(e) {
-        $(e.element).popover('hide');
+        //alert('double click!');
+        //$(e.element).popover('hide');
+        $(e.element).popover('show');
     },
+//    eventRender: function(event, element) {
+//      element.bind('dblclick', function() {
+//         alert('double click!');
+//      });
+//    },
+//     dayRender: function(date, element, view){
+//        element.bind('dblclick', function() {
+//            alert('double click!');
+//        });
+//    },
     dataSource: dataSourse
   });
 

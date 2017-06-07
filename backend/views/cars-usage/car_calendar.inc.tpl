@@ -1,7 +1,6 @@
 <script src="/js/bootstrap-year-calendar.min.js"></script>
 
-<script src="/js/spa/calendar.js"></script>
-<reference path="/js/bootstrap-year-calendar.d.ts"/>
+<script src="/js/spa/calendar.js?v=2"></script>
 
 <script type="text/javascript">
   var dataSourse = [
