@@ -1,4 +1,4 @@
-<form id="login-form" action="/site/login" method="post" role="form">
+<form id="login-form" action="{url route='site/login'}" method="post" role="form">
                                     <input type="hidden" name="_csrf-backend" value='{$csrf}'>
                                     <div class="form-group-lg field-loginform-username required">
                                         <label class="control-label" for="loginform-username">Username</label>

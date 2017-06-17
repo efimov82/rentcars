@@ -97,10 +97,10 @@
                             {if isset($params.group_by.types)}<td>&nbsp;</td>{/if}
                             {if isset($params.group_by.categories)}<td>&nbsp;</td>{/if}
                             {if isset($params.group_by.statuses)}<td>&nbsp;</td>{/if}
-                            <td><strong>{$all_thb}</strong></td>
-                            <td><strong>{$all_usd}</strong></td>
-                            <td><strong>{$all_euro}</strong></td>
-                            <td><strong>{$all_ruble}</strong></td>
+                            <td><strong>{$all_thb|number_format:0}</strong></td>
+                            <td><strong>{$all_usd|number_format:0}</strong></td>
+                            <td><strong>{$all_euro|number_format:0}</strong></td>
+                            <td><strong>{$all_ruble|number_format:0}</strong></td>
                         </tr>
                     </tbody>
                 </table>

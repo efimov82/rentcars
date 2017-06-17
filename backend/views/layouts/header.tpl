@@ -19,13 +19,21 @@
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="{$item.class}"></span> {$item.name|upper}<b class="caret"></b></a>
                           <ul class="dropdown-menu dropdown-menu-right">
                             {foreach $item.items as $num2=>$subitem}
-                            <li><a href="{$subitem.href}">{$subitem.name}</a></li>
+                            <li><a href="{url route=$subitem.href}">{$subitem.name}</a></li>
                             {/foreach}</ul> 
                         </li>
                         {else}
-                        <li><a href="{$item.href}"><i class="{$item.class}"> </i> {$item.name|upper}</a></li>  
+                        <li><a href="{url route=$item.href}"><i class="{$item.class}"> </i> {$item.name|upper}</a></li>  
                         {/if}
                       {/foreach}
+
+                      {*<form id="change_lang" method="POST">
+                      <select name="new_lang" onChange="$('#change_lang').submit()">
+                        <option value="en">Eng</option>
+                        <option value="ru"{if Yii::$app->language=='ru'}selected="selected"{/if}>Rus</option>
+                      </select>
+                      </form>*}
+
                       <li class="dropdown"><b>STATE:</b> <span id="status">Online</span></li>
                     </ul>
                 </div>

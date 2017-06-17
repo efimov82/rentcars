@@ -9,34 +9,40 @@ use backend\models\Car;
 use backend\models\Payment;
 use backend\models\PaymentType;
 use backend\models\Customer;
+use backend\models\Place;
+use backend\models\Area;
+
 
 /**
  * Import contracts -  php yii utils/contracts/import
  */
 class ContractsController extends Controller {
-  protected $users = [''=>4, 'T'=>4, 'B'=>5, 'В'=>5, 'D'=>6, 'P'=>7, 'A'=>8, 'M'=>9, 'М'=>9, 'Т'=>4, 'Th'=>4];
+  protected $users = [''=>4, 'T'=>4, 'B'=>5, 'D'=>6, 'P'=>7, 'A'=>8, 'M'=>9, 'Т'=>4, 'Th'=>4, 'K'=>29];
   
-  protected $models = ['Toyota'=>['Vios', 'Altis', 'Fortuner', 'Innova', 'Yaris'],
-                      'Suzuki'=>['Swift', 'Dreza'],
-                      'Isusu'=>['MU5', 'MU7', 'MUX'],
-                      'Honda'=>['City', 'Civic', 'Accord', 'HRV', 'Jazz'],
-                      'Mitsubishi'=>['Pajero Sport'],
-                      'Chevrolet'=>['Captiva'],
-                      'Ford'=>['Fiesta'],
-                      'BMW'=>['320I'],
-                      'Nissan'=>['Almera']
-      
-                      ];
-  
-  protected $colors = ['Black', 'White', 'Grey', 'Red', 'Brown', 'Gold', 'Dark'];
+//  protected $models = ['Toyota'=>['Vios', 'Altis', 'Fortuner', 'Innova', 'Yaris'],
+//                      'Suzuki'=>['Swift', 'Dreza'],
+//                      'Isusu'=>['MU5', 'MU7', 'MUX'],
+//                      'Honda'=>['City', 'Civic', 'Accord', 'HRV', 'Jazz'],
+//                      'Mitsubishi'=>['Pajero Sport'],
+//                      'Chevrolet'=>['Captiva'],
+//                      'Ford'=>['Fiesta'],
+//                      'BMW'=>['320I'],
+//                      'Nissan'=>['Almera']
+//      
+//                      ];
+//  
+//  protected $colors = ['Black', 'White', 'Grey', 'Red', 'Brown', 'Gold', 'Dark'];
   
   /**
-   * format:  user,contract#,model,car#,time,start,finish,name,hotel,phone, paid ,agent,deposit,who,gas,comments,email
+   * format:  IMPORT[0,1],manager,contract#, ,car#,data_start,data_stop,name,passport #,phone_h,second_m,email,hotel,place
+   * 
+   * Example: 
+   * 1,B,02672,  7 000   ,4375,17.09.2016,24.09.2016,Ivan Ivanov,71637202,79135383786,,ivan_stroy@mail.ru,Alamanda Laguna Phuket,Laguna
    */
   public function actionImport(){
     die();
     
-    $file = __DIR__.'/contracts.csv';
+    $file = __DIR__.'/data/contracts_17.06.csv';
     $f = fopen($file, 'r');
     while(!feof($f)){
       $str = fgets($f);
@@ -50,7 +56,7 @@ class ContractsController extends Controller {
     fclose($f);
   }
   
-  public function actionFindWrongContracts() {
+  /*public function actionFindWrongContracts() {
     $contracts = Contract::find()->all();
     
     foreach ($contracts as $num=>$contract) {
@@ -82,56 +88,50 @@ class ContractsController extends Controller {
         }
       }
     }
-  }
+  }*/
     
   /**
    * 
-   * @param string "user,contract#,model,car#,time, start,finish,name,hotel,phone, paid ,agent,deposit,who,gas,comments,email"
-   * @return array
+   * @param string "1,B,02672,  7 000   ,4375,17.09.2016,24.09.2016,Ivan Ivanov,71637202,79135383786,,ivan_stroy@mail.ru,Alamanda Laguna Phuket,Laguna"
+   * @return array [user, contract_number, car_number, date_start, date_stop, client_name, hotel, phone_h, phone_m, comment, email, paid]
  */
   protected function parseData($str) {
-    $arr = explode(';', $str);
-    if (count($arr) < 16)
+    $arr = explode(',', $str);
+    if (count($arr) != 14)
       return false;
     
-    // бронь - нет paid, contract#, car# - пропускаем
-    if (!$arr[1] && !$arr[3] && !$arr[10]) {
-      echo("BOKING data \n");
+    if (!$arr[0]) {
+      echo("skip data \n");
       return;
     }
     
-    return ['user'=>trim($arr[0]), 
-            'contract_number'=>trim($arr[1]), 
-            'car_number'=>trim($arr[3]),
-            'model'=>trim($arr[2]),
-            'time'=>trim($arr[4]),
+    return ['user'=>trim($arr[1]), 
+            'contract_number'=>trim($arr[2]), 
+            'car_number'=>trim($arr[4]),
             'date_start'=>trim($arr[5]),
             'date_stop'=>trim($arr[6]),
             'client_name'=>trim($arr[7]),
-            'hotel'=>trim($arr[8]),
-            'phone'=>trim($arr[9]),
-            'comment'=>trim($arr[15]),
-            'email'=>trim($arr[16]),
-            'paid'=> preg_replace("/[^0-9]/", '', $arr[10])
+            'passport'=>trim($arr[8]),
+            'hotel'=>trim($arr[12]),
+            'phone_h'=>trim($arr[9]),
+            'phone_m'=>trim($arr[10]),
+            'comment'=>trim($arr[13]),
+            'email'=>trim($arr[11]),
+            'paid'=> preg_replace("/[^0-9]/", '', $arr[3])
             ];
   }
   
   /**
    * 
-   * @param array $data []
+   * @param array $data [user, contract_number, car_number, date_start, date_stop, client_name, hotel, phone_h, phone_m, comment, paid]
    * 
-   *  1. 
-   *      если номер машины есть в БД - берем его
-   *      ксли номера нет - добавляем в БД
-   *      если номер пустой - id = 107 = ZORRO
-   * КОнткракт  если есть - в поле number занести его
-   *  2. если есть контракт + оплата, но нет машины - заносим NONAME
    */
   protected function save($data){
     $contract = new Contract();
     
     $contract->car_id = $this->saveCar($data);
     $contract->client_id = $this->saveClient($data);
+    $contract->place_id = $this->savePlace($data);
     $this->saveContract($contract, $data);
     $this->savePayments($contract, $data);
   }
@@ -143,28 +143,26 @@ class ContractsController extends Controller {
    */
   protected function saveCar($data){
     // HUCK 1111 -> id=107 ZORRO
-    if (((int)$data['car_number'] == 0) || ($data['car_number'] == 1111)){
-      $zorro_car = Car::findOne(['number'=>'Zorro']);
-      if (!$zorro_car){
-        $zorro_car = new Car();
-        $zorro_car->number = 'Zorro';
-        $zorro_car->save();
-      }
-      return $zorro_car->id;  
-    }
-    
-      
+//    if (((int)$data['car_number'] == 0) || ($data['car_number'] == 1111)){
+//      $zorro_car = Car::findOne(['number'=>'Zorro']);
+//      if (!$zorro_car){
+//        $zorro_car = new Car();
+//        $zorro_car->number = 'Zorro';
+//        $zorro_car->save();
+//      }
+//      return $zorro_car->id;  
+//    }
     
     $car = Car::findOne(['number'=>(int)$data['car_number']]);
     if ($car) 
       return $car->id;
     
     $car = new Car();
-    $car_data = $this->getCarDataFromString($data['model']);
+    //$car_data = $this->getCarDataFromString($data['model']);
     $car->number = (int)$data['car_number'];
-    $car->mark = $car_data['mark'];
-    $car->model = $car_data['model'];
-    $car->color = $car_data['color'];
+    //$car->mark = $car_data['mark'];
+    //$car->model = $car_data['model'];
+    //$car->color = $car_data['color'];
     $car->save();
     echo("Save new car ".$data['car_number']."\n");
     
@@ -173,10 +171,36 @@ class ContractsController extends Controller {
   
   /**
    * 
+   * @param array $data [hotel, comment]
+   */
+  protected function savePlace($data) {
+    $place = Place::findOne(['name'=>$data['hotel']]);
+    if (!$place) {
+      $area = Area::findOne(['name'=>$data['comment']]);
+      if (!$area) {
+        $area = new Area();
+        $area->name = $data['comment'];
+        $area->save();
+      }
+      
+      $place = new Place();
+      $place->name = $data['hotel'];
+      $place->type_id = 1; // hotel
+      $place->city_id = 1; // Phuket
+      $place->area_id = $area->id;
+      $place->save();
+    }
+    
+    return $place->id;
+  }
+
+
+  /**
+   * 
    * @param string $str
    * @return [mark, model, color]
  */
-  protected function getCarDataFromString($str) {
+  /*protected function getCarDataFromString($str) {
     // find Model and try detect Mark
     $car_data = ['mark'=>'Unknown', 'model'=>'', 'color'=>''];
     foreach($this->models as $mark=>$models){
@@ -197,16 +221,27 @@ class ContractsController extends Controller {
       }
     }
     return $car_data;
-  }
+  }*/
   
   /**
    * 
-   * @param type $data [client_name, phone, email]
+   * @param type $data [user, contract_number, car_number, date_start, date_stop, client_name, passport, hotel, phone_h, phone_m, comment, paid]
    * @return type
    */
   protected function saveClient($data){
-    // don't need save
-    return 1;
+    $customer = Customer::findOne(['passport'=>trim($data['passport'])]);
+    if ($customer)
+      return $customer->id;
+    
+    $customer = new Customer();
+    $customer->f_name = $data['client_name'];
+    $customer->passport = $data['passport'];
+    $customer->phone_m = $data['phone_m'];
+    $customer->phone_h = $data['phone_h'];
+    $customer->email = $data['email'];
+    
+    $customer->save();
+    return $customer->id;
   }
   
   /**
@@ -220,10 +255,10 @@ class ContractsController extends Controller {
     $contract->date_create = date('Y-m-d H:i:s');
     $contract->date_start = date('Y-m-d', strtotime($data['date_start']));
     $contract->date_stop = date('Y-m-d', strtotime($data['date_stop']));
-    $contract->time = $data['time'];
+    //$contract->time = $data['time'];
     $contract->number = $data['contract_number'];
-    $contract->description = $data['comment'];
-    $contract->location = $data['hotel'];
+    //$contract->description = $data['comment'];
+    //$contract->location = $data['hotel'];
     $contract->status = 2; // CLOSE
 
     $contract->save();

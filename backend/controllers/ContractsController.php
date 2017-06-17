@@ -7,6 +7,8 @@ use yii\filters\AccessControl;
 use backend\models\Contract;
 use backend\models\Car;
 use backend\models\User;
+use backend\models\Place;
+use backend\models\Area;
 use backend\models\Customer;
 use backend\models\PaymentCategory;
 use backend\models\PaymentType;
@@ -73,6 +75,8 @@ class ContractsController extends RentCarsController{
     $cars = ArrayHelper::map(Car::find()->all(), 'id', 'number');
     $customers = Customer::find()->indexBy('id')->all();
     $users = User::find()->indexBy('id')->all();
+    $places = Place::find()->indexBy('id')->all();
+    $areas = Area::find()->indexBy('id')->all();
 
     $message = Yii::$app->session->getFlash('message');
     $paginator = new rcPaginator(['pages'=>$pages,
@@ -84,6 +88,8 @@ class ContractsController extends RentCarsController{
                                        'paginator'=>$paginator,
                                        'all_records'=>$all_records,
                                        'users'=>$users,
+                                       'places'=>$places,
+                                       'areas'=>$areas,
                                        'list_orders'=>$this->list_orders,
                                        'customers'=>$customers,
                                        'cars'=>$cars]);

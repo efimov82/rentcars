@@ -73,10 +73,13 @@
                             <td>{$contract->date_start|date_format:"d/m/y"} - {$contract->date_stop|date_format:"d/m/y"}</td>
                             <td>{$contract->time}</td>
                             {$customer = $customers[$contract->client_id]}
-                            <td><a href="/customers/{$contract->client_id}">{$customer->s_name}</a></td>
+                            <td><a href="/customers/{$contract->client_id}">{$customer->f_name} {$customer->s_name}</a></td>
                             <td>{$customer->phone_h}</td>
                             <td>{$customer->phone_m}</td>
-                            <td>{$contract->location}</td>
+                            {$place = $places[$contract->place_id]}
+                            <td>{if $place}
+                                {$area = $areas[$place->area_id]}
+                                {$place->name} ({$area->name}){/if}</td>
                             <td><a href="/cars/view/{$contract->car_id}">{$cars[$contract->car_id]}</a></td>
                             <td>{$contract->getStatusName()}</td>
                             <td><a href="{url route="/contracts/view" id=$contract->id}"><button class="btn btn-info btn-fill btn-xs">View</button></a></td>

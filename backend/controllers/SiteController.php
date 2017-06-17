@@ -5,10 +5,10 @@ use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
-use yii\helpers\Html;
+use yii\helpers\Url;
 use backend\controllers\RentCarsController;
 
-use backend\classes\Mobile_Detect;
+//use backend\classes\Mobile_Detect;
 
 /**
  * Site controller

@@ -27,8 +27,19 @@ class RentCarsController extends Controller
     if (!parent::beforeAction($action))
       return false;
      
+    /*if (Yii::$app->session->has('lang')) {
+        Yii::$app->language = Yii::$app->session->get('lang');
+    } else {
+        if (Yii::$app->request->post('new_lang') == 'ru') {
+          Yii::$app->language = 'ru'; 
+          Yii::$app->session->set('lang', 'ru');
+        } else { 
+          Yii::$app->language = 'en'; 
+        }
+    }*/
+    
     $menu = array();
-    $this->common_vars['main_menu'] = $menu;
+    //$this->common_vars['main_menu'] = $menu;
     
     if (Yii::$app->user->can('admin')){
 
@@ -72,8 +83,6 @@ class RentCarsController extends Controller
     }
     
     $this->common_vars['main_menu'] = $menu;
-    //$this->view->params['title'] = $this->title;
-    //$this->main_menu = $menu;
     
     return true;
   }
